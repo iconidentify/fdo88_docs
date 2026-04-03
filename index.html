@@ -495,17 +495,19 @@
   <div class="no-results">Loading manual data...</div>
 </div>
 
+<script src="aol_manual_output.js"></script>
 <script>
-let DATA = null;
+let DATA = window.__MANUAL_DATA || null;
 
 async function loadData() {
+  if (DATA) { init(); return; }
   try {
     const resp = await fetch('aol_manual_output.json');
     DATA = await resp.json();
     init();
   } catch (e) {
     document.getElementById('main').innerHTML =
-      '<div class="no-results">Failed to load aol_manual_output.json. Serve this directory with a local HTTP server.<br><br><code>python3 -m http.server 8080</code></div>';
+      '<div class="no-results">Failed to load manual data. Ensure aol_manual_output.js exists alongside this file.</div>';
   }
 }
 
