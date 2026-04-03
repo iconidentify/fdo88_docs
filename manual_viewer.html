@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FDO88 Manual - Chonkvision Viewer</title>
+<style>
+  :root {
+    --bg: #f5f5f0;
+    --sidebar-bg: #1a1a2e;
+    --sidebar-text: #c4c4d4;
+    --sidebar-active: #e0e0f0;
+    --sidebar-hover: #2a2a4e;
+    --card-bg: #ffffff;
+    --border: #d0d0c8;
+    --text: #1a1a1a;
+    --text-muted: #5a5a5a;
+    --accent: #2c4a8c;
+    --accent-light: #e8edf5;
+    --code-bg: #f0ede6;
+    --tag-bg: #e2ddd3;
+    --mono: 'SF Mono', 'Menlo', 'Consolas', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Sidebar */
+  #sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #sidebar-header {
+    padding: 20px 16px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  #sidebar-header h1 {
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  #sidebar-header .meta {
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+  }
+
+  #search-box {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  #search {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.06);
+    color: #eee;
+    font-size: 13px;
+    outline: none;
+  }
+
+  #search::placeholder { color: #666; }
+  #search:focus { border-color: rgba(255,255,255,0.25); }
+
+  #nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+  }
+
+  #nav::-webkit-scrollbar { width: 4px; }
+  #nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  .nav-section {
+    padding: 6px 16px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #555;
+    margin-top: 8px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.1s;
+    gap: 8px;
+  }
+
+  .nav-item:hover { background: var(--sidebar-hover); }
+  .nav-item.active { background: var(--sidebar-hover); color: var(--sidebar-active); }
+
+  .nav-item .count {
+    margin-left: auto;
+    font-size: 11px;
+    color: #555;
+    background: rgba(255,255,255,0.06);
+    padding: 1px 6px;
+    border-radius: 8px;
+  }
+
+  .nav-cmd {
+    padding: 4px 16px 4px 28px;
+    font-size: 12px;
+    font-family: var(--mono);
+    cursor: pointer;
+    transition: background 0.1s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-cmd:hover { background: var(--sidebar-hover); }
+  .nav-cmd.active { background: var(--sidebar-hover); color: var(--sidebar-active); }
+
+  /* Main content */
+  #main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 40px;
+  }
+
+  #main::-webkit-scrollbar { width: 6px; }
+  #main::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .card p, .card li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  /* Command detail */
+  .cmd-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+
+  .cmd-name {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .cmd-alias {
+    font-size: 16px;
+    color: var(--text-muted);
+  }
+
+  .cmd-opcodes {
+    display: flex;
+    gap: 8px;
+    margin: 8px 0 16px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-family: var(--mono);
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: var(--tag-bg);
+    color: var(--text-muted);
+  }
+
+  .tag.platform {
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  .cmd-section {
+    margin-top: 16px;
+  }
+
+  .cmd-section-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .cmd-description {
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+
+  .cmd-syntax {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--code-bg);
+    padding: 10px 14px;
+    border-radius: 4px;
+    overflow-x: auto;
+  }
+
+  /* Parameter table */
+  .param-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  .param-table th {
+    text-align: left;
+    padding: 6px 10px;
+    background: var(--bg);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .param-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+  }
+
+  .param-table .param-name {
+    font-family: var(--mono);
+    white-space: nowrap;
+    color: var(--accent);
+  }
+
+  .param-values {
+    margin-top: 4px;
+    padding-left: 12px;
+  }
+
+  .param-values .pv {
+    display: flex;
+    gap: 8px;
+    font-size: 12px;
+    padding: 2px 0;
+  }
+
+  .param-values .pv-val {
+    font-family: var(--mono);
+    min-width: 40px;
+    color: var(--accent);
+  }
+
+  .cmd-example {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--code-bg);
+    padding: 10px 14px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+  }
+
+  .cmd-example-expl {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  .cross-refs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .cross-ref {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 2px 8px;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .cross-ref:hover { background: #d0d8ee; }
+
+  /* Glossary */
+  .glossary-term {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+
+  .glossary-def {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  /* Reference table */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .ref-table th {
+    text-align: left;
+    padding: 8px 10px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .ref-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+  }
+
+  .ref-table tr:nth-child(even) td { background: #fafaf6; }
+
+  /* Chapter content */
+  .chapter-heading {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+
+  .chapter-content {
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    margin-bottom: 12px;
+  }
+
+  .chapter-bullets {
+    padding-left: 24px;
+    margin-bottom: 12px;
+  }
+
+  .chapter-bullets li {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 2px;
+  }
+
+  /* Code samples */
+  .code-block {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: #1a1a2e;
+    color: #c4d4c4;
+    padding: 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.5;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* Search results highlight */
+  .highlight {
+    background: #fff3a8;
+    padding: 1px 2px;
+    border-radius: 2px;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    font-size: 15px;
+  }
+
+  /* TOC */
+  .toc-entry {
+    padding: 4px 0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    border-bottom: 1px dotted #ddd;
+  }
+
+  .toc-entry.level-2 { padding-left: 24px; }
+  .toc-entry.level-3 { padding-left: 48px; }
+
+  .toc-page { color: var(--text-muted); font-family: var(--mono); font-size: 13px; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    #sidebar { width: 240px; min-width: 240px; }
+    #main { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div id="sidebar-header">
+    <h1 id="doc-title">Loading...</h1>
+    <div class="meta" id="doc-meta"></div>
+  </div>
+  <div id="search-box">
+    <input type="text" id="search" placeholder="Search commands, terms..." autocomplete="off">
+  </div>
+  <div id="nav"></div>
+</div>
+
+<div id="main">
+  <div class="no-results">Loading manual data...</div>
+</div>
+
+<script>
+let DATA = null;
+
+async function loadData() {
+  try {
+    const resp = await fetch('aol_manual_output.json');
+    DATA = await resp.json();
+    init();
+  } catch (e) {
+    document.getElementById('main').innerHTML =
+      '<div class="no-results">Failed to load aol_manual_output.json. Serve this directory with a local HTTP server.<br><br><code>python3 -m http.server 8080</code></div>';
+  }
+}
+
+function init() {
+  const m = DATA.manual || {};
+  const meta = m.document_metadata || {};
+
+  document.getElementById('doc-title').textContent = meta.title || 'Manual';
+  document.getElementById('doc-meta').textContent =
+    [meta.version, meta.date, meta.author].filter(Boolean).join(' / ');
+  document.title = (meta.title || 'Manual') + ' - Viewer';
+
+  buildNav();
+  showOverview();
+
+  document.getElementById('search').addEventListener('input', onSearch);
+}
+
+function buildNav() {
+  const m = DATA.manual || {};
+  const nav = document.getElementById('nav');
+  const cmds = m.commands || [];
+  const glossary = m.glossary || [];
+  const tables = m.reference_tables || [];
+  const chapters = m.chapters || [];
+  const samples = m.code_samples || [];
+
+  let html = '';
+
+  html += navItem('overview', 'Overview', null);
+  html += navItem('toc', 'Table of Contents', (m.table_of_contents || []).length);
+
+  if (chapters.length) {
+    html += '<div class="nav-section">Chapters</div>';
+    const seen = new Set();
+    for (const ch of chapters) {
+      const key = (ch.chapter || '') + ':' + (ch.chapter_title || '');
+      if (ch.page_type === 'chapter_start' || ch.page_type === 'appendix_start') {
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const label = (ch.chapter ? (ch.page_type === 'appendix_start' ? 'App ' : 'Ch ') + ch.chapter + ': ' : '') + (ch.chapter_title || 'Untitled');
+        html += navItem('chapter:' + key, label, null);
+      }
+    }
+  }
+
+  html += '<div class="nav-section">Reference</div>';
+  html += navItem('commands', 'All Commands', cmds.length);
+  html += navItem('glossary', 'Glossary', glossary.length);
+  html += navItem('tables', 'Reference Tables', tables.length);
+  if (samples.length) html += navItem('samples', 'Code Samples', samples.length);
+  if ((m.figures || []).length) html += navItem('figures', 'Figures', m.figures.length);
+
+  if (cmds.length) {
+    html += '<div class="nav-section">Commands A-Z</div>';
+    for (let i = 0; i < cmds.length; i++) {
+      const c = cmds[i];
+      const label = c.alias ? c.name + ' (' + c.alias + ')' : (c.name || '(unnamed)');
+      html += '<div class="nav-cmd" data-idx="' + i + '" onclick="showCommand(' + i + ')">' + esc(label) + '</div>';
+    }
+  }
+
+  nav.innerHTML = html;
+}
+
+function navItem(id, label, count) {
+  const countHtml = count !== null ? '<span class="count">' + count + '</span>' : '';
+  return '<div class="nav-item" data-nav="' + id + '" onclick="navigate(\'' + id + '\')">' + esc(label) + countHtml + '</div>';
+}
+
+function navigate(id) {
+  setActive(id);
+  if (id === 'overview') showOverview();
+  else if (id === 'toc') showTOC();
+  else if (id === 'commands') showAllCommands();
+  else if (id === 'glossary') showGlossary();
+  else if (id === 'tables') showTables();
+  else if (id === 'samples') showSamples();
+  else if (id === 'figures') showFigures();
+  else if (id.startsWith('chapter:')) showChapter(id.substring(8));
+}
+
+function setActive(id) {
+  document.querySelectorAll('.nav-item, .nav-cmd').forEach(el => el.classList.remove('active'));
+  const el = document.querySelector('[data-nav="' + id + '"]');
+  if (el) el.classList.add('active');
+}
+
+function showCommand(idx) {
+  document.querySelectorAll('.nav-cmd').forEach(el => el.classList.remove('active'));
+  const el = document.querySelector('.nav-cmd[data-idx="' + idx + '"]');
+  if (el) el.classList.add('active');
+
+  const c = DATA.manual.commands[idx];
+  const main = document.getElementById('main');
+  main.innerHTML = renderCommandDetail(c);
+  main.scrollTop = 0;
+}
+
+function showOverview() {
+  const m = DATA.manual || {};
+  const meta = m.document_metadata || {};
+  const cmds = m.commands || [];
+  const wf = cmds.filter(c => c.opcode && c.syntax).length;
+  const summary = DATA.summary || {};
+
+  let html = '<div class="page-title">' + esc(meta.title || 'Manual') + '</div>';
+  html += '<div class="page-subtitle">' + [meta.version, meta.date, meta.author].filter(Boolean).join(' / ') + '</div>';
+
+  html += '<div class="stats-grid">';
+  html += stat(summary.total_pages || 0, 'Pages');
+  html += stat(cmds.length, 'Commands');
+  html += stat(wf, 'Well-formed');
+  html += stat((m.glossary || []).length, 'Glossary');
+  html += stat((m.reference_tables || []).length, 'Ref Tables');
+  html += stat((m.chapters || []).length, 'Sections');
+  html += stat((m.code_samples || []).length, 'Code Samples');
+  html += stat((m.figures || []).length, 'Figures');
+  html += '</div>';
+
+  if (meta.confidentiality) {
+    html += '<div class="card"><p style="color:var(--text-muted);font-style:italic">' + esc(meta.confidentiality) + '</p></div>';
+  }
+
+  // Page type breakdown
+  const pt = (summary.page_types_found || {});
+  if (Object.keys(pt).length) {
+    html += '<div class="card"><h3>Page Type Breakdown</h3><table class="param-table">';
+    html += '<tr><th>Type</th><th>Count</th></tr>';
+    for (const [k, v] of Object.entries(pt).sort((a, b) => b[1] - a[1])) {
+      html += '<tr><td>' + esc(k) + '</td><td>' + v + '</td></tr>';
+    }
+    html += '</table></div>';
+  }
+
+  document.getElementById('main').innerHTML = html;
+}
+
+function showTOC() {
+  const entries = (DATA.manual || {}).table_of_contents || [];
+  let html = '<div class="page-title">Table of Contents</div>';
+  html += '<div class="page-subtitle">' + entries.length + ' entries</div>';
+  html += '<div class="card">';
+  for (const e of entries) {
+    const level = e.level || 1;
+    html += '<div class="toc-entry level-' + level + '">';
+    html += '<span>' + (e.numbering ? esc(e.numbering) + ' ' : '') + esc(e.title || '') + '</span>';
+    html += '<span class="toc-page">' + esc(e.page_ref || '') + '</span>';
+    html += '</div>';
+  }
+  html += '</div>';
+  document.getElementById('main').innerHTML = html;
+}
+
+function showAllCommands(filter) {
+  const cmds = (DATA.manual || {}).commands || [];
+  const filtered = filter
+    ? cmds.filter(c => matchCmd(c, filter))
+    : cmds;
+
+  let html = '<div class="page-title">Commands</div>';
+  html += '<div class="page-subtitle">' + filtered.length + ' of ' + cmds.length + ' commands</div>';
+
+  for (let i = 0; i < filtered.length; i++) {
+    const c = filtered[i];
+    const realIdx = cmds.indexOf(c);
+    html += '<div class="card" style="cursor:pointer" onclick="showCommand(' + realIdx + ')">';
+    html += '<div class="cmd-header">';
+    html += '<span class="cmd-name">' + esc(c.name || '(unnamed)') + '</span>';
+    if (c.alias) html += '<span class="cmd-alias">(' + esc(c.alias) + ')</span>';
+    html += '</div>';
+    html += '<div class="cmd-opcodes">';
+    if (c.opcode != null) html += '<span class="tag">Opcode: ' + c.opcode + (c.opcode_hex ? ' (' + c.opcode_hex + ')' : '') + '</span>';
+    if (c.sub_opcode != null) html += '<span class="tag">Sub: ' + c.sub_opcode + (c.sub_opcode_hex ? ' (' + c.sub_opcode_hex + ')' : '') + '</span>';
+    if (c.platforms) c.platforms.forEach(p => { if (p && p !== 'None') html += '<span class="tag platform">' + esc(p) + '</span>'; });
+    html += '</div>';
+    if (c.description) {
+      const desc = c.description.length > 200 ? c.description.substring(0, 200) + '...' : c.description;
+      html += '<p style="color:var(--text-muted);font-size:13px">' + esc(desc) + '</p>';
+    }
+    html += '</div>';
+  }
+
+  if (!filtered.length) html += '<div class="no-results">No commands match your search.</div>';
+
+  const main = document.getElementById('main');
+  main.innerHTML = html;
+  main.scrollTop = 0;
+}
+
+function renderCommandDetail(c) {
+  let html = '<div class="cmd-header">';
+  html += '<span class="cmd-name">' + esc(c.name || '(unnamed)') + '</span>';
+  if (c.alias) html += '<span class="cmd-alias">(' + esc(c.alias) + ')</span>';
+  html += '</div>';
+
+  html += '<div class="cmd-opcodes">';
+  if (c.opcode != null) html += '<span class="tag">Opcode: ' + c.opcode + (c.opcode_hex ? ' (' + c.opcode_hex + ')' : '') + '</span>';
+  if (c.sub_opcode != null) html += '<span class="tag">Sub-Opcode: ' + c.sub_opcode + (c.sub_opcode_hex ? ' (' + c.sub_opcode_hex + ')' : '') + '</span>';
+  if (c.is_extended) html += '<span class="tag">Extended</span>';
+  if (c.is_byte_count) html += '<span class="tag">Byte-Count</span>';
+  if (c.platforms) c.platforms.forEach(p => { if (p && p !== 'None') html += '<span class="tag platform">' + esc(p) + '</span>'; });
+  if (c.source_page) html += '<span class="tag">Page ' + esc(c.source_page) + '</span>';
+  html += '</div>';
+
+  if (c.description) {
+    html += '<div class="cmd-section"><div class="cmd-section-title">Description</div>';
+    html += '<div class="cmd-description">' + esc(c.description) + '</div></div>';
+  }
+
+  if (c.syntax) {
+    html += '<div class="cmd-section"><div class="cmd-section-title">Syntax</div>';
+    html += '<div class="cmd-syntax">' + esc(c.syntax) + '</div></div>';
+  }
+
+  if (c.parameters && c.parameters.length) {
+    html += '<div class="cmd-section"><div class="cmd-section-title">Parameters</div>';
+    html += '<table class="param-table"><tr><th>Name</th><th>Type</th><th>Description</th></tr>';
+    for (const p of c.parameters) {
+      html += '<tr>';
+      html += '<td class="param-name">' + esc(p.name || '') + '</td>';
+      html += '<td>' + esc(p.type || '') + (p.size ? ' (' + p.size + ')' : '') + '</td>';
+      html += '<td>' + esc(p.description || '');
+      if (p.values && p.values.length) {
+        html += '<div class="param-values">';
+        for (const v of p.values) {
+          html += '<div class="pv"><span class="pv-val">' + esc(String(v.value)) + '</span><span>' + esc(v.description || '') + '</span></div>';
+        }
+        html += '</div>';
+      }
+      html += '</td></tr>';
+    }
+    html += '</table></div>';
+  }
+
+  if (c.example) {
+    html += '<div class="cmd-section"><div class="cmd-section-title">Example</div>';
+    html += '<div class="cmd-example">' + esc(c.example) + '</div>';
+    if (c.example_explanation) html += '<div class="cmd-example-expl">' + esc(c.example_explanation) + '</div>';
+    html += '</div>';
+  }
+
+  if (c.notes) {
+    html += '<div class="cmd-section"><div class="cmd-section-title">Notes</div>';
+    html += '<p style="font-size:14px;line-height:1.6;color:var(--text-muted)">' + esc(c.notes) + '</p></div>';
+  }
+
+  if (c.cross_references && c.cross_references.length) {
+    html += '<div class="cmd-section"><div class="cmd-section-title">Cross References</div>';
+    html += '<div class="cross-refs">';
+    for (const ref of c.cross_references) {
+      html += '<span class="cross-ref" onclick="jumpToCommand(\'' + esc(ref).replace(/'/g, "\\'") + '\')">' + esc(ref) + '</span>';
+    }
+    html += '</div></div>';
+  }
+
+  return html;
+}
+
+function jumpToCommand(ref) {
+  const cmds = (DATA.manual || {}).commands || [];
+  const refLower = ref.toLowerCase();
+  const idx = cmds.findIndex(c =>
+    (c.name || '').toLowerCase() === refLower ||
+    (c.alias || '').toLowerCase() === refLower ||
+    ((c.name || '') + ' ' + (c.alias || '')).toLowerCase().includes(refLower)
+  );
+  if (idx >= 0) showCommand(idx);
+}
+
+function showGlossary(filter) {
+  const terms = (DATA.manual || {}).glossary || [];
+  const filtered = filter
+    ? terms.filter(t => (t.term || '').toLowerCase().includes(filter) || (t.definition || '').toLowerCase().includes(filter))
+    : terms;
+
+  let html = '<div class="page-title">Glossary</div>';
+  html += '<div class="page-subtitle">' + filtered.length + ' terms</div>';
+
+  for (const t of filtered) {
+    html += '<div class="card">';
+    html += '<div class="glossary-term">' + esc(t.term || '') + '</div>';
+    html += '<div class="glossary-def">' + esc(t.definition || '') + '</div>';
+    html += '</div>';
+  }
+
+  if (!filtered.length) html += '<div class="no-results">No glossary terms match your search.</div>';
+
+  const main = document.getElementById('main');
+  main.innerHTML = html;
+  main.scrollTop = 0;
+}
+
+function showTables() {
+  const tables = (DATA.manual || {}).reference_tables || [];
+  let html = '<div class="page-title">Reference Tables</div>';
+  html += '<div class="page-subtitle">' + tables.length + ' tables</div>';
+
+  for (const t of tables) {
+    html += '<div class="card">';
+    html += '<h3>' + (t.table_id ? esc(t.table_id) + ' - ' : '') + esc(t.table_title || 'Untitled') + '</h3>';
+    if (t.page_number) html += '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Page ' + esc(t.page_number) + '</div>';
+
+    const cols = t.columns || [];
+    const rows = t.rows || [];
+    if (rows.length) {
+      html += '<div style="overflow-x:auto"><table class="ref-table"><tr>';
+      if (cols.length) {
+        for (const c of cols) html += '<th>' + esc(String(c)) + '</th>';
+      } else {
+        const keys = Object.keys(rows[0] || {});
+        for (const k of keys) html += '<th>' + esc(k) + '</th>';
+      }
+      html += '</tr>';
+      for (const row of rows) {
+        html += '<tr>';
+        if (cols.length) {
+          for (const c of cols) {
+            const key = String(c);
+            const val = row[key] != null ? row[key] : row[key.toLowerCase()] != null ? row[key.toLowerCase()] : '';
+            html += '<td>' + esc(String(val)) + '</td>';
+          }
+        } else {
+          for (const v of Object.values(row)) html += '<td>' + esc(String(v || '')) + '</td>';
+        }
+        html += '</tr>';
+      }
+      html += '</table></div>';
+    }
+
+    if (t.notes) html += '<p style="font-size:12px;color:var(--text-muted);margin-top:8px">' + esc(t.notes) + '</p>';
+    html += '</div>';
+  }
+
+  const main = document.getElementById('main');
+  main.innerHTML = html;
+  main.scrollTop = 0;
+}
+
+function showChapter(key) {
+  const chapters = (DATA.manual || {}).chapters || [];
+  const [chNum, chTitle] = key.split(':');
+  const matching = chapters.filter(ch => ch.chapter === chNum && ch.chapter_title === chTitle);
+
+  let html = '<div class="page-title">' + (chNum ? (matching[0]?.page_type === 'appendix_start' ? 'Appendix ' : 'Chapter ') + esc(chNum) : '') + '</div>';
+  if (chTitle) html += '<div class="page-subtitle">' + esc(chTitle) + '</div>';
+
+  for (const ch of matching) {
+    if (ch.page_number) html += '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Page ' + esc(ch.page_number) + '</div>';
+
+    const sections = ch.sections || [];
+    for (const s of sections) {
+      if (typeof s !== 'object') continue;
+      if (s.heading) html += '<div class="chapter-heading">' + esc(s.heading) + '</div>';
+      if (s.content) html += '<div class="chapter-content">' + esc(s.content) + '</div>';
+      if (s.bullet_points && s.bullet_points.length) {
+        html += '<ul class="chapter-bullets">';
+        for (const bp of s.bullet_points) html += '<li>' + esc(bp) + '</li>';
+        html += '</ul>';
+      }
+      if (s.subsections) {
+        for (const sub of s.subsections) {
+          if (sub.heading) html += '<div class="chapter-heading" style="font-size:15px">' + esc(sub.heading) + '</div>';
+          if (sub.content) html += '<div class="chapter-content">' + esc(sub.content) + '</div>';
+          if (sub.bullet_points && sub.bullet_points.length) {
+            html += '<ul class="chapter-bullets">';
+            for (const bp of sub.bullet_points) html += '<li>' + esc(bp) + '</li>';
+            html += '</ul>';
+          }
+        }
+      }
+    }
+  }
+
+  if (!matching.length) html += '<div class="no-results">No content found for this chapter.</div>';
+
+  setActive('chapter:' + key);
+  const main = document.getElementById('main');
+  main.innerHTML = html;
+  main.scrollTop = 0;
+}
+
+function showSamples() {
+  const samples = (DATA.manual || {}).code_samples || [];
+  let html = '<div class="page-title">Code Samples</div>';
+  html += '<div class="page-subtitle">' + samples.length + ' samples</div>';
+
+  for (const s of samples) {
+    html += '<div class="card">';
+    html += '<h3>' + (s.sample_id ? esc(s.sample_id) + ' - ' : '') + esc(s.sample_title || 'Untitled') + '</h3>';
+    if (s.language) html += '<span class="tag" style="margin-bottom:8px;display:inline-block">' + esc(s.language) + '</span> ';
+    if (s.page_number) html += '<span class="tag">Page ' + esc(s.page_number) + '</span>';
+    if (s.code) html += '<div class="code-block" style="margin-top:10px">' + esc(s.code) + '</div>';
+    if (s.explanation) html += '<p style="margin-top:8px;font-size:13px;color:var(--text-muted)">' + esc(s.explanation) + '</p>';
+    html += '</div>';
+  }
+
+  const main = document.getElementById('main');
+  main.innerHTML = html;
+  main.scrollTop = 0;
+}
+
+function showFigures() {
+  const figs = (DATA.manual || {}).figures || [];
+  let html = '<div class="page-title">Figures</div>';
+  html += '<div class="page-subtitle">' + figs.length + ' figures</div>';
+
+  for (const f of figs) {
+    html += '<div class="card">';
+    html += '<h3>' + (f.figure_id ? 'Figure ' + esc(f.figure_id) + ': ' : '') + esc(f.figure_title || 'Untitled') + '</h3>';
+    if (f.page_number) html += '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Page ' + esc(f.page_number) + '</div>';
+    if (f.description) html += '<p>' + esc(f.description) + '</p>';
+    html += '</div>';
+  }
+
+  const main = document.getElementById('main');
+  main.innerHTML = html;
+  main.scrollTop = 0;
+}
+
+function matchCmd(c, q) {
+  const s = [c.name, c.alias, c.description, c.syntax, c.opcode, c.sub_opcode, c.opcode_hex]
+    .filter(Boolean).join(' ').toLowerCase();
+  return s.includes(q);
+}
+
+let searchTimeout;
+function onSearch(e) {
+  clearTimeout(searchTimeout);
+  const q = e.target.value.trim().toLowerCase();
+  searchTimeout = setTimeout(() => {
+    if (!q) { showOverview(); return; }
+    showSearchResults(q);
+  }, 200);
+}
+
+function showSearchResults(q) {
+  const m = DATA.manual || {};
+  const cmds = (m.commands || []).filter(c => matchCmd(c, q));
+  const terms = (m.glossary || []).filter(t =>
+    (t.term || '').toLowerCase().includes(q) || (t.definition || '').toLowerCase().includes(q));
+
+  let html = '<div class="page-title">Search: "' + esc(q) + '"</div>';
+  html += '<div class="page-subtitle">' + cmds.length + ' commands, ' + terms.length + ' glossary terms</div>';
+
+  if (cmds.length) {
+    html += '<h3 style="margin:16px 0 8px">Commands</h3>';
+    for (const c of cmds) {
+      const realIdx = (m.commands || []).indexOf(c);
+      html += '<div class="card" style="cursor:pointer;padding:12px 16px" onclick="showCommand(' + realIdx + ')">';
+      html += '<span class="cmd-name" style="font-size:15px">' + esc(c.name || '') + '</span>';
+      if (c.alias) html += ' <span class="cmd-alias" style="font-size:13px">(' + esc(c.alias) + ')</span>';
+      if (c.opcode != null) html += ' <span class="tag" style="margin-left:8px">Opcode ' + c.opcode + '</span>';
+      html += '</div>';
+    }
+  }
+
+  if (terms.length) {
+    html += '<h3 style="margin:16px 0 8px">Glossary</h3>';
+    for (const t of terms) {
+      html += '<div class="card" style="padding:12px 16px">';
+      html += '<span class="glossary-term" style="font-size:14px">' + esc(t.term || '') + '</span>';
+      html += '<span style="font-size:13px;color:var(--text-muted)"> - ' + esc((t.definition || '').substring(0, 150)) + '</span>';
+      html += '</div>';
+    }
+  }
+
+  if (!cmds.length && !terms.length) {
+    html += '<div class="no-results">No results found.</div>';
+  }
+
+  const main = document.getElementById('main');
+  main.innerHTML = html;
+  main.scrollTop = 0;
+}
+
+function stat(value, label) {
+  return '<div class="stat-card"><div class="stat-value">' + value + '</div><div class="stat-label">' + label + '</div></div>';
+}
+
+function esc(s) {
+  if (s == null) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+loadData();
+</script>
+</body>
+</html>
