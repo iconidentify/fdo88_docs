@@ -517,7 +517,7 @@ function init() {
 
   document.getElementById('doc-title').textContent = meta.title || 'Manual';
   document.getElementById('doc-meta').textContent =
-    [meta.version, meta.date, meta.author].filter(Boolean).join(' / ');
+    [meta.version, meta.date].filter(Boolean).join(' / ');
   document.title = (meta.title || 'Manual') + ' - Viewer';
 
   buildNav();
@@ -615,7 +615,7 @@ function showOverview() {
   const summary = DATA.summary || {};
 
   let html = '<div class="page-title">' + esc(meta.title || 'Manual') + '</div>';
-  html += '<div class="page-subtitle">' + [meta.version, meta.date, meta.author].filter(Boolean).join(' / ') + '</div>';
+  html += '<div class="page-subtitle">' + [meta.version, meta.date].filter(Boolean).join(' / ') + '</div>';
 
   html += '<div class="stats-grid">';
   html += stat(summary.total_pages || 0, 'Pages');
@@ -628,9 +628,6 @@ function showOverview() {
   html += stat((m.figures || []).length, 'Figures');
   html += '</div>';
 
-  if (meta.confidentiality) {
-    html += '<div class="card"><p style="color:var(--text-muted);font-style:italic">' + esc(meta.confidentiality) + '</p></div>';
-  }
 
   // Page type breakdown
   const pt = (summary.page_types_found || {});

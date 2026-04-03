@@ -45,7 +45,7 @@ FDO91 succeeded FDO88 in 1991. All AOL for Windows versions (1.0 through 5.0+) r
 
 ## About this document
 
-The source material is the **FDO88 Manual, Release 1.0** (January 1994), an internal America Online document marked "America Online Confidential." The manual was OCR-processed from a scanned physical copy into structured JSON, then rendered into the interactive viewer hosted here.
+The source material is the **FDO88 Manual, Release 1.0** (January 1994). The manual was OCR-processed from a scanned physical copy into structured JSON, then rendered into the interactive viewer hosted here.
 
 ### Contents
 
@@ -79,6 +79,10 @@ Open `index.html` directly in a browser. No server required -- the JSON data is 
 - [notaol: AOL P3/FDO client implementation](https://github.com/chfoo/notaol)
 - [AOL FDO Traces (Internet Archive)](https://archive.org/details/aol-fdo-traces)
 - [AOL Protocol Documentation (Internet Archive)](https://archive.org/details/aol_20210605)
+
+## Disclaimer
+
+This project is **not affiliated with, endorsed by, or associated with America Online, AOL, or any of their parent companies or successors in any way.** This is an independent research and interoperability project aimed at documenting and preserving a historical protocol for the purpose of enabling compatibility with legacy systems.
 
 ## License
 
