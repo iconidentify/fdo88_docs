@@ -1,1 +1,11 @@
 *.pdf
+.DS_Store
+
+# Binary sources and extracted data (too large for git, keep locally)
+binary sources/
+extracted_tools/
+site_data/
+
+# Build artifacts
+scripts/__pycache__/
+scripts/*.class

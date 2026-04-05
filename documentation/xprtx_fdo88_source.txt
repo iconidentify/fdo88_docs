@@ -1,0 +1,1025 @@
+XprtX 1.0b4 - Decompiled FDO88 Source
+============================================================
+Decoded by atomforge-fdo-java FDO88 decompiler
+
+; =======================================================
+; DB12 Record 1 (247 bytes)
+; =======================================================
+fdo$start
+$26 center center 220 180 normal
+$21 Text 10 10 200 40 none
+fdo$Text 00 "Enter token or rec to request:"
+$21 Text 42 181 200 40 none
+fdo$Text 00 "Made By Res/GOH  "
+$21 Text 10 60 60 20 none
+fdo$Text 00 "L/T #:"
+$21 Text 80 60 20 15 sendform editable
+fdo$Mark field=0 mark=54272
+$86 $02 $00
+$21 Text 10 85 60 20 none
+fdo$Text 00 "R/D #:"
+$21 Text 80 85 80 15 sendform editable
+fdo$Mark field=0 mark=54528
+$86 $0A $00
+$21 Button 120 120 80 20 dispatch
+fdo$dispch invoke_record info=170000
+fdo$Text 00 "REC#"
+$21 Button 20 120 80 20 dispatch
+fdo$dispch invoke_record info=160000
+fdo$Text 00 "Token"
+$21 Button 70 153 80 20 default
+fdo$dispch close
+fdo$Text 00 "Cancel"
+fdo$canmap $00
+fdo$enddef
+
+; =======================================================
+; DB12 Record 22 (301 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 center -14336 8192 5120 normal
+fdo$Title "        Private Room"
+fdo$SMultiIcon resid=658 at 26,88 flags=$60
+fdo$dispch no_action
+fdo$Field16 Text 238 238 272 50 none
+fdo$Text 00 "To create or enter a private room, type the room n"
+fdo$Text 00 "ame in the box below and click on the Go button."
+fdo$Field16 Text 90 86 88 16 none
+fdo$Text 00 "Room name:"
+fdo$TextDesc application 9pt bold green
+fdo$Field16 Text 10 10 135 18 sendform editable
+fdo$SetSize 20
+fdo$Switch AccentsOk
+fdo$EncodeType $00 $02
+fdo$TextDesc application 9pt bold magenta
+fdo$Field16 Button 160 8 30 16 default
+fdo$Text 00 "P"
+fdo$Text 00 "R"
+fdo$dispch open_room token=".X"
+fdo$Field16 Popup 140 128 215 18 none
+fdo$Text 00 "Language:"
+fdo$Mark field=0 mark=20
+fdo$Switch SetEnterKeyField
+fdo$Switch FillLanguageList
+fdo$SImdDispatch $A7 $00 $00 $00 $00 $04
+fdo$enddef
+
+; =======================================================
+; DB12 Record 23 (184 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$F8 $08 $00 $18
+fdo$SetWindowTag cluster:$102A id=31
+fdo$Switch SetMajorField
+fdo$Switch SetToolDisplay $12
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 1360 10 60 20 none
+fdo$Text 01 "Name:"
+fdo$Field16 Text 1420 10 90 20 editable scrollable
+fdo$Mark field=2 mark=9216
+fdo$SetSize 10
+fdo$Text 02 "aol://2719:2-2-MacFilez"
+$F8 $10 $10 $2A
+fdo$Field16 Text 10 10 176 20 editable scrollable
+fdo$Mark field=3 mark=9472
+fdo$Text 03 "Î  "
+fdo$Field16 Button 41 32 100 20 default
+fdo$Switch ExitTool
+fdo$Text 04 "Exit"
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $89 $97 $AC $00 $00 $00
+fdo$enddef
+
+; =======================================================
+; DB12 Record 24 (185 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$F8 $08 $00 $18
+fdo$SetWindowTag cluster:$102A id=31
+fdo$Switch SetMajorField
+fdo$Switch SetToolDisplay $12
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 1360 10 60 20 none
+fdo$Text 01 "Name:"
+fdo$Field16 Text 1420 10 90 20 editable scrollable
+fdo$Mark field=2 mark=9216
+fdo$SetSize 10
+fdo$Text 02 "aol://2719:2-2-MacFilez2"
+$F8 $10 $10 $2A
+fdo$Field16 Text 10 10 176 20 editable scrollable
+fdo$Mark field=3 mark=9472
+fdo$Text 03 "Î  "
+fdo$Field16 Button 41 32 100 20 default
+fdo$Switch ExitTool
+fdo$Text 04 "Exit"
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $89 $97 $AC $00 $00 $00
+fdo$enddef
+
+; =======================================================
+; DB12 Record 25 (185 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$F8 $08 $00 $18
+fdo$SetWindowTag cluster:$102A id=31
+fdo$Switch SetMajorField
+fdo$Switch SetToolDisplay $12
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 1360 10 60 20 none
+fdo$Text 01 "Name:"
+fdo$Field16 Text 1420 10 90 20 editable scrollable
+fdo$Mark field=2 mark=9216
+fdo$SetSize 10
+fdo$Text 02 "aol://2719:2-2-MacFilez3"
+$F8 $10 $10 $2A
+fdo$Field16 Text 10 10 176 20 editable scrollable
+fdo$Mark field=3 mark=9472
+fdo$Text 03 "Î  "
+fdo$Field16 Button 41 32 100 20 default
+fdo$Switch ExitTool
+fdo$Text 04 "Exit"
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $89 $97 $AC $00 $00 $00
+fdo$enddef
+
+; =======================================================
+; DB12 Record 26 (197 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$21 Text 10 10 200 40 none
+fdo$Text 00 " "
+$21 Text 10 60 60 20 none
+fdo$Text 00 " "
+$21 Text 511 60 20 15 sendform editable
+fdo$Mark field=0 mark=54272
+fdo$SetSize 2
+fdo$Text 00 "AA"
+$21 Text 10 10 255 255 none
+fdo$Text 00 ""
+$21 Text 511 85 80 15 sendform editable
+fdo$Mark field=0 mark=54528
+fdo$SetSize 255
+fdo$Text 00 "2F2F726F6C6C2D646963653135202D7369646573393939"
+$21 Button 20 15 15 20 default
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $24 $00 $00 $16 $00 $00
+fdo$Text 00 "    "
+fdo$enddef
+
+; =======================================================
+; DB12 Record 27 (201 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$F8 $08 $00 $18
+fdo$SetWindowTag cluster:$102A id=31
+fdo$Switch SetMajorField
+fdo$Switch SetToolDisplay $12
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 1360 10 60 20 none
+fdo$Text 01 "Name:"
+fdo$Field16 Text 1420 10 90 20 editable scrollable
+fdo$Mark field=2 mark=9216
+fdo$SetSize 10
+fdo$Text 02 "aol://5862:144/users.aol.com:/fibraxprtx"
+$F8 $10 $10 $2A
+fdo$Field16 Text 10 10 176 20 editable scrollable
+fdo$Mark field=3 mark=9472
+fdo$Text 03 "Î  "
+fdo$Field16 Button 41 32 100 20 default
+fdo$Switch ExitTool
+fdo$Text 04 "Exit"
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $89 $97 $AC $00 $00 $00
+fdo$enddef
+
+; =======================================================
+; DB12 Record 4 (167 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$F8 $08 $00 $18
+fdo$SetWindowTag cluster:$102A id=31
+fdo$Switch SetMajorField
+fdo$Switch SetToolDisplay $12
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 1360 10 60 20 none
+fdo$Text 01 "Name:"
+fdo$Field16 Text 1420 10 90 20 editable scrollable
+fdo$Mark field=2 mark=9216
+fdo$SetSize 10
+fdo$Text 02 "$im_on"
+$F8 $10 $10 $2A
+fdo$Field16 Text 10 10 176 20 editable scrollable
+fdo$Mark field=3 mark=9472
+fdo$Text 03 "Î23"
+fdo$Field16 Button 41 32 100 20 default
+fdo$Switch ExitTool
+fdo$Text 04 "Exit"
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $26 $00 $00 $00 $00 $04
+fdo$enddef
+
+; =======================================================
+; DB12 Record 5 (168 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$F8 $08 $00 $18
+fdo$SetWindowTag cluster:$102A id=31
+fdo$Switch SetMajorField
+fdo$Switch SetToolDisplay $12
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 1360 10 60 20 none
+fdo$Text 01 "Name:"
+fdo$Field16 Text 1420 10 90 20 editable scrollable
+fdo$Mark field=2 mark=9216
+fdo$SetSize 10
+fdo$Text 02 "$im_off"
+$F8 $10 $10 $2A
+fdo$Field16 Text 10 10 176 20 editable scrollable
+fdo$Mark field=3 mark=9472
+fdo$Text 03 "Î23"
+fdo$Field16 Button 41 32 100 20 default
+fdo$Switch ExitTool
+fdo$Text 04 "Exit"
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $26 $00 $00 $00 $00 $04
+fdo$enddef
+
+; =======================================================
+; DB14 Record 122 (170 bytes)
+; =======================================================
+fdo$start
+fdo$canned rec=125 db=4
+fdo$TextDesc application 9pt bold green
+fdo$Field16 Text 11 248 316 23 sendform editable
+$86 $FF $00
+fdo$Mark field=0 mark=5376
+fdo$SMultiIcon resid=139 at 320,24 flags=$41
+fdo$SetIcon field=0 resid=65535 ""
+$F8 $06 $00 $01 $01
+fdo$dispch invoke_and_send info=000002
+fdo$SMultiIcon resid=140 at 352,24 flags=$41
+fdo$SetIcon field=0 resid=65535 ""
+$F8 $06 $00 $01 $01
+fdo$dispch mop_$83 token=".."
+fdo$Field16 Text 135 131 -15762 25 none
+fdo$dispch no_action
+fdo$Picture resid=101 at 387,276 flags=$40
+fdo$dispch invoke_and_send info=000001
+fdo$SMultiIcon resid=3467 at 2047,122 flags=$60
+fdo$dispch no_action
+fdo$SMultiIcon resid=138 at 384,24 flags=$41
+fdo$SetIcon field=0 resid=65535 ""
+$F8 $06 $00 $01 $01
+fdo$dispch goto_keyword token=".." info=2819C4
+fdo$enddef
+
+; =======================================================
+; DB14 Record 124 (170 bytes)
+; =======================================================
+fdo$start
+fdo$canned rec=125 db=4
+fdo$SMultiIcon resid=139 at 320,24 flags=$41
+fdo$SetIcon field=0 resid=65535 ""
+$F8 $06 $00 $01 $01
+fdo$dispch invoke_and_send info=000002
+fdo$SMultiIcon resid=140 at 352,24 flags=$41
+fdo$SetIcon field=0 resid=65535 ""
+$F8 $06 $00 $01 $01
+fdo$dispch mop_$83 token=".."
+fdo$Field16 Text 135 131 -15762 25 none
+fdo$dispch no_action
+fdo$Picture resid=101 at 387,276 flags=$40
+fdo$dispch invoke_and_send info=000001
+fdo$SMultiIcon resid=3467 at 2047,122 flags=$60
+fdo$dispch no_action
+fdo$SMultiIcon resid=138 at 384,24 flags=$41
+fdo$SetIcon field=0 resid=65535 ""
+$F8 $06 $00 $01 $01
+fdo$dispch goto_keyword token=".." info=2819C4
+fdo$TextDesc application 9pt bold green
+fdo$Field16 Text 11 248 316 23 sendform editable
+$86 $FF $00
+fdo$Mark field=0 mark=5376
+fdo$enddef
+
+; =======================================================
+; DB14 Record 125 (312 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 10240 -16640 6401 5121 normal
+$F8 $08 $00 $64
+fdo$SpecialClear $B9 $02 $12 $01 $26
+fdoS$field type_18 0 0 171 4 $10
+$26 256 705 4667 705 type_44
+fdo$window -8 2 18 2 type_168
+fdo$Text 01 "	¡
+"
+fdo$window center center 250 1 type_250
+fdo$canned rec=32 db=248
+fdo$prompt
+fdo$start
+fdo$window center 69 112 112 type_97
+$74
+fdo$dispch none
+fdo$TextDesc application 9pt bold magenta
+fdo$Field16 Button 426 426 98 20 default
+fdo$Text 00 "Send"
+fdo$Mark field=0 mark=6144
+fdo$dispch invoke_and_send info=000001
+fdo$Switch switch_27
+$F8 $10 $10 $26
+fdo$TextDesc application 9pt bold magenta
+fdo$Field16 Text 10 40 428 204 sendform default
+$F8 $11 $00 $00 $03
+fdo$Switch switch_125
+fdo$Mark field=0 mark=5632
+fdo$TextDesc application 9pt bold magenta
+fdo$Field16 Text 10 2 50 18 none
+fdo$Text 00 "Hi:"
+fdo$TextDesc application 9pt bold yellow
+fdo$Field16 Text 35 2 280 18 none
+fdo$Mark field=0 mark=6400
+fdo$TextDesc application 9pt bold yellow
+fdo$Field16 Text 386 2 90 18 none
+fdo$Text 00 "            "
+fdo$TextDesc application 9pt bold white
+fdo$Field16 Text 416 2 30 18 none
+fdo$Mark field=0 mark=5888
+fdo$TextDesc application 9pt bold green
+fdo$Field16 Text 10 20 50 18 none
+fdo$Text 00 "Bye:"
+fdo$TextDesc application 9pt bold yellow
+fdo$Field16 Text 40 20 280 18 none
+fdo$Mark field=0 mark=6656
+fdo$enddef
+
+; =======================================================
+; DB14 Record 130 (351 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 -256 1791 -15103 512 normal
+fdo$Title "Who's in This Room"
+fdo$SpecialClear $05 $00 $00 $00 $00
+$FF $00 $00 $F8 $03 $08 $00 $68 $AB $04 $10 $26 $00 $02 $C1 $02 $3B $12 $C1 $02 $2C $00 $C1 $02 $33 $00 $9A $07 $C8 $00 $7A $00 $FF $FF $30 $05 $00 $00 $00 $00 $00 $00 $A8 $04 $01 $09 $01 $07 $A1 $0A $0E $00 $00 $00 $00 $A4 $01 $FA $01 $20 $F8 $08 $15 $00 $00 $45 $70 $70 $61 $74 $05 $00 $00 $00 $00 $00 $00 $A8 $04 $1C $0A $00 $06 $A1 $0A $01 $0F $00 $2C $00 $5A $00 $0F $00 $00 $04 $00 $47 $65 $74 $20 $50 $72 $6F $66 $69 $6C $65 $00 $05 $26 $00 $00 $00 $00 $11 $D4 $02 $00 $06 $A8 $04 $1C $0A $00 $06 $A1 $0A $01 $0F $00 $11 $00 $5A $00 $0F $00 $08 $04 $00 $20 $4D $65 $73 $73 $73 $61 $67 $65 $20 $00 $05 $26 $00 $00 $00 $00 $10 $D4 $02 $00 $06 $A8 $04 $1C $0A $00 $03 $A1 $0A $01 $21 $00 $91 $00 $38 $00 $0F $00 $00 $04 $00 $48 $69 $67 $68 $6C $69 $67 $68 $74 $00 $05 $26 $00 $00 $00 $00 $0E $D4 $02 $00 $06 $A8 $04 $1C $0A $00 $03 $A1 $0A $01 $21 $00 $A8 $00 $38 $00 $0F $00 $00 $04 $00 $49 $67 $6E $6F $72 $65 $00 $05 $26 $00 $00 $00 $00 $0F $D4 $02 $00 $06 $A8 $04 $1C $0A $00 $03 $A1 $0A $01 $21 $00 $7A $00 $38 $00
+fdoSreset $00
+fdo$window 4 center 83 112 type_101
+$65
+$63
+$68
+fdo$window 5 38 0 0 normal
+fdo$window 18 -44 2 0 type_6
+fdo$TextDesc font_28 10pt plain magenta
+fdo$Field16 List 123 0 139 183 sendform editable
+fdo$dispch invoke_and_send info=000010
+fdo$Mark field=0 mark=7168
+fdo$enddef
+
+; =======================================================
+; DB14 Record 161 (425 bytes)
+; =======================================================
+fdo$start
+fdo$Switch switch_81
+fdo$Window16 center -28672 -14335 5120 normal
+fdo$UseDisplay $4F $46 $00 $04
+fdo$PlusGroup $3F $C1 $00
+fdo$SetWindowTag cluster:OF id=4
+fdo$Title "AOL Setup & Sign On       "
+fdo$Field16 Text 135 131 110 25 none
+fdo$dispch no_action
+fdo$Picture resid=100 at 200,200 flags=$60
+fdo$dispch no_action
+fdo$Field16 Button 110 165 80 20 default
+fdo$Text 00 "Sign On"
+fdo$dispch invoke_record info=0E0000
+fdo$Field16 Button 220 165 80 20 none
+fdo$Text 00 "Setup"
+fdo$dispch mop_$28 info=00140A
+fdo$Mark field=0 mark=256
+fdo$Field16 Popup 48 28 215 18 none
+fdo$Text 00 "     Screen name:"
+fdo$Mark field=0 mark=48640
+fdo$dispch none
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 60 53 100 18 none
+fdo$Switch switch_109
+fdo$Switch switch_225
+fdo$Mark field=0 mark=50944
+fdo$Text 00 "   Password:"
+fdo$Field16 Text 150 50 111 18 sendform editable default
+fdo$Switch switch_109
+fdo$Switch switch_225
+fdo$SetSize 8
+fdo$Mark field=0 mark=49152
+fdo$TextDesc geneva 9pt plain black
+fdo$Field16 Text 176 63 30 16 smallbtn
+fdo$Switch switch_170
+fdo$TypedData $00 $01 $05 $00
+fdo$Field16 type_14 60 260 170 18 scrollable
+fdo$NoAutoShowWindow
+fdo$break
+fdo$window -35 -35 221 221 type_221
+fdo$EncodeType
+fdo$canned rec=5 db=0
+fdo$window center center 0 0 type_161
+fdoSpop 15
+$4B
+fdo$window 125 center 170 0 type_18
+fdo$window center -63 2 107 normal
+fdo$Text 00 "         Locality:"
+fdo$Mark field=0 mark=2580
+fdo$TextDesc geneva 9pt plain black
+fdo$Switch switch_9 $01
+fdo$Field16 Text -1 145 250 8 scrollable
+fdo$Switch switch_204
+fdo$prompt
+fdo$dispch invoke_record info=8E0000
+fdo$Switch switch_89
+fdo$Switch switch_42
+fdo$Switch switch_23
+fdo$enddef
+
+; =======================================================
+; DB14 Record 162 (155 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 center -23552 -6655 1024 normal
+fdo$SetWindowTag cluster:SC id=3
+fdo$Field16 type_14 0 0 420 230 scrollable
+fdo$RememberSizeID $15 $00
+fdo$window 69 112 112 97 type_116
+fdo$Picture resid=573 at 0,10 flags=$20
+fdo$Picture resid=502 at 17,80 flags=$20
+fdo$Mark field=3 mark=18688
+fdo$Picture resid=503 at 147,80 flags=$20
+fdo$Mark field=4 mark=18944
+fdo$Picture resid=504 at 277,80 flags=$20
+fdo$Mark field=5 mark=19200
+fdo$Picture resid=534 at 0,212 flags=$20
+fdo$TextDesc application 9pt bold cyan
+fdo$Field16 Text 10 175 400 18 smallbtn
+fdo$Mark field=7 mark=18176
+fdo$Switch switch_204 $07
+fdo$TextDesc application 9pt bold magenta
+fdo$Field16 Text 10 193 400 18 smallbtn
+fdo$Mark field=8 mark=18432
+fdo$Switch switch_204 $08
+fdo$enddef
+
+; =======================================================
+; DB14 Record 163 (496 bytes)
+; =======================================================
+fdo$start
+fdo$Switch switch_81
+fdo$Window16 center -28672 -14335 5120 normal
+fdo$UseDisplay $4F $46 $00 $04
+fdo$PlusGroup $3F $C1 $00
+fdo$SetWindowTag cluster:OF id=4
+fdo$Title "       AOL Setup & Sign On"
+fdo$Field16 Text 135 131 110 25 none
+fdo$dispch no_action
+fdo$Picture resid=100 at 200,200 flags=$60
+fdo$dispch no_action
+fdo$Field16 Button 110 165 80 20 default
+fdo$Text 00 "Sign On"
+fdo$dispch invoke_record info=0E0000
+fdo$Field16 Button 220 165 80 20 none
+fdo$Text 00 "Setup"
+fdo$dispch mop_$28 info=00140A
+fdo$Mark field=0 mark=256
+fdo$Field16 Popup 48 28 215 18 none
+fdo$Text 00 "     Screen name:"
+fdo$Mark field=0 mark=48640
+fdo$dispch none
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 60 53 100 18 none
+fdo$Switch switch_109
+fdo$Switch switch_225
+fdo$Mark field=0 mark=50944
+fdo$Text 00 "   Password:"
+fdo$Field16 Text 150 50 111 18 sendform editable default
+fdo$Switch switch_109
+fdo$Switch switch_225
+fdo$SetSize 8
+fdo$Mark field=0 mark=49152
+fdo$TextDesc geneva 9pt plain black
+fdo$Field16 Text 176 63 30 16 smallbtn
+fdo$Switch switch_170
+fdo$TypedData $00 $01 $05 $00
+fdo$Field16 type_14 60 260 170 18 scrollable
+fdo$NoAutoShowWindow
+fdo$break
+fdo$window -35 -35 221 221 type_221
+fdo$EncodeType
+fdo$canned rec=5 db=0
+fdo$window center center 0 0 type_161
+fdoSpop 15
+$4B
+fdo$window 125 center 170 0 type_18
+fdo$window center -63 2 107 normal
+fdo$Text 00 "         Locality:"
+fdo$Mark field=0 mark=2580
+fdo$TextDesc geneva 9pt plain black
+fdo$Switch switch_9 $01
+fdo$Field16 Text -1 145 250 8 scrollable
+fdo$Switch switch_204
+fdo$prompt
+fdo$dispch invoke_record info=8E0000
+fdo$Switch switch_89
+fdo$Switch switch_42
+fdo$Switch switch_23
+fdo$start
+fdo$canned rec=8 db=1
+fdo$Text 02 "**Beta warning, remember this is beta, check for newest - fibra."
+fdo$enddef
+
+; =======================================================
+; DB14 Record 208 (111 bytes)
+; =======================================================
+fdo$start
+fdo$MakeMenu $10 $26 $00 $2D $00 $00 $00 $00 $FF $FF $03 $00 $43 $68 $61 $74 $00
+fdo$MenuItem $10 $26 $00 $2D $01 $1A $00 $00 $29 $A1 $0C $01 $10 $26 $43 $68 $61 $74 $20 $50 $72 $65 $66 $65 $72 $65 $6E $63 $65 $73 $00
+fdo$MenuItem $10 $26 $00 $2D $02 $1A $00 $00 $27 $00 $00 $0B $10 $26 $43 $68 $61 $74 $20 $53 $6F $75 $6E $64 $73 $2E $2E $2E $00
+fdo$MenuItem $10 $26 $00 $2D $03 $1A $00 $00 $81 $96 $C4 $81 $00 $0C $52 $6F $6C $6C $20 $44 $69 $63 $65 $00
+fdo$enddef
+
+; =======================================================
+; DB15 Record 152 (95 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 20992 11264 -29695 8704 normal
+fdo$Title "Update"
+fdo$SetWindowTag cluster:ON id=10
+fdo$Field16 Text 10 10 280 50 smallbtn
+fdo$Mark field=0 mark=11520
+fdo$Switch switch_204
+fdo$SetFont geneva 10pt
+fdo$Field16 Text 30 106 240 16 smallbtn
+fdo$Switch switch_204
+fdo$Mark field=0 mark=12032
+fdo$Field16 type_12 30 80 240 16 sendform editable
+fdo$Switch switch_200
+fdo$Mark field=0 mark=11776
+fdo$enddef
+
+; =======================================================
+; DB15 Record 170 (359 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 center -25088 -30463 512 normal
+fdo$Title "Instant Message"
+fdo$SpecialClear $05 $00 $00 $00 $00
+$FF $00 $00 $F8 $03 $08 $00 $0E $AB $04 $10 $2A $00 $1E $C1 $02 $2C $00 $C1 $02 $3B $12 $A1 $0A $0E $00 $00 $00 $00 $A4 $01 $FA $01 $20 $F8 $08 $15 $00 $00 $45 $70 $70 $61 $74 $05 $00 $00 $00 $00 $00 $00 $A1 $0A $12 $01 $00 $02 $00 $01 $00 $02 $00 $00 $05 $00 $00 $00 $00 $00 $00 $DD $02 $00 $02 $C2 $03 $00 $00 $24 $A8 $04 $1C $0A $00 $00 $A1 $0A $00 $00 $00 $33 $00 $9E $01 $55 $00 $D0 $F8 $04 $06 $00 $03 $01 $C1 $02 $73 $00 $C1 $02 $70 $00 $C2 $03 $00 $00 $25 $9C $02 $00 $02 $A8 $04 $1C $0A $00 $03 $A1 $0A $00 $46 $00 $0E $00 $55 $00 $0F $00 $01 $08 $A8 $04 $1C $0A $00 $00 $A1 $0A $01 $08 $01 $0E $00 $41 $00 $0F $00 $00 $04 $00 $20 $20 $4C $6F $63 $61 $74 $65 $20 $20 $00 $05 $0A $99 $B8 $00 $00 $02 $A8 $04 $1C $0A $00 $00 $A1 $0A $01 $58 $01 $0E $00 $37 $00 $0F $00 $00 $04 $00 $53 $65 $6E $64 $00 $C1 $02 $EF $00 $05 $26 $00 $00 $02 $00 $02 $A5 $02 $1C $0A $A1 $0A $01 $B4 $00 $0E $00 $46 $00 $0F $00 $00 $04 $00 $47 $65 $74 $20 $50 $72 $6F $66 $69 $6C $65 $00 $05 $0A $65 $A4 $00 $00 $00 $A8 $04 $1D $0A $00 $07
+fdo$Field16 Text 12 12 80 17 none
+fdo$Text 00 "Talk to:"
+fdo$TextDesc font_28 9pt plain cyan
+fdo$Field16 Text 0 33 131 18 none
+fdo$Text 00 "Type your message:"
+$06 3
+fdo$enddef
+
+; =======================================================
+; DB15 Record 171 (358 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 center -25088 -30463 512 normal
+fdo$Title "Instant Message"
+fdo$SpecialClear $05 $00 $00 $00 $00
+$FF $00 $00 $F8 $03 $08 $00 $18 $AB $04 $10 $2A $00 $1F $C1 $02 $2C $00 $C1 $02 $3B $12 $A1 $0A $0E $00 $00 $00 $00 $A4 $01 $FA $01 $20 $F8 $08 $15 $00 $00 $45 $70 $70 $61 $74 $05 $00 $00 $00 $00 $00 $00 $A8 $04 $1C $0A $00 $00 $A1 $0A $00 $46 $00 $0E $00 $55 $00 $0F $00 $C1 $C1 $02 $73 $00 $D9 $03 $00 $00 $00 $DD $02 $00 $02 $C2 $03 $00 $00 $24 $9C $02 $10 $00 $A8 $04 $1C $0A $00 $00 $A1 $0A $00 $00 $00 $33 $00 $9E $01 $55 $00 $D0 $F8 $04 $06 $00 $03 $03 $C1 $02 $73 $00 $C1 $02 $70 $00 $C2 $03 $00 $00 $25 $9C $02 $00 $02 $A8 $04 $1C $0A $00 $06 $A1 $0A $01 $08 $01 $0E $00 $41 $00 $0F $00 $00 $04 $00 $20 $20 $4C $6F $63 $61 $74 $65 $20 $20 $00 $05 $0A $99 $B8 $00 $00 $02 $A8 $04 $1C $0A $00 $06 $A1 $0A $01 $58 $01 $0E $00 $37 $00 $0F $00 $00 $04 $00 $53 $65 $6E $64 $00 $C1 $02 $EF $00 $05 $26 $00 $00 $02 $00 $02 $A5 $02 $1C $0A $A8 $04 $1C $0A $00 $06 $A1 $0A $01 $B4 $00 $0E $00 $46 $00 $0F $00 $00 $04 $00 $47 $65 $74 $20 $50 $72 $6F $66 $69 $6C $65 $00 $05 $0A $65 $A4 $00 $00 $00 $A8 $04 $1D $0A $00 $07 $A1
+fdoSpop 0
+$0C
+fdo$window 12 center 80 0 type_17
+fdo$window center 4 0 84 type_97
+$6C
+$6B
+$20
+$74
+$6F
+$3A
+fdo$window -88 4 28 9 normal
+fdo$dispch mop_$A1 token=".." info=000021
+fdo$window -125 center 18 0 normal
+fdo$Text 00 "Type your message:"
+$06 2
+fdo$enddef
+
+; =======================================================
+; DB15 Record 172 (429 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 -512 16383 -16127 512 normal
+fdo$SpecialClear $05 $00 $00 $00 $00
+$FF $00 $00 $F8 $03 $08 $00 $0E $AB $04 $10 $2A $00 $1E $C1 $02 $2C $00 $C1 $02 $3B $12 $9A $07 $67 $01 $00 $00 $F9 $FF $30 $05 $00 $00 $00 $00 $00 $00 $A1 $0A $12 $01 $00 $02 $00 $01 $00 $02 $00 $00 $05 $00 $00 $00 $00 $00 $00 $C1 $02 $73 $00 $DD $02 $00 $02 $C2 $03 $00 $00 $24 $A8 $04 $1C $0A $00 $00 $A1 $0A $00 $00 $00 $2C $00 $99 $01 $37 $00 $F0 $F8 $04 $06 $00 $03 $01 $C1 $02 $EC $00 $C1 $02 $73 $00 $C1 $02 $70 $00 $C2 $03 $00 $00 $25 $9C $02 $00 $02 $A8 $04 $1C $0A $00 $06 $A1 $0A $01 $F9 $00 $08 $00 $37 $00 $0F $00 $20 $04 $00 $53 $65 $6E $64 $00 $C1 $02 $EF $00 $05 $26 $00 $00 $00 $00 $02 $C2 $03 $00 $00 $26 $A8 $04 $1C $0A $00 $03 $A1 $0A $01 $0F $00 $08 $00 $37 $00 $0F $00 $00 $04 $00 $52 $65 $70 $6C $79 $00 $05 $26 $00 $00 $00 $00 $01 $C2 $03 $00 $00 $27 $A8 $04 $1C $0A $00 $06 $A1 $0A $01 $55 $00 $08 $00 $46 $00 $0F $00 $00 $04 $00 $47 $65 $74 $20 $50 $72 $6F $66 $69 $6C $65 $00 $05 $0A $65 $A4 $00 $00 $00 $A8 $04 $1C $0A $00 $06 $A1 $0A $01 $A9 $00 $08 $00 $41 $00 $0F $00 $00 $04 $00 $20 $20 $4C
+$6F
+$63
+$61
+$74
+$65
+$20
+$20
+fdo$window 5 10 153 184 normal
+fdo$window 2 -88 4 28 type_9
+fdo$window 5 -95 10 0 normal
+fdo$window 26 center 131 0 type_18
+fdo$window center 4 0 84 type_121
+$70
+$65
+$20
+$79
+$6F
+$75
+$72
+$20
+$6D
+$65
+$73
+$73
+$61
+$67
+$65
+$3A
+fdo$window -102 7 103 1 normal
+fdo$window 102 center 48 5 normal
+fdo$window center center 0 0 type_248
+fdo$Text 06 ""
+fdo$canned rec=1 db=168
+fdo$Text 28 "	¡
+"
+fdo$window center 103 0 131 normal
+$12
+fdo$window center 4 0 73 type_77
+$20
+$74
+$72
+$61
+$6E
+$73
+$63
+$72
+$69
+$70
+$74
+$3A
+fdo$window -88 4 28 10 normal
+fdo$window -95 10 0 0 normal
+$79
+fdo$window -105 1 65 0 type_152
+fdo$Switch switch_206
+$F8 $06 $00 $03 $03
+fdo$Mark field=0 mark=8960
+$F8 $11 $00 $00 $04
+$06 3
+fdo$enddef
+
+; =======================================================
+; db81 Record 1 (222 bytes)
+; =======================================================
+fdo$start
+$26 center center 220 128 no_resize
+fdo$Title "          Rec/Lib"
+$21 Text 10 10 200 40 none
+fdo$Text 00 "Enter host rec num to request:"
+$21 Text 117 231 200 40 none
+fdo$Text 00 ""
+$21 Text 19 38 60 20 none
+fdo$Text 00 "Lib #:"
+$21 Text 80 40 20 15 sendform editable
+fdo$Mark field=0 mark=54272
+$86 $02 $00
+$21 Text 19 67 60 20 none
+fdo$Text 00 "Rec #:"
+$21 Text 80 69 80 15 sendform editable
+fdo$Mark field=0 mark=54528
+$86 $0A $00
+$21 Button 120 96 80 20 dispatch
+fdo$dispch close
+fdo$Text 00 "Cancel"
+$21 Button 20 96 80 20 default
+fdo$dispch invoke_record info=170000
+fdo$Text 00 "Send"
+fdo$enddef
+
+; =======================================================
+; db81 Record 10 (207 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 center 30208 17920 5120 normal
+fdo$Title "              "
+fdo$SetWindowTag cluster:$0028 id=46384
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 10 18 248 50 smallbtn
+fdo$Switch switch_170
+fdo$Field16 Text 12 178 204 18 sendform editable
+fdo$Field16 Text 10 206 204 18 sendform editable
+fdo$Field16 Button 25 40 66 20 default
+fdo$Text 00 "Go"
+fdo$dispch mop_$8B token=".." info=000004
+fdo$Title "               "
+fdo$ClearField $01
+fdo$Text 01 "Enter Teen Chat"
+fdo$ClearField $02
+fdo$Text 02 "aol://2719:23-2-Teen Chat"
+fdo$ClearField $03
+fdo$Text 03 "aol://2719:23-2-Teen Chat"
+fdo$enddef
+
+; =======================================================
+; db81 Record 11 (426 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 center -5120 4864 5121 normal
+fdo$Title "               "
+fdo$Picture resid=8086 at 70,300 flags=$60
+fdo$dispch no_action
+fdo$Picture resid=8093 at 217,300 flags=$60
+fdo$dispch no_action
+fdo$TextDesc geneva 18pt bold yellow
+fdo$Field16 Text 5 2 230 25 smallbtn
+fdo$Switch switch_170
+fdo$Field16 List 15 39 205 230 sendform
+fdo$Title "    Conf Rooms"
+fdo$SetWindowTag cluster:$0039 id=4775
+fdo$TypedData $00 $FF $FE $00 $01 $00 $13 $11 $00 $83 $01 $00 $82 $01 $00 $81 $01 $00 $B2 $00 $02 $00
+fdo$Text 03 "Conferences"
+fdo$Text 00 "23 All Conf Rooms "
+fdo$dispch goto_keyword token=".." info=010099
+fdo$Text 00 "24 Wonderland"
+fdo$dispch mop_$82 token=".H" info=0001F8
+fdo$Text 00 "24 Center of the Earth"
+fdo$dispch mop_$82 token=".H" info=0001F7
+fdo$Text 00 "24 Rocky Mountain"
+fdo$dispch mop_$82 token=".." info=383E88
+fdo$Text 00 "24 Orbit of the Earth"
+fdo$dispch mop_$82 token=".H" info=00030C
+fdo$Text 00 "24 Ghosts n Hides"
+fdo$dispch mop_$82 token=".H" info=00030B
+fdo$Text 00 "24 TOS Advocates"
+fdo$dispch mop_$82 token=".H" info=00028D
+fdo$Text 00 "24 TOS CA Help Desk"
+fdo$dispch mop_$82 token=".H" info=0002C4
+fdo$Text 00 "24 MTV Yack Live!"
+fdo$dispch mop_$82 token=".H" info=000177
+fdo$enddef
+
+; =======================================================
+; db81 Record 12 (197 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$21 Text 10 10 200 40 none
+fdo$Text 00 " "
+$21 Text 10 60 60 20 none
+fdo$Text 00 " "
+$21 Text 511 60 20 15 sendform editable
+fdo$Mark field=0 mark=54272
+fdo$SetSize 2
+fdo$Text 00 "AA"
+$21 Text 10 10 255 255 none
+fdo$Text 00 ""
+$21 Text 511 85 80 15 sendform editable
+fdo$Mark field=0 mark=54528
+fdo$SetSize 255
+fdo$Text 00 "2F2F726F6C6C2D646963653135202D7369646573393939"
+$21 Button 20 15 15 20 default
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $24 $00 $00 $16 $00 $00
+fdo$Text 00 "    "
+fdo$enddef
+
+; =======================================================
+; db81 Record 13 (301 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 center -14336 8192 5120 normal
+fdo$Title "        Private Room"
+fdo$SMultiIcon resid=658 at 26,88 flags=$60
+fdo$dispch no_action
+fdo$Field16 Text 238 238 272 50 none
+fdo$Text 00 "To create or enter a private room, type the room n"
+fdo$Text 00 "ame in the box below and click on the Go button."
+fdo$Field16 Text 90 86 88 16 none
+fdo$Text 00 "Room name:"
+fdo$TextDesc application 9pt bold green
+fdo$Field16 Text 10 10 135 18 sendform editable
+fdo$SetSize 20
+fdo$Switch AccentsOk
+fdo$EncodeType $00 $02
+fdo$TextDesc application 9pt bold magenta
+fdo$Field16 Button 160 8 30 16 default
+fdo$Text 00 "P"
+fdo$Text 00 "R"
+fdo$dispch open_room token=".X"
+fdo$Field16 Popup 140 128 215 18 none
+fdo$Text 00 "Language:"
+fdo$Mark field=0 mark=20
+fdo$Switch SetEnterKeyField
+fdo$Switch FillLanguageList
+fdo$SImdDispatch $A7 $00 $00 $00 $00 $04
+fdo$enddef
+
+; =======================================================
+; db81 Record 2 (222 bytes)
+; =======================================================
+fdo$start
+$26 center center 220 128 no_resize
+fdo$Title "            Token"
+$21 Text 10 10 200 40 none
+fdo$Text 00 "Enter data to send to the host:"
+$21 Text 117 231 200 40 none
+fdo$Text 00 ""
+$21 Text 19 38 60 20 none
+fdo$Text 00 "Token:"
+$21 Text 80 40 20 15 sendform editable
+fdo$Mark field=0 mark=54272
+$86 $02 $00
+$21 Text 19 67 60 20 none
+fdo$Text 00 "Data:"
+$21 Text 80 69 80 15 sendform editable
+fdo$Mark field=0 mark=54528
+$86 $0A $00
+$21 Button 120 96 80 20 dispatch
+fdo$dispch close
+fdo$Text 00 "Cancel"
+$21 Button 20 96 80 20 default
+fdo$dispch invoke_record info=160000
+fdo$Text 00 "Send"
+fdo$enddef
+
+; =======================================================
+; db81 Record 3 (142 bytes)
+; =======================================================
+fdo$start
+fdo$window center 4 34 5 type_2
+fdo$TextDesc geneva 12pt bold magenta
+fdo$Field16 Text 15 13 145 50 none
+$DF $00 $00 $01
+fdo$Text 01 "Enter Board ID:"
+fdo$TextDesc geneva 12pt plain black
+fdo$Field16 Text 140 13 42 15 sendform editable smallbtn
+fdo$SetSize 4
+fdo$Field16 Button 25 49 55 16 default
+$DF $00 $00 $02
+fdo$Text 03 "Classic"
+fdo$dispch open_room token=".."
+$06 2
+fdo$Field16 Button 121 49 55 16 none
+$DF $00 $00 $02
+fdo$Text 04 "System"
+fdo$dispch open_room token="j."
+$06 2
+fdo$enddef
+
+; =======================================================
+; db81 Record 4 (167 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$F8 $08 $00 $18
+fdo$SetWindowTag cluster:$102A id=31
+fdo$Switch SetMajorField
+fdo$Switch SetToolDisplay $12
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 1360 10 60 20 none
+fdo$Text 01 "Name:"
+fdo$Field16 Text 1420 10 90 20 editable scrollable
+fdo$Mark field=2 mark=9216
+fdo$SetSize 10
+fdo$Text 02 "$im_on"
+$F8 $10 $10 $2A
+fdo$Field16 Text 10 10 176 20 editable scrollable
+fdo$Mark field=3 mark=9472
+fdo$Text 03 "Î23"
+fdo$Field16 Button 41 32 100 20 default
+fdo$Switch ExitTool
+fdo$Text 04 "Exit"
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $26 $00 $00 $00 $00 $04
+fdo$enddef
+
+; =======================================================
+; db81 Record 5 (168 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$F8 $08 $00 $18
+fdo$SetWindowTag cluster:$102A id=31
+fdo$Switch SetMajorField
+fdo$Switch SetToolDisplay $12
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 1360 10 60 20 none
+fdo$Text 01 "Name:"
+fdo$Field16 Text 1420 10 90 20 editable scrollable
+fdo$Mark field=2 mark=9216
+fdo$SetSize 10
+fdo$Text 02 "$im_off"
+$F8 $10 $10 $2A
+fdo$Field16 Text 10 10 176 20 editable scrollable
+fdo$Mark field=3 mark=9472
+fdo$Text 03 "Î23"
+fdo$Field16 Button 41 32 100 20 default
+fdo$Switch ExitTool
+fdo$Text 04 "Exit"
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $26 $00 $00 $00 $00 $04
+fdo$enddef
+
+; =======================================================
+; db81 Record 7 (184 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$F8 $08 $00 $18
+fdo$SetWindowTag cluster:$102A id=31
+fdo$Switch SetMajorField
+fdo$Switch SetToolDisplay $12
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 1360 10 60 20 none
+fdo$Text 01 "Name:"
+fdo$Field16 Text 1420 10 90 20 editable scrollable
+fdo$Mark field=2 mark=9216
+fdo$SetSize 10
+fdo$Text 02 "aol://2719:2-2-MacFilez"
+$F8 $10 $10 $2A
+fdo$Field16 Text 10 10 176 20 editable scrollable
+fdo$Mark field=3 mark=9472
+fdo$Text 03 "Î  "
+fdo$Field16 Button 41 32 100 20 default
+fdo$Switch ExitTool
+fdo$Text 04 "Exit"
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $89 $97 $AC $00 $00 $00
+fdo$enddef
+
+; =======================================================
+; db81 Record 8 (185 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$F8 $08 $00 $18
+fdo$SetWindowTag cluster:$102A id=31
+fdo$Switch SetMajorField
+fdo$Switch SetToolDisplay $12
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 1360 10 60 20 none
+fdo$Text 01 "Name:"
+fdo$Field16 Text 1420 10 90 20 editable scrollable
+fdo$Mark field=2 mark=9216
+fdo$SetSize 10
+fdo$Text 02 "aol://2719:2-2-MacFilez2"
+$F8 $10 $10 $2A
+fdo$Field16 Text 10 10 176 20 editable scrollable
+fdo$Mark field=3 mark=9472
+fdo$Text 03 "Î  "
+fdo$Field16 Button 41 32 100 20 default
+fdo$Switch ExitTool
+fdo$Text 04 "Exit"
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $89 $97 $AC $00 $00 $00
+fdo$enddef
+
+; =======================================================
+; db81 Record 9 (185 bytes)
+; =======================================================
+fdo$start
+fdo$Window16 default 476 256 5120 type_220
+fdo$Title "          "
+$F8 $08 $00 $18
+fdo$SetWindowTag cluster:$102A id=31
+fdo$Switch SetMajorField
+fdo$Switch SetToolDisplay $12
+fdo$TextDesc system 12pt plain black
+fdo$Field16 Text 1360 10 60 20 none
+fdo$Text 01 "Name:"
+fdo$Field16 Text 1420 10 90 20 editable scrollable
+fdo$Mark field=2 mark=9216
+fdo$SetSize 10
+fdo$Text 02 "aol://2719:2-2-MacFilez3"
+$F8 $10 $10 $2A
+fdo$Field16 Text 10 10 176 20 editable scrollable
+fdo$Mark field=3 mark=9472
+fdo$Text 03 "Î  "
+fdo$Field16 Button 41 32 100 20 default
+fdo$Switch ExitTool
+fdo$Text 04 "Exit"
+fdo$dispch goto_url token=".." info=1178B5
+fdo$SImdDispatch $89 $97 $AC $00 $00 $00
+fdo$enddef
+

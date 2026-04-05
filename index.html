@@ -3,996 +3,2346 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FDO88 Manual - Chonkvision Viewer</title>
+<title>Dialtone Tech Notes - Macintosh AOL 2.7</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23fc9d2c' d='M256 40L380 180H132L256 40z'/%3E%3Cellipse fill='%23fc9d2c' cx='256' cy='340' rx='180' ry='40'/%3E%3Cpath fill='%23001e37' d='M96 180c-20 0-36 16-36 36v120c0 20 16 36 36 36h320c20 0 36-16 36-36V216c0-20-16-36-36-36H96z'/%3E%3Crect fill='%23fffae3' x='76' y='196' width='360' height='104' rx='16'/%3E%3Crect fill='%23001e37' x='92' y='212' width='328' height='72' rx='12'/%3E%3Ccircle fill='%23fffae3' cx='140' cy='248' r='24'/%3E%3Ccircle fill='%23001e37' cx='140' cy='248' r='14'/%3E%3Ccircle fill='%23fffae3' cx='320' cy='248' r='10'/%3E%3Ccircle fill='%23fffae3' cx='360' cy='248' r='10'/%3E%3Ccircle fill='%23fffae3' cx='400' cy='248' r='10'/%3E%3Crect fill='%23001e37' x='120' y='352' width='40' height='20' rx='4'/%3E%3Crect fill='%23001e37' x='352' y='352' width='40' height='20' rx='4'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#fc9d2c">
 <style>
-  :root {
-    --bg: #f5f5f0;
-    --sidebar-bg: #1a1a2e;
-    --sidebar-text: #c4c4d4;
-    --sidebar-active: #e0e0f0;
-    --sidebar-hover: #2a2a4e;
-    --card-bg: #ffffff;
-    --border: #d0d0c8;
-    --text: #1a1a1a;
-    --text-muted: #5a5a5a;
-    --accent: #2c4a8c;
-    --accent-light: #e8edf5;
-    --code-bg: #f0ede6;
-    --tag-bg: #e2ddd3;
-    --mono: 'SF Mono', 'Menlo', 'Consolas', monospace;
-    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: var(--sans);
-    background: var(--bg);
-    color: var(--text);
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  /* Sidebar */
-  #sidebar {
-    width: 280px;
-    min-width: 280px;
-    background: var(--sidebar-bg);
-    color: var(--sidebar-text);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  #sidebar-header {
-    padding: 20px 16px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
-
-  #sidebar-header h1 {
-    font-size: 16px;
-    color: #fff;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-
-  #sidebar-header .meta {
-    font-size: 11px;
-    color: #888;
-    margin-top: 4px;
-  }
-
-  #search-box {
-    padding: 10px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
-
-  #search {
-    width: 100%;
-    padding: 7px 10px;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 4px;
-    background: rgba(255,255,255,0.06);
-    color: #eee;
-    font-size: 13px;
-    outline: none;
-  }
-
-  #search::placeholder { color: #666; }
-  #search:focus { border-color: rgba(255,255,255,0.25); }
-
-  #nav {
-    flex: 1;
-    overflow-y: auto;
-    padding: 8px 0;
-  }
-
-  #nav::-webkit-scrollbar { width: 4px; }
-  #nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-
-  .nav-section {
-    padding: 6px 16px;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #555;
-    margin-top: 8px;
-  }
-
-  .nav-item {
-    display: flex;
-    align-items: center;
-    padding: 6px 16px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background 0.1s;
-    gap: 8px;
-  }
-
-  .nav-item:hover { background: var(--sidebar-hover); }
-  .nav-item.active { background: var(--sidebar-hover); color: var(--sidebar-active); }
-
-  .nav-item .count {
-    margin-left: auto;
-    font-size: 11px;
-    color: #555;
-    background: rgba(255,255,255,0.06);
-    padding: 1px 6px;
-    border-radius: 8px;
-  }
-
-  .nav-cmd {
-    padding: 4px 16px 4px 28px;
-    font-size: 12px;
-    font-family: var(--mono);
-    cursor: pointer;
-    transition: background 0.1s;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .nav-cmd:hover { background: var(--sidebar-hover); }
-  .nav-cmd.active { background: var(--sidebar-hover); color: var(--sidebar-active); }
-
-  /* Main content */
-  #main {
-    flex: 1;
-    overflow-y: auto;
-    padding: 32px 40px;
-  }
-
-  #main::-webkit-scrollbar { width: 6px; }
-  #main::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-
-  .page-title {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: var(--text);
-  }
-
-  .page-subtitle {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 24px;
-  }
-
-  /* Cards */
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 20px;
-    margin-bottom: 16px;
-  }
-
-  .card h3 {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-
-  .card p, .card li {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text);
-  }
-
-  /* Command detail */
-  .cmd-header {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 4px;
-  }
-
-  .cmd-name {
-    font-family: var(--mono);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--accent);
-  }
-
-  .cmd-alias {
-    font-size: 16px;
-    color: var(--text-muted);
-  }
-
-  .cmd-opcodes {
-    display: flex;
-    gap: 8px;
-    margin: 8px 0 16px;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    display: inline-block;
-    font-size: 12px;
-    font-family: var(--mono);
-    padding: 2px 8px;
-    border-radius: 3px;
-    background: var(--tag-bg);
-    color: var(--text-muted);
-  }
-
-  .tag.platform {
-    background: var(--accent-light);
-    color: var(--accent);
-  }
-
-  .cmd-section {
-    margin-top: 16px;
-  }
-
-  .cmd-section-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-    font-weight: 600;
-  }
-
-  .cmd-description {
-    font-size: 14px;
-    line-height: 1.7;
-    white-space: pre-wrap;
-  }
-
-  .cmd-syntax {
-    font-family: var(--mono);
-    font-size: 13px;
-    background: var(--code-bg);
-    padding: 10px 14px;
-    border-radius: 4px;
-    overflow-x: auto;
-  }
-
-  /* Parameter table */
-  .param-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    margin-top: 4px;
-  }
-
-  .param-table th {
-    text-align: left;
-    padding: 6px 10px;
-    background: var(--bg);
-    font-weight: 600;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .param-table td {
-    padding: 6px 10px;
-    border-bottom: 1px solid #eee;
-    vertical-align: top;
-  }
-
-  .param-table .param-name {
-    font-family: var(--mono);
-    white-space: nowrap;
-    color: var(--accent);
-  }
-
-  .param-values {
-    margin-top: 4px;
-    padding-left: 12px;
-  }
-
-  .param-values .pv {
-    display: flex;
-    gap: 8px;
-    font-size: 12px;
-    padding: 2px 0;
-  }
-
-  .param-values .pv-val {
-    font-family: var(--mono);
-    min-width: 40px;
-    color: var(--accent);
-  }
-
-  .cmd-example {
-    font-family: var(--mono);
-    font-size: 13px;
-    background: var(--code-bg);
-    padding: 10px 14px;
-    border-radius: 4px;
-    white-space: pre-wrap;
-  }
-
-  .cmd-example-expl {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 6px;
-    font-style: italic;
-  }
-
-  .cross-refs {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-top: 4px;
-  }
-
-  .cross-ref {
-    font-family: var(--mono);
-    font-size: 12px;
-    padding: 2px 8px;
-    background: var(--accent-light);
-    color: var(--accent);
-    border-radius: 3px;
-    cursor: pointer;
-  }
-
-  .cross-ref:hover { background: #d0d8ee; }
-
-  /* Glossary */
-  .glossary-term {
-    font-weight: 600;
-    font-size: 15px;
-    margin-bottom: 4px;
-  }
-
-  .glossary-def {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text);
-  }
-
-  /* Reference table */
-  .ref-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-
-  .ref-table th {
-    text-align: left;
-    padding: 8px 10px;
-    background: var(--accent);
-    color: #fff;
-    font-size: 12px;
-    font-weight: 600;
-  }
-
-  .ref-table td {
-    padding: 6px 10px;
-    border-bottom: 1px solid #eee;
-    vertical-align: top;
-  }
-
-  .ref-table tr:nth-child(even) td { background: #fafaf6; }
-
-  /* Chapter content */
-  .chapter-heading {
-    font-size: 18px;
-    font-weight: 600;
-    margin-top: 20px;
-    margin-bottom: 8px;
-    color: var(--accent);
-  }
-
-  .chapter-content {
-    font-size: 14px;
-    line-height: 1.7;
-    white-space: pre-wrap;
-    margin-bottom: 12px;
-  }
-
-  .chapter-bullets {
-    padding-left: 24px;
-    margin-bottom: 12px;
-  }
-
-  .chapter-bullets li {
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 2px;
-  }
-
-  /* Code samples */
-  .code-block {
-    font-family: var(--mono);
-    font-size: 12px;
-    background: #1a1a2e;
-    color: #c4d4c4;
-    padding: 16px;
-    border-radius: 4px;
-    overflow-x: auto;
-    white-space: pre;
-    line-height: 1.5;
-  }
-
-  /* Stats grid */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
-  .stat-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 14px;
-    text-align: center;
-  }
-
-  .stat-value {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--accent);
-  }
-
-  .stat-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
-
-  /* Search results highlight */
-  .highlight {
-    background: #fff3a8;
-    padding: 1px 2px;
-    border-radius: 2px;
-  }
-
-  .no-results {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-muted);
-    font-size: 15px;
-  }
-
-  /* TOC */
-  .toc-entry {
-    padding: 4px 0;
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    border-bottom: 1px dotted #ddd;
-  }
-
-  .toc-entry.level-2 { padding-left: 24px; }
-  .toc-entry.level-3 { padding-left: 48px; }
-
-  .toc-page { color: var(--text-muted); font-family: var(--mono); font-size: 13px; }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    #sidebar { width: 240px; min-width: 240px; }
-    #main { padding: 20px; }
-  }
+:root {
+  --bg: #04060c;
+  --sidebar-bg: #0b1120;
+  --card-bg: #0f1628;
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #f4f7ff;
+  --text-dim: #9aa4c7;
+  --text-bright: #f4f7ff;
+  --green: #34d399;
+  --green-dim: #22a07a;
+  --orange: #fc9d2c;
+  --orange-dim: #ffb347;
+  --cream: #fffae3;
+  --navy: #001e37;
+  --code-bg: #0b1120;
+  --mono: 'SF Mono', 'Menlo', 'Consolas', 'Liberation Mono', monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --sidebar-w: 260px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+/* ========== SIDEBAR ========== */
+#sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 100;
+}
+
+#sidebar-header {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+#sidebar-header h1 {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--cream);
+  text-shadow: 0 0 10px rgba(252,157,44,0.3);
+  letter-spacing: 1px;
+}
+
+#sidebar-header .sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+#sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+#sidebar-nav::-webkit-scrollbar { width: 4px; }
+#sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.nav-item {
+  display: block;
+  padding: 10px 16px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  font-family: var(--mono);
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  color: var(--text);
+  background: rgba(0,255,65,0.03);
+}
+
+.nav-item.active {
+  color: var(--orange);
+  border-left-color: var(--orange);
+  background: rgba(252,157,44,0.08);
+}
+
+.nav-item .nav-num {
+  color: var(--green-dim);
+  margin-right: 8px;
+  font-size: 11px;
+}
+
+/* ========== MAIN CONTENT ========== */
+#main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+#main::-webkit-scrollbar { width: 8px; }
+#main::-webkit-scrollbar-track { background: var(--bg); }
+#main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+#main::-webkit-scrollbar-thumb:hover { background: #2a2a3a; }
+
+.section {
+  padding: 60px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--border);
+  min-height: 50vh;
+}
+
+.section:last-child { border-bottom: none; }
+
+/* ========== HERO ========== */
+#hero {
+  position: relative;
+  padding: 80px 48px 60px;
+  max-width: 1100px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+
+#hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,255,65,0.015) 2px,
+    rgba(0,255,65,0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+#hero > * { position: relative; z-index: 2; }
+
+.hero-title {
+  font-family: var(--mono);
+  font-size: 36px;
+  color: var(--cream);
+  text-shadow: 0 0 20px rgba(252,157,44,0.25);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  color: var(--text);
+  max-width: 800px;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.stat-card:hover { border-color: var(--green-dim); }
+
+.stat-num {
+  font-family: var(--mono);
+  font-size: 28px;
+  color: var(--orange);
+  text-shadow: 0 0 8px rgba(252,157,44,0.3);
+  display: block;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+.hero-intro {
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.8;
+  max-width: 800px;
+}
+
+/* ========== TYPOGRAPHY ========== */
+h2 {
+  font-family: var(--mono);
+  font-size: 24px;
+  color: var(--orange);
+  text-shadow: 0 0 12px rgba(0,255,65,0.25);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+h3 {
+  font-family: var(--mono);
+  font-size: 18px;
+  color: var(--text-bright);
+  margin: 32px 0 12px;
+  letter-spacing: 1px;
+}
+
+h4 {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--orange);
+  margin: 24px 0 8px;
+  letter-spacing: 1px;
+}
+
+.section-desc {
+  color: var(--text-dim);
+  font-size: 14px;
+  margin-bottom: 32px;
+  font-family: var(--mono);
+}
+
+p { margin-bottom: 12px; font-size: 15px; }
+
+/* ========== CODE BLOCKS ========== */
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  margin: 16px 0;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--orange);
+  white-space: pre;
+  word-wrap: normal;
+  overflow-wrap: normal;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--orange);
+  background: rgba(0,255,65,0.06);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+/* ========== TABLES ========== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+}
+
+th {
+  background: var(--code-bg);
+  color: var(--orange);
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--green-dim);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 13px;
+  vertical-align: top;
+}
+
+tr:hover td { background: rgba(0,255,65,0.02); }
+
+.table-wrap {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 16px 0;
+}
+
+.table-wrap::-webkit-scrollbar { width: 6px; }
+.table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.table-wrap table { margin: 0; }
+.table-wrap th { top: 0; }
+
+/* ========== SEARCH / FILTER ========== */
+.search-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus { border-color: var(--green-dim); }
+
+.search-input::placeholder { color: var(--text-dim); }
+
+.filter-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 14px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover { border-color: var(--green-dim); color: var(--text); }
+.filter-btn.active { border-color: var(--orange); color: var(--orange); background: rgba(252,157,44,0.08); }
+
+select.filter-select {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+select.filter-select option { background: var(--code-bg); color: var(--text); }
+
+/* ========== COMMAND CARDS ========== */
+.cmd-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+  overflow: hidden;
+}
+
+.cmd-card:hover { border-color: rgba(252,157,44,0.3); }
+
+.cmd-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cmd-header:hover { background: rgba(0,255,65,0.02); }
+
+.cmd-opcode {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--orange);
+  min-width: 50px;
+  font-weight: bold;
+}
+
+.cmd-name {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--orange);
+  flex: 1;
+}
+
+.cmd-alias {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.cmd-expand-icon {
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 14px;
+  transition: transform 0.2s;
+}
+
+.cmd-card.expanded .cmd-expand-icon { transform: rotate(90deg); }
+
+.cmd-body {
+  display: none;
+  padding: 0 16px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.cmd-card.expanded .cmd-body { display: block; padding-top: 16px; }
+
+.cmd-field { margin-bottom: 12px; }
+.cmd-field-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.cmd-field-value {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.param-table {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.param-table th {
+  font-size: 11px;
+  padding: 6px 8px;
+  position: static;
+}
+
+.param-table td {
+  font-size: 12px;
+  padding: 6px 8px;
+}
+
+/* ========== TOOL GALLERY ========== */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.tool-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.tool-card:hover {
+  border-color: rgba(252,157,44,0.3);
+  box-shadow: 0 0 20px rgba(252,157,44,0.08);
+}
+
+.tool-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tool-primary-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  background: var(--bg);
+  image-rendering: pixelated;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.tool-card-info h4 {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--orange);
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.tool-card-version {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.tool-card-stats {
+  display: flex;
+  gap: 12px;
+  padding: 8px 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  background: rgba(0,0,0,0.2);
+}
+
+.tool-card-stats span { color: var(--orange); }
+
+.tool-art-strip {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  overflow-x: auto;
+  background: var(--bg);
+  min-height: 44px;
+}
+
+.tool-art-strip::-webkit-scrollbar { height: 4px; }
+.tool-art-strip::-webkit-scrollbar-thumb { background: var(--border); }
+
+.tool-art-strip img {
+  height: 36px;
+  image-rendering: pixelated;
+  border-radius: 2px;
+  background: var(--card-bg);
+  flex-shrink: 0;
+}
+
+/* Tool expanded detail panel */
+.tool-detail-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 200;
+  overflow-y: auto;
+  padding: 40px;
+}
+
+.tool-detail-overlay.visible { display: block; }
+
+.tool-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tool-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tool-detail-header h3 {
+  margin: 0;
+  color: var(--orange);
+}
+
+.tool-detail-close {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tool-detail-close:hover { color: var(--text); border-color: var(--text-dim); }
+
+.tool-detail-body { padding: 24px; }
+
+.tool-detail-section { margin-bottom: 24px; }
+
+.tool-detail-section h4 {
+  font-family: var(--mono);
+  color: var(--orange);
+  font-size: 13px;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.art-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.art-grid img {
+  max-height: 80px;
+  image-rendering: pixelated;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.art-grid img:hover { border-color: var(--green-dim); }
+
+.art-grid img.large-art {
+  max-height: 160px;
+}
+
+.sound-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sound-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 12px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sound-btn:hover { border-color: var(--orange); color: var(--orange); }
+.sound-btn.playing { border-color: var(--orange); color: var(--orange); }
+.sound-btn .play-icon { font-size: 14px; }
+
+.text-block {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 8px;
+}
+
+.text-block-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 300;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.lightbox.visible { display: flex; }
+
+.lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  image-rendering: pixelated;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+}
+
+/* ========== AOL4FREE SECTION ========== */
+.patch-table td:first-child {
+  color: var(--orange);
+  font-weight: bold;
+}
+
+blockquote {
+  border-left: 3px solid var(--orange);
+  padding: 12px 20px;
+  margin: 16px 0;
+  background: rgba(255,102,0,0.04);
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  color: var(--text);
+}
+
+.info-box {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+
+.info-box h4 { margin-top: 0; }
+
+/* ========== COUNT BADGE ========== */
+.count-badge {
+  display: inline-block;
+  background: rgba(252,157,44,0.1);
+  color: var(--orange);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+}
+
+/* ========== LOADING ========== */
+.loading-msg {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+}
+
+.loading-msg::after {
+  content: '';
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  :root { --sidebar-w: 200px; }
+  .section { padding: 40px 24px; }
+  #hero { padding: 60px 24px 40px; }
+  .hero-title { font-size: 24px; }
+  .tools-grid { grid-template-columns: 1fr; }
+}
+
+/* ========== MISC ========== */
+a { color: var(--orange); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--orange-dim); }
+
+a.code-ref {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: rgba(252,157,44,0.08);
+  border: 1px solid rgba(252,157,44,0.15);
+  border-radius: 3px;
+  padding: 0 4px;
+  white-space: nowrap;
+}
+a.code-ref:hover { background: rgba(252,157,44,0.15); text-decoration: none; }
+
+tr:target {
+  background: rgba(252,157,44,0.12);
+  outline: 1px solid rgba(252,157,44,0.3);
+}
+
+/* FDO88 Syntax Highlighting */
+.fdo-source {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  overflow-x: auto;
+  white-space: pre;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+pre code.fdo-source {
+  display: block;
+  font-size: 12px;
+  line-height: 1.7;
+  white-space: pre;
+  overflow-x: auto;
+}
+.fdo-source .fdo-cmd { color: #fc9d2c; font-weight: bold; }
+.fdo-source .fdo-keyword { color: #ffb347; }
+.fdo-source .fdo-string { color: #34d399; }
+.fdo-source .fdo-number { color: #93bbff; }
+.fdo-source .fdo-hex { color: #c4a0ff; }
+.fdo-source .fdo-comment { color: #6a7390; font-style: italic; }
+.fdo-source .fdo-dispatch { color: #fb7185; }
+.fdo-source .fdo-param { color: #9aa4c7; }
+.fdo-source .fdo-type { color: #7dd3fc; }
+
+.fdo-form-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.fdo-form-header {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.fdo-form-header:hover { background: rgba(252,157,44,0.05); }
+.fdo-form-header .fdo-form-db { color: var(--orange); min-width: 70px; }
+.fdo-form-header .fdo-form-desc { color: var(--text-dim); flex: 1; }
+.fdo-form-header .fdo-form-lines { color: var(--text-dim); font-size: 11px; }
+.fdo-form-body { display: none; padding: 0; }
+.fdo-form-card.expanded .fdo-form-body { display: block; }
+
+.orange { color: var(--orange); }
+.green { color: var(--orange); }
+.dim { color: var(--text-dim); }
+
+.tag {
+  display: inline-block;
+  background: rgba(252,157,44,0.08);
+  border: 1px solid rgba(252,157,44,0.2);
+  color: var(--orange);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin: 2px 4px 2px 0;
+}
+
+.tag.orange {
+  background: rgba(255,102,0,0.08);
+  border-color: rgba(255,102,0,0.2);
+  color: var(--orange);
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+.version-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.04);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
 </style>
 </head>
 <body>
 
-<div id="sidebar">
+<!-- SIDEBAR -->
+<nav id="sidebar">
   <div id="sidebar-header">
-    <h1 id="doc-title">Loading...</h1>
-    <div class="meta" id="doc-meta"></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:36px;height:36px;flex-shrink:0;">
+        <path fill="#fc9d2c" d="M256 40L380 180H132L256 40z"/>
+        <ellipse fill="#fc9d2c" cx="256" cy="340" rx="180" ry="40"/>
+        <path fill="#001e37" d="M96 180c-20 0-36 16-36 36v120c0 20 16 36 36 36h320c20 0 36-16 36-36V216c0-20-16-36-36-36H96z"/>
+        <rect fill="#fffae3" x="76" y="196" width="360" height="104" rx="16"/>
+        <rect fill="#001e37" x="92" y="212" width="328" height="72" rx="12"/>
+        <circle fill="#fffae3" cx="140" cy="248" r="24"/>
+        <circle fill="#001e37" cx="140" cy="248" r="14"/>
+        <circle fill="#fffae3" cx="320" cy="248" r="10"/>
+        <circle fill="#fffae3" cx="360" cy="248" r="10"/>
+        <circle fill="#fffae3" cx="400" cy="248" r="10"/>
+      </svg>
+      <div>
+        <div style="font-family:var(--sans);font-size:15px;font-weight:700;color:var(--orange);letter-spacing:0.5px;">DIALTONE</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:1px;">TECH NOTES</div>
+      </div>
+    </div>
+    <h1 style="font-size:14px;">Macintosh AOL 2.7</h1>
+    <div class="sub">FDO88 Protocol &amp; Reverse Engineering</div>
   </div>
-  <div id="search-box">
-    <input type="text" id="search" placeholder="Search commands, terms..." autocomplete="off">
+  <div id="sidebar-nav">
+    <a class="nav-item active" href="#overview"><span class="nav-num">01</span>Overview</a>
+    <a class="nav-item" href="#protocol"><span class="nav-num">02</span>Protocol</a>
+    <a class="nav-item" href="#manual"><span class="nav-num">03</span>FDO88 Commands</a>
+    <a class="nav-item" href="#aol4free"><span class="nav-num">04</span>AOL4FREE</a>
+    <a class="nav-item" href="#tools"><span class="nav-num">05</span>Tool Gallery</a>
+    <a class="nav-item" href="#source"><span class="nav-num">06</span>Decompiled FDO88</a>
+    <a class="nav-item" href="#toolkit"><span class="nav-num">07</span>RE Toolkit</a>
+    <a class="nav-item" href="#about"><span class="nav-num">08</span>About</a>
   </div>
-  <div id="nav"></div>
-</div>
+</nav>
 
+<!-- MAIN CONTENT -->
 <div id="main">
-  <div class="no-results">Loading manual data...</div>
-</div>
 
+  <!-- ============ SECTION 1: OVERVIEW / HERO ============ -->
+  <section id="overview" class="section" style="border-bottom: none;">
+    <div id="hero">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:56px;height:56px;">
+          <path fill="#fc9d2c" d="M256 40L380 180H132L256 40z"/>
+          <ellipse fill="#fc9d2c" cx="256" cy="340" rx="180" ry="40"/>
+          <path fill="#001e37" d="M96 180c-20 0-36 16-36 36v120c0 20 16 36 36 36h320c20 0 36-16 36-36V216c0-20-16-36-36-36H96z"/>
+          <rect fill="#fffae3" x="76" y="196" width="360" height="104" rx="16"/>
+          <rect fill="#001e37" x="92" y="212" width="328" height="72" rx="12"/>
+          <circle fill="#fffae3" cx="140" cy="248" r="24"/>
+          <circle fill="#001e37" cx="140" cy="248" r="14"/>
+          <circle fill="#fffae3" cx="320" cy="248" r="10"/>
+          <circle fill="#fffae3" cx="360" cy="248" r="10"/>
+          <circle fill="#fffae3" cx="400" cy="248" r="10"/>
+        </svg>
+        <div>
+          <div style="font-family:var(--sans);font-size:13px;font-weight:600;color:var(--orange);letter-spacing:1px;text-transform:uppercase;">Dialtone Tech Notes</div>
+        </div>
+      </div>
+      <h1 class="hero-title">Macintosh AOL 2.7</h1>
+      <div class="hero-subtitle">
+        A deep technical exploration of AOL's proprietary FDO88 binary GUI protocol, the P3 transport layer, and the underground tool scene that hacked it all through the mid-1990s.
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-num">119</span>
+          <div class="stat-label">FDO88 Commands</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">57</span>
+          <div class="stat-label">Executable Modules</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">171</span>
+          <div class="stat-label">Canned Forms</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="stat-tools">86</span>
+          <div class="stat-label">Underground Tools</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="stat-art">2158</span>
+          <div class="stat-label">Extracted Art</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="stat-sounds">57</span>
+          <div class="stat-label">Sounds</div>
+        </div>
+      </div>
+      <p class="hero-intro">
+        <strong>FDO88</strong> (Form Definition Opcode 88) was America Online's proprietary binary bytecode language for defining, rendering, and controlling the graphical user interface of its client software. Every window, button, text field, and menu on AOL was described as an FDO88 stream &mdash; a compact sequence of opcodes sent from AOL's host computers over the P3 transport protocol and interpreted in real-time by the client.
+      </p>
+      <p class="hero-intro">
+        This project documents the complete FDO88 instruction set from the original confidential AOL engineering manual (January 1994, Release 1.0), maps the internal architecture of the AOL 2.7 Macintosh client through resource fork analysis, and preserves the underground "hacker tool" ecosystem that exploited these protocols &mdash; including the infamous <strong>AOL4FREE</strong> billing bypass. The 83 tools catalogued here represent a nearly complete archive of the AOL Macintosh underground scene.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 2: PROTOCOL ARCHITECTURE ============ -->
+  <section id="protocol" class="section">
+    <h2>Protocol Architecture</h2>
+    <p class="section-desc">How the AOL 2.7 Macintosh client processed data from modem to screen</p>
+
+    <h3>Client Architecture</h3>
+    <p>The AOL 2.7 Mac client was a single 851KB binary containing 57 executable modules (what the classic Mac OS called "CODE resources" &mdash; essentially the 1990s equivalent of DLLs, loaded into memory on demand). Each module handled a distinct subsystem: protocol networking, form rendering, sound playback, modem control, etc. The following diagram shows the data flow from network connection to rendered UI:</p>
+
+    <pre><code>
+          AOL 2.7 Mac Client - Internal Architecture
+          ============================================
+
+  [  Modem (300-28800 baud) or TCP to AmericaOnline.aol.com:5190  ]
+                                  |
+                                  v
+  +---------------------------------------------------------------+
+  |                    P3 Protocol Engine                          |
+  |  Reliable transport: sync ($5A), CRC-16, sequence numbers,    |
+  |  sliding window flow control, 119-byte max payload per frame  |
+  +---------------------------------------------------------------+
+                                  |
+                                  v
+  +---------------------------------------------------------------+
+  |                      Token Handler                             |
+  |  Routes each packet by its 2-byte ASCII token identifier:      |
+  |  AF/RF = FDO88 forms, iT/iP = IMs, AA-AX = Chat, OT = Tools  |
+  +-------------------------------+-------------------------------+
+                |                                   |
+                v                                   v
+  +----------------------------+      +----------------------------+
+  |   FDO88 Form Pipeline      |      |      Online Tools          |
+  |                            |      |                            |
+  |  DataParsing               |      |  Chat        (tokens AA-AX)|
+  |    Reads binary stream     |      |  Mail        (tokens iT/iP)|
+  |    byte by byte, decodes   |      |  File Xfer   (token f1)   |
+  |    opcodes + parameters    |      |  Members     (tokens iA/iB)|
+  |           |                |      |  Goto, Setup, Compression  |
+  |           v                |      +----------------------------+
+  |  FormModifiers             |
+  |    Interprets each opcode: |
+  |    Window16, Field16,      |
+  |    Text, dispch, Switch,   |
+  |    Picture, SetFont...     |
+  |           |                |
+  |           v                |
+  |  FormsCreation             |
+  |    Builds Mac UI elements: |
+  |    _NewWindow, TextEdit,   |
+  |    buttons, lists, popups  |
+  |           |                |
+  |           v                |
+  |  Drawing (QuickDraw)       |
+  |    Renders pixels on screen|
+  +----------------------------+
+                |
+                v
+  +---------------------------------------------------------------+
+  |               MOPs - Dispatch Execution                        |
+  |  User clicks button -> reads 6-byte dispatch structure:        |
+  |  [MOP code] [token hi] [token lo] [info1] [info2] [info3]     |
+  |  Sends P3 token to server -> server responds with new form     |
+  +---------------------------------------------------------------+
+                |
+                v
+          (back to P3 Protocol Engine &mdash; full cycle)
+</code></pre>
+
+    <h3>P3 Packet Structure</h3>
+    <p>P3 (Protocol 3) was AOL's reliable transport layer, sitting between the raw serial/TCP connection and the application-level token dispatching. Each P3 frame carried a 2-byte token identifier that determined how the payload was routed. FDO88 form data, chat messages, IMs, and billing signals all traveled as P3 packets.</p>
+
+    <pre><code>[5A]        Sync byte 'Z'
+[CRC hi]    CRC-16 high byte
+[CRC lo]    CRC-16 low byte
+[00]        Padding
+[length]    Payload length
+[tx_seq]    Transmit sequence
+[rx_seq]    Receive sequence
+[space]     0x20
+[token hi]  Token identifier
+[token lo]  Token identifier
+[data...]   FDO88 payload</code></pre>
+
+    <p>The sync byte <code>0x5A</code> ('Z') marked the start of every frame. CRC-16 provided integrity checking. The tx/rx sequence numbers implemented reliable delivery with retransmission &mdash; critical when the transport was a 2400 baud modem connection. The 2-byte token after the header determined which handler in the client would process the payload.</p>
+
+    <h3>7-Phase Connection Sequence</h3>
+    <div class="info-box">
+      <p><strong>Phase 1: Physical Link</strong> &mdash; Modem dials AOL access number via the CCL interpreter. SerStuff manages the serial port. Baud rate negotiation at hardware level.</p>
+      <p><strong>Phase 2: P3 Handshake</strong> &mdash; Client sends P3 init sequence. Protocol version negotiation. CRC and sequence number initialization in the P3 engine.</p>
+      <p><strong>Phase 3: Authentication</strong> &mdash; Screen name and password transmitted. Server validates credentials. Session token issued.</p>
+      <p><strong>Phase 4: Client Configuration</strong> &mdash; Server sends configuration tokens. Client version verified. Feature flags set based on account type.</p>
+      <p><strong>Phase 5: Form Loading</strong> &mdash; Initial FDO88 streams arrive via AF (Add Form) tokens. Welcome screen and navigation forms constructed. DataParsing decodes the atom stream, FormModifiers interprets opcodes, FormsCreation builds the windows.</p>
+      <p><strong>Phase 6: Idle Loop</strong> &mdash; Main event loop processes Mac events. The Schedule handler manages keepalives. P3 handles incoming tokens and routes to handlers.</p>
+      <p><strong>Phase 7: Teardown</strong> &mdash; Disconnect token sent. P3 session closed. FormsDeletion tears down windows. Modem hung up.</p>
+    </div>
+
+    <h3>Token Dispatch Table</h3>
+    <p>When a P3 packet arrived, the TokenHandler examined the 2-byte token and routed the payload to the appropriate handler. These ASCII token pairs were the fundamental addressing scheme of the AOL protocol:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Token</th><th>Hex</th><th>Handler</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>wS</td><td>0x7753</td><td>Window Show</td><td>Show/activate window by ID</td></tr>
+          <tr><td>wC</td><td>0x7743</td><td>Window Close</td><td>Close window by ID</td></tr>
+          <tr><td>wH</td><td>0x7748</td><td>Window Hide</td><td>Hide window (keep state)</td></tr>
+          <tr><td>hS</td><td>0x6853</td><td>Host String</td><td>Display host message</td></tr>
+          <tr><td>AF</td><td>0x4146</td><td>Add Form</td><td>Create new FDO88 form</td></tr>
+          <tr><td>RF</td><td>0x5246</td><td>Return Form</td><td>Update existing form</td></tr>
+          <tr><td>OT</td><td>0x4F54</td><td>Online Tools</td><td>Tool management</td></tr>
+          <tr><td>iP</td><td>0x6950</td><td>IM Present</td><td>IM presence probe</td></tr>
+          <tr><td>iT</td><td>0x6954</td><td>IM Text</td><td>IM message body</td></tr>
+          <tr><td>AA-AX</td><td>0x4141+</td><td>Chat</td><td>Chat room operations</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="code-segment-map">Module Map</h3>
+    <p>The 57 executable modules inside the AOL 2.7 binary. Classic Mac apps split their code into numbered "CODE resources" loaded into memory on demand &mdash; think of each row as a separate DLL with a specific job:</p>
+
+    <div class="table-wrap" style="max-height: 700px;" id="code-table">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Size (bytes)</th><th>Module</th><th>What it does</th></tr>
+        </thead>
+        <tbody>
+          <tr id="code-0"><td>0</td><td>12,928</td><td>Jump table</td><td>Segment loader &mdash; contains the inter-segment jump table. The Macintosh Segment Loader resolves CODE resource references through this table.</td></tr>
+          <tr id="code-1"><td>1</td><td>42,206</td><td>Main</td><td>Application entry point and main event loop. After initialization, all user interaction flows through this loop.</td></tr>
+          <tr id="code-2"><td>2</td><td>20,448</td><td>InitUnit</td><td>Startup initialization and globals setup. Sets up the A5 globals world including the P3 state block. AOL4Free patches at offsets $1376, $13C0, and appends 64 bytes at $4DA2.</td></tr>
+          <tr id="code-3"><td>3</td><td>31,490</td><td>Libs</td><td>Shared library routines used across multiple segments. AOL4Free patches at offset $7AB8.</td></tr>
+          <tr id="code-4"><td>4</td><td>27,106</td><td>Events</td><td>Event dispatch and idle processing. Routes Mac OS events. AOL4Free patches at offset $69E2. Contains BSR calls and CMP.B #$33 comparisons for event type testing.</td></tr>
+          <tr id="code-5"><td>5</td><td>22,524</td><td>P3</td><td>P3 protocol engine. First function accesses globals at A5-$ACAA, uses _BlockMove ($A02E) for packet assembly. AOL4Free patches at offsets $1ABA, $56A4, $56CE and appends 448 bytes at $57FC &mdash; the largest single patch, injecting billing-stop token logic.</td></tr>
+          <tr id="code-6"><td>6</td><td>27,088</td><td>DataParsing</td><td>The FDO88 binary decoder. Reads FDO88 streams byte by byte: checks high bit for byte-count vs fixed params, handles $F8 extended prefix, routes each decoded opcode to FormModifiers. Called from TokenHandler via JSR $10D2(A5).</td></tr>
+          <tr id="code-7"><td>7</td><td>20,588</td><td>ToolkitUtils</td><td>Online Tool loading and management. Loads tool files from the Online Tools/ directory.</td></tr>
+          <tr id="code-8"><td>8</td><td>19,072</td><td>Toolkit</td><td>Tool API framework. Provides the interface between the main client and loaded Online Tools.</td></tr>
+          <tr id="code-9"><td>9</td><td>4,218</td><td>TokenHandler</td><td>Routes incoming P3 DATA packets by their 2-byte token. Takes 4 parameters (output status, output type, data length, data buffer). Clears output buffers, reads token bytes, dispatches via cross-segment JSR to DataParsing at $10D2(A5).</td></tr>
+          <tr id="code-10"><td>10</td><td>18,004</td><td>FormsInfo</td><td>FDO88 form state machine. Tracks active form context (the window being built), field counter (sequential numbering), and stream continuation state for multi-packet forms using break.</td></tr>
+          <tr id="code-11"><td>11</td><td>14,294</td><td>Drawing</td><td>Mac QuickDraw rendering of FDO88 forms. Translates decoded form elements into QuickDraw drawing calls.</td></tr>
+          <tr id="code-12"><td>12</td><td>28,048</td><td>FormModifiers</td><td>The FDO88 opcode interpreter. First function is a Pascal-convention stub (LINK/UNLK/pop 8 bytes/JMP). Second function at $0010: LINK A6,#-2; reads byte from stream via A4 structure at $000C(A4); sign-extends with ADD.W #$0100 for unsigned 0x80-0xFF range; increments stream pointer. Cross-segment calls via JSR $04DA(A5). AOL4Free patches at offset $6D92.</td></tr>
+          <tr id="code-13"><td>13</td><td>26,278</td><td>CCL</td><td>Connection Control Language interpreter. Runs modem scripts from Online Files/. Sends AT commands, dials the access number, waits for CONNECT.</td></tr>
+          <tr id="code-14"><td>14</td><td>2,436</td><td>Dbase</td><td>Local database access. Opens the Online Database resource file containing DB08-DB16 canned FDO88 forms. Uses Mac Resource Manager traps (_GetResource=$A9A0, _LoadResource=$A9A4, _SizeRsrc=$A9A3).</td></tr>
+          <tr id="code-15"><td>15</td><td>2,898</td><td>Dialogs</td><td>Alert and dialog management.</td></tr>
+          <tr id="code-16"><td>16</td><td>1,258</td><td>Utils</td><td>Miscellaneous utility routines.</td></tr>
+          <tr id="code-17"><td>17</td><td>16,940</td><td>SerStuff</td><td>Serial port / modem I/O. Uses SERi resource 128 (160 bytes) as the serial input ring buffer. Handles baud rate negotiation (300-28800 baud).</td></tr>
+          <tr id="code-18"><td>18</td><td>4,802</td><td>Printing</td><td>Print support.</td></tr>
+          <tr id="code-19"><td>19</td><td>2,242</td><td>WindowUtes</td><td>Window utility routines.</td></tr>
+          <tr id="code-20"><td>20</td><td>3,130</td><td>FormsDeletion</td><td>Form teardown and cleanup. Destroys windows and releases form state when disconnecting or navigating away.</td></tr>
+          <tr id="code-21"><td>21</td><td>28,006</td><td>FormsCreation</td><td>Converts decoded FDO88 commands into Macintosh windows and controls: Window16 -> _NewWindow/_NewCWindow, Field16 -> text fields/buttons/lists/popups, Picture -> PICT/ICON, Title -> _SetWTitle.</td></tr>
+          <tr id="code-22"><td>22</td><td>17,894</td><td>Menus</td><td>Menu bar construction and dispatch. AOL4Free patches at offset $45E6, modifying _MenuSelect ($A9BF) trap handling.</td></tr>
+          <tr id="code-23"><td>23</td><td>20,300</td><td>Schedule</td><td>Background task scheduling. Handles keepalives and periodic maintenance during idle time.</td></tr>
+          <tr id="code-24"><td>24</td><td>9,232</td><td>UDO</td><td>User Data Objects &mdash; user preferences and session state.</td></tr>
+          <tr id="code-25"><td>25</td><td>23,752</td><td>ToolCallbacks</td><td>Callback handlers for Online Tools. Provides the bridge between the tool API and the main client's token dispatch.</td></tr>
+          <tr id="code-26"><td>26</td><td>9,602</td><td>EditStuff</td><td>Text editing via Macintosh TextEdit integration.</td></tr>
+          <tr id="code-27"><td>27</td><td>11,100</td><td>MOPs</td><td>Menu Operation dispatch. Allocates 268 bytes of locals (LINK A6,#-268). Accesses method dispatch table at struct offset $82 (130 bytes). Uses SNE D0 for conditional dispatch. AOL4Free patches at offsets $21E0 and $2B5C.</td></tr>
+          <tr id="code-28"><td>28</td><td>13,980</td><td>DiskIO</td><td>File system operations.</td></tr>
+          <tr id="code-29"><td>29</td><td>6,030</td><td>SoundUtil</td><td>Sound playback for Sound and Note commands.</td></tr>
+          <tr id="code-30"><td>30-50</td><td>varies</td><td>TDI Charting</td><td>Embedded TDI charting engine: 2D_ENGINE_SUPPORT, AREA_LINE, BAR_ENGINE, PIE_ENGINE, COM, DRAW. Uses D3DF definition resources and precomputed sine tables (DGDS "FixedSinTable") for pie chart rendering.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 3: FDO88 COMMAND REFERENCE ============ -->
+  <section id="manual" class="section">
+    <h2>FDO88 Command Reference</h2>
+    <p class="section-desc">All 119 commands from the internal AOL FDO88 Manual (January 1994)</p>
+
+    <div class="search-bar">
+      <input type="text" class="search-input" id="cmd-search" placeholder="Search commands by name, opcode, or description...">
+      <div id="cmd-category-filters" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+    </div>
+
+    <div id="cmd-count" style="font-family:var(--mono);font-size:12px;color:var(--text-dim);margin-bottom:16px;"></div>
+
+    <div id="cmd-list">
+      <div class="loading-msg">Loading FDO88 manual data</div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 4: AOL4FREE ============ -->
+  <section id="aol4free" class="section">
+    <h2>AOL4FREE: The Full Story</h2>
+    <p class="section-desc">In 1995, a teenager called Happy Hardcore wrote a binary patcher that let Mac users access AOL without paying hourly charges. We disassembled both his patcher and the AOL client it targets.</p>
+
+    <p>AOL's Mac client is a single 851KB 68k application where every byte of executable code lives in the resource fork as numbered modules. 57 modules, 721KB of Motorola 68000 assembly. The client renders its entire UI using FDO88 &mdash; every window, button, text field, and chat room is a binary FDO88 stream interpreted in real-time.</p>
+
+    <p>Happy Hardcore's patcher contains no FDO88 data whatsoever. It is pure 68k machine code patches stored as ZAP resources (using Michael Hecht's ResCompare patcher, v4.0.3), applied to the AOL 2.6 executable and three Online Tools: Chat, File Transfer, and Mail. But here is what made it invaluable to us: <strong>his ZAP# resources name every module he patches</strong> &mdash; InitUnit, Libs, Events, P3, FormModifiers, Menus, MOPs. The AOL binary itself has no symbols. His labels gave us the map.</p>
+
+    <h3>The Fundamental Flaw</h3>
+
+    <p>The exploit targets a fundamental design flaw that Happy Hardcore describes perfectly in his docs:</p>
+
+    <blockquote>
+      "To go to the free area, you select 'Member Services', and the client sends a 'token' to the host telling it to stop billing, and telling it to send the client the information for the 'Free Area' window. The catch is that it's the client's job to close all of the other windows. It's the client's job to tell you you can't IM and read EMAIL. The host couldn't give a shit."
+    </blockquote>
+
+    <p>When you click Member Services, the client sends a P3 token to the Stratus servers saying "stop billing me." Then the FormModifiers module &mdash;28,048 bytes of 68k assembly &mdash; processes the FDO88 form for the free area and closes your other windows. The host trusts the client to enforce this.</p>
+
+    <h3>The Patches, Byte by Byte</h3>
+
+    <div class="info-box">
+      <p><strong>FormModifiers</strong> &mdash; The core patch is 2 bytes: <code>60 10</code>. That is <code>BRA.S $0012</code>, an unconditional branch that jumps over 16 bytes of the original enforcement code. The code it skips is what closes your chat windows, disables your IM, and restricts you to free area content. With those 2 bytes bypassed, the client sends the billing-stop token but never closes anything.</p>
+      <p><strong>P3 Protocol</strong> &mdash; The biggest patch: 460 bytes of injected code in the protocol handler. It intercepts the P3 data stream and periodically re-injects "enter free area" tokens to keep billing suppressed. There is a <code>CMPI.B #$15</code> instruction that checks for <code>start</code> (opcode $15) in the stream &mdash; it watches for new forms being sent and re-sends the billing-stop token before each one renders.</p>
+      <p><strong>Events</strong> &mdash; Injects two <code>JSR</code> calls into the main event loop: periodic callbacks that fire on every idle cycle to maintain the billing suppression state. Without these, the free area would time out and billing would resume.</p>
+      <p><strong>Menus</strong> &mdash;190 bytes that add the "Hell" menu to the menu bar with two items: "Enable Ultrabomb" and "Secret Guide Room" (which navigates to a hidden AOL staff chat room called "Center of the Earth").</p>
+      <p><strong>Chat Tool</strong> &mdash;3 bytes: <code>4E 71 60</code>. NOP followed by BRA, skipping chat billing verification entirely.</p>
+      <p style="margin-bottom:0;"><strong>Mail Tool</strong> &mdash;3 bytes: <code>3C 00 00</code>. Modifies the Mail tool so the Send Now button does not dim after sending, enabling the UltraBomb macro to rapid-fire mail at about one message per second.</p>
+    </div>
+
+    <p>Each patched file also gets a <code>vers</code> resource stamp: <code>"2.6Free v4 AOL4Free2.6 v4 by Happy Hardcore"</code>. He signed his work.</p>
+
+    <h3>Stealth (v4)</h3>
+
+    <p>v4 added stealth after AOL found a detection method. From leaked internal AOL staff email, August-September 1995:</p>
+
+    <div class="info-box">
+      <p><strong>From: Appelman<br>To: MayLiang</strong><br>"These people are idable as stealing time. I think we have enough to go forward with legal action."</p>
+      <p style="margin-bottom:0;"><strong>From: MayLiang</strong><br>"We then should get verification from TOS and then hand them over to the Secret Service."</p>
+    </div>
+
+    <p>His fix was only a few lines of additional code that eliminated the error patterns the Stratus server logs were using to identify AOL4Free users.</p>
+
+    <h3>Why This Matters</h3>
+
+    <p>The irony is his patcher helped more than official documentation. The 1994 FDO88 manual gave us the spec, but his named modules gave us the architecture. We used both to build a complete FDO88 compiler, disassemble the 68k client, extract 44 P3 tokens, and map the full connection flow toward getting Dialtone to serve real AOL 2.7 clients.</p>
+
+    <p>A teenager's weekend project from 1995 turned out to be the best reverse engineering documentation we had.</p>
+
+    <h3>Happy Hardcore's Own Words</h3>
+    <p>The <code>AOL4Free2.6 v4 Docs</code> file is a standalone Macintosh application containing a custom document viewer with 13 chapters. We extracted all 13 TEXT resources. Click any chapter to read the original text:</p>
+
+    <div id="aol4free-docs">
+      <div class="loading-msg">Loading AOL4Free documentation...</div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 5: UNDERGROUND TOOL GALLERY ============ -->
+  <section id="tools" class="section">
+    <h2>Underground Tool Gallery</h2>
+    <p class="section-desc">83 extracted Macintosh AOL hacker tools &mdash; icons, art, sounds, and text</p>
+
+    <div class="search-bar">
+      <input type="text" class="search-input" id="tool-search" placeholder="Search tools by name...">
+      <select class="filter-select" id="tool-sort">
+        <option value="name">Sort: Name</option>
+        <option value="art">Sort: Art Count</option>
+        <option value="sound">Sort: Sound Count</option>
+      </select>
+      <label style="font-family:var(--mono);font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:6px;">
+        <input type="checkbox" id="tool-filter-art"> Has Art
+      </label>
+      <label style="font-family:var(--mono);font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:6px;">
+        <input type="checkbox" id="tool-filter-sound"> Has Sound
+      </label>
+    </div>
+
+    <div id="tool-count" style="font-family:var(--mono);font-size:12px;color:var(--text-dim);margin-bottom:16px;"></div>
+
+    <div id="tool-gallery" class="tools-grid">
+      <div class="loading-msg">Loading tool manifest</div>
+    </div>
+  </section>
+
+  <!-- Tool detail overlay -->
+  <div id="tool-detail-overlay" class="tool-detail-overlay">
+    <div id="tool-detail" class="tool-detail"></div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Enlarged art">
+  </div>
+
+  <!-- ============ SECTION 6: DECOMPILED FDO88 SOURCE ============ -->
+  <section id="source" class="section">
+    <h2>Decompiled FDO88 Source</h2>
+    <p class="section-desc">Examples of FDO88 bytecode decompiled to human-readable form definition streams</p>
+
+    <p>FDO88 streams were stored as binary data in DB12 resources within the application and online tools. Each DB12 record defined a complete form (window) with its fields, buttons, text, images, and dispatch actions. The decompiler translates the binary opcodes into the assembly-like syntax documented in the FDO88 manual.</p>
+
+    <h3>Example 1: Token/Record Request Form</h3>
+    <p>From XprtX 1.0b4 (DB12 Record 1). A utility form that lets the user request any form by library/token or record number &mdash; the fundamental debug tool for FDO88 developers.</p>
+
+    <pre><code class="fdo-source">; DB12 Record 1 - Token/Record Request Form
+; Source: XprtX 1.0b4. Binary: 247 bytes.
+
+start                              ; begin form stream
+Window16 center center 220 180 normal  ; 220x180 centered window
+Field16 Text 10 10 200 40 none    ; static label
+Text 00 "Enter token or rec to request:"
+Field16 Text 42 181 200 40 none
+Text 00 "Made By Res/GOH  "
+Field16 Text 10 60 60 20 none
+Text 00 "L/T #:"
+; editable input: sendform = send contents to server
+Field16 Text 80 60 20 15 sendform editable
+; mark $D400: server identifies this field by marker
+Mark field=0 mark=54272
+Field16 Text 10 85 60 20 none
+Text 00 "R/D #:"
+Field16 Text 80 85 80 15 sendform editable
+Mark field=0 mark=54528
+; dispatch button: action defined by next dispch
+Field16 Button 120 120 80 20 dispatch
+; MOP $24: invoke_record - fetch from host DB
+dispch invoke_record info=170000
+Text 00 "REC#"
+Field16 Button 20 120 80 20 dispatch
+dispch invoke_record info=160000
+Text 00 "Token"
+; default = responds to Enter key
+Field16 Button 70 153 80 20 default
+dispch close
+Text 00 "Cancel"
+enddef</code></pre>
+
+    <h4>Opcode Quick Reference</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Opcode</th><th>Parameters</th><th>What it does</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>start</code></td><td>$15</td><td>none</td><td>Begins a form definition stream. Every form starts with this.</td></tr>
+          <tr><td><code>Window16</code></td><td>$A6</td><td>col, row, width, height, type</td><td>Creates a window at pixel coordinates. <code>center</code> = auto-centered. <code>normal</code> = standard resizable window.</td></tr>
+          <tr><td><code>Field16</code></td><td>$A1</td><td>type, col, row, w, h, flags</td><td>Creates a UI element. Types: <code>Text</code>, <code>Button</code>, <code>List</code>, <code>Popup</code>, <code>Check</code>.</td></tr>
+          <tr><td><code>Text</code></td><td>$04</td><td>field_num, string</td><td>Sets text content of a field. Field 00 = current. Defines labels and button text.</td></tr>
+          <tr><td><code>Mark</code></td><td>$C2</td><td>field, mark</td><td>Tags a field with a 16-bit ID so the server knows which field is which on submit.</td></tr>
+          <tr><td><code>dispch</code></td><td>$05</td><td>MOP, token, info</td><td>Defines what happens when a button is clicked. The MOP code determines the action.</td></tr>
+          <tr><td><code>enddef</code></td><td>$09</td><td>none</td><td>End of form. Client renders the completed window.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Field Flags (bitmask)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Flag</th><th>Hex</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>sendform</code></td><td>$80</td><td>Field contents are sent to the server when the form is submitted</td></tr>
+          <tr><td><code>editable</code></td><td>$40</td><td>User can type in this field</td></tr>
+          <tr><td><code>scrollable</code></td><td>$20</td><td>Field has a scrollbar</td></tr>
+          <tr><td><code>default</code></td><td>$08</td><td>This button responds to the Enter/Return key</td></tr>
+          <tr><td><code>dispatch</code></td><td>$04</td><td>Next <code>dispch</code> opcode defines this field's click action</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>MOP Codes (dispatch actions)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>MOP</th><th>Name</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td>$05</td><td><code>close</code></td><td>Close this window</td></tr>
+          <tr><td>$12</td><td><code>send_form</code></td><td>Send all sendform field contents to the server</td></tr>
+          <tr><td>$24</td><td><code>invoke_record</code></td><td>Request a form from the host database by record number</td></tr>
+          <tr><td>$80</td><td><code>no_action</code></td><td>Placeholder &mdash; click does nothing</td></tr>
+          <tr><td>$81</td><td><code>goto_keyword</code></td><td>Navigate to an AOL keyword</td></tr>
+          <tr><td>$89</td><td><code>run_tool</code></td><td>Launch an Online Tool</td></tr>
+          <tr><td>$8A</td><td><code>open_room</code></td><td>Create or enter a chat room</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Example 2: Private Room Entry</h3>
+    <p>From XprtX 1.0b4 (DB12 Record 22). The dialog that let users create or join unlisted chat rooms. Demonstrates 16-bit coordinates, icon resources, switch commands, and the open_room dispatch.</p>
+
+    <pre><code class="fdo-source">; DB12 Record 22 - Private Room Entry (301 bytes)
+
+start
+Window16 center -14336 8192 5120 normal
+Title "        Private Room"
+; icon resource #658 (AOL globe), click = no action
+SMultiIcon resid=658 at 26,88 flags=$60
+dispch no_action
+Field16 Text 238 238 272 50 none
+Text 00 "To create or enter a private room, type the room name in the box below and click on the Go button."
+Field16 Text 90 86 88 16 none
+Text 00 "Room name:"
+; font: application (id 1), 9pt, bold, green
+TextDesc application 9pt bold green
+; the room name input, max 20 chars
+Field16 Text 10 10 135 18 sendform editable
+SetSize 20
+Switch AccentsOk
+EncodeType $00 $02
+TextDesc application 9pt bold magenta
+Field16 Button 160 8 30 16 default
+Text 00 "PR"
+; MOP $8A: open_room sends token ".X" + room name
+; server creates/joins that private room
+dispch open_room token=".X"
+enddef</code></pre>
+
+    <h3>Example 3: Typical Underground Tool Form</h3>
+    <p>Underground tools used the same FDO88 opcodes to build their interfaces. This is a real form from ZealTool v3.0 (DB19 Record 29) &mdash; a board ID request dialog. Compare with Example 1: same pattern, same opcodes, just different content.</p>
+
+    <pre><code class="fdo-source">; ZealTool v3.0 - DB19 Record 29 (Board ID Request)
+; Real decompiled output from atomforge-fdo-java
+
+start
+window center 4 45 8 type_2
+TextDesc geneva 12pt bold black
+Field16 Text 15 25 145 50 none
+ListDispatch item=1
+Text 01 "Enter Board ID:"
+TextDesc geneva 12pt plain black
+Field16 Text 140 25 75 15 sendform editable smallbtn
+SetSize 4
+Field16 Button 120 85 55 16 default
+ListDispatch item=2
+Text 03 "OK"
+; open_room with token ".." + board ID from input
+dispch open_room token=".."
+setfld 2
+enddef</code></pre>
+
+    <p>This form pattern was ubiquitous across the underground tool scene: a compact modal dialog with an input field and an action button dispatching a P3 token. The tools added their own DB resources to the AOL client's resource fork via ResEdit or custom installers.</p>
+  </section>
+
+  <!-- ============ SECTION 7: RE TOOLKIT ============ -->
+  <section id="toolkit" class="section">
+    <h2>RE Toolkit</h2>
+    <p class="section-desc">Tools and techniques used to reverse engineer AOL 2.7 and extract these artifacts</p>
+
+    <h3>Macintosh Resource Fork Architecture</h3>
+    <p>Every classic Macintosh file had two data streams: the <strong>data fork</strong> (normal file content) and the <strong>resource fork</strong> (a structured database of typed, numbered entries). AOL tools &mdash; and the AOL client itself &mdash; stored almost everything in the resource fork: executable code, icons, sounds, dialog definitions, version info, and FDO88 form data.</p>
+    <p>Each resource has a 4-character type code (like <code>PICT</code>, <code>snd </code>, <code>ICN#</code>) and a numeric ID. The resource fork's internal structure is a header pointing to a resource map (type list + reference list + name list) and a resource data section. The map provides O(1) lookup by type+ID, making it efficient for the OS to load executable modules on demand.</p>
+
+    <h3>Resource Types Found in AOL Tools</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Type</th><th>Description</th><th>Usage in AOL Tools</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>CODE</td><td>Executable modules (68k machine code)</td><td>Each module handles a subsystem &mdash; loaded on demand like DLLs</td></tr>
+          <tr><td>AOtk</td><td>AOL Online Tool code</td><td>The tool's main code entry point, registered with AOL's tool API</td></tr>
+          <tr><td>DB08-DB19</td><td>FDO88 form definitions</td><td>Binary FDO88 streams &mdash; each DB type/ID pair is one form. DB numbers vary by tool.</td></tr>
+          <tr><td>dbDB</td><td>FDO88 form variant</td><td>Alternate FDO88 storage used by some tools (e.g. SteveCase tool has 50 dbDB resources)</td></tr>
+          <tr><td>ICN# / icl4 / icl8</td><td>32x32 icon family</td><td>1-bit (with mask), 4-bit (16 color), and 8-bit (256 color) icon variants</td></tr>
+          <tr><td>ics# / ics4 / ics8</td><td>16x16 small icon family</td><td>Small icons for Finder lists and menus</td></tr>
+          <tr><td>PICT</td><td>QuickDraw picture</td><td>Splash screens, about boxes, custom art &mdash; some tools have 60+ PICTs</td></tr>
+          <tr><td>snd </td><td>Sound resource</td><td>Replacement sounds for Welcome, Goodbye, You've Got Mail, IM alerts, and custom effects</td></tr>
+          <tr><td>STR# / STR</td><td>String list / single string</td><td>Menu definitions, token commands, screen names, area keywords, README text</td></tr>
+          <tr><td>TEXT / styl</td><td>Styled text</td><td>About boxes, help text, credits, README documents</td></tr>
+          <tr><td>vers</td><td>Version info</td><td>Structured version number, copyright, and long description string</td></tr>
+          <tr><td>ppat</td><td>Pixel pattern</td><td>Custom window background patterns</td></tr>
+          <tr><td>Tinf / Tevt</td><td>Tool info / events</td><td>AOL tool registration metadata</td></tr>
+          <tr><td>Ttkn</td><td>Tool tokens</td><td>P3 token registrations &mdash; which tokens this tool handles (found in AOL's own Online Tools)</td></tr>
+          <tr><td>ZAP / ZAP# / ZVER</td><td>ResCompare patch system</td><td>Michael Hecht's ResCompare format: ZAP=patch payloads, ZAP#=target files, ZVER=file locators, ZIS#=instruction sets, ZAPS=format signature</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The STR# Menu System</h3>
+    <p>Most AOL tools defined their custom menus via <code>STR#</code> resources. The format encodes menu items, keyboard shortcuts, and the P3 token commands they send. For example, from BOO'S TOOL:</p>
+    <pre><code>Enter A Private Room     L3
+Enter Macwarez           cV [token] MacWarezˇ
+Turn IM's On             iS [token] $IM_ON  $ˇ
+Turn IM's Off            iS [token] $IM_OFF  $ˇ</code></pre>
+    <p>These strings contain inline P3 token data &mdash; the <code>cV</code> is a "go to keyword" token, <code>iS</code> controls IM state, <code>L3</code> opens a private room dialog. The tool's AOtk code registered these strings with AOL's menu system at load time.</p>
+
+    <h3>atomforge-fdo-java</h3>
+    <p>The <a href="https://github.com/iconidentify/atomforge-fdo-java">atomforge-fdo-java</a> library (Java 21, MIT license) provides complete FDO88 decompilation and compilation. It passes 80,000+ golden tests against AOL 2.7's 140 official canned forms with 100% binary fidelity. The library includes a full opcode registry, a type-safe DSL for building FDO88 streams programmatically, and code generation that converts binary forms to compilable Java source.</p>
+
+    <h3>Format Conversion Notes</h3>
+    <p>Extracting usable media from 1996 Macintosh binaries required solving several format-specific challenges. These notes document the techniques used, in case they're useful to anyone doing similar preservation work.</p>
+
+    <div class="info-box">
+      <h4>StuffIt Archives (.sit)</h4>
+      <p>The 86 tool archives use StuffIt 3.x/4.x format. <code>unar</code> (from The Unarchiver project) is the only modern tool that handles these reliably while preserving macOS resource forks via extended attributes. The resource fork data ends up accessible at <code>filename/..namedfork/rsrc</code> on macOS.</p>
+
+      <h4>Resource Forks</h4>
+      <p>Classic Mac files stored structured data in a second file stream called the resource fork. The fork has its own internal filesystem: a header pointing to a resource map (type list, reference list, name list) and a data section. Each resource is identified by a 4-character type code and numeric ID. Our Python parser (<code>scripts/extract_resources.py</code>) implements the full resource fork binary format to extract resources without relying on Apple's deprecated Resource Manager APIs.</p>
+
+      <h4>PICT Images</h4>
+      <p>PICT is Apple's QuickDraw metafile format &mdash; it stores drawing commands (lines, text, fill, bitmap blits) rather than pixel data. Rendering PICTs requires interpreting QuickDraw opcodes, which modern tools handle inconsistently:</p>
+      <ul style="margin:8px 0 8px 24px;color:var(--text);">
+        <li><strong>ImageMagick</strong> (<code>magick</code>) correctly renders most PICTs including those with PackBits-compressed bitmap data and basic drawing commands. It recovered 152 images that <code>sips</code> rendered as blank white.</li>
+        <li><strong>Apple's sips</strong> only handles simple bitmap PICTs and produces blank output for vector/text-only images.</li>
+        <li>PICT files require a 512-byte zero header prepended to the raw resource data for file-based tools to recognize them.</li>
+        <li>29 PICTs use exotic QuickDraw opcodes that neither tool can render &mdash; these are preserved as raw .pict files for future conversion.</li>
+      </ul>
+
+      <h4>Sound Resources (snd)</h4>
+      <p>Mac <code>snd</code> resources use a container format with a header, sound commands, and a sampled sound data section. Three encoding types exist:</p>
+      <ul style="margin:8px 0 8px 24px;color:var(--text);">
+        <li><strong>Standard (stdSH, encoding $00)</strong> &mdash; Uncompressed 8-bit unsigned PCM. Direct conversion to WAV by writing a RIFF header and copying the sample data.</li>
+        <li><strong>Extended (extSH, encoding $FF)</strong> &mdash; Uncompressed but with a different header layout. The <code>numSamples</code> field at offset 4 is actually <code>numChannels</code>; the real frame count is at offset 22; sample data starts at offset 64. Six sounds were initially broken due to parsing the extSH header as stdSH.</li>
+        <li><strong>Compressed (cmpSH, encoding $FE)</strong> &mdash; MACE 3:1 or 6:1 compression. These cannot be decoded by directly reading the PCM data. The solution: wrap the compressed audio in an AIFF-C container with a COMM chunk specifying the <code>MAC3</code> compression type, then pipe through <code>ffmpeg</code> which has a built-in MACE decoder. This recovered 5 sounds including "OHYEAH!", "BabyPenut", and "Its-OJ-".</li>
+      </ul>
+
+      <h4>FDO88 Binary Streams</h4>
+      <p>FDO88 forms are stored in DB-prefixed resources (DB08-DB19, plus non-standard types like db69, db81, db96, dbAB, dbDD used by underground tools). The binary format uses three encoding modes: low-bit opcodes ($00-$7F) with fixed-size parameters, high-bit opcodes ($80-$FF) with a byte-count prefix, and extended opcodes ($F8 + sub-opcode). Low-bit opcodes like $21 (Field16) and $26 (Window16) are mirrors of their high-bit counterparts $A1 and $A6 &mdash; same command, different parameter encoding. The atomforge-fdo-java decompiler resolves these to named commands, decodes dispatch structures (6-byte MOP + token + info), and converts numeric constants to their named equivalents (window types, field types, fonts, colors, switch values).</p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 8: ABOUT / CREDITS ============ -->
+  <section id="about" class="section">
+    <h2>About This Project</h2>
+    <p class="section-desc">Preservation, documentation, and historical context</p>
+
+    <h3>Purpose</h3>
+    <p>This is a digital preservation project. AOL 2.7 and its surrounding ecosystem represent a significant chapter in internet history &mdash; one of the first mass-market online services, the first widespread encounter with "hacking" for many users, and a fascinating case study in proprietary protocol design. The FDO88 protocol, the P3 transport layer, and the underground tools that exploited them are all at risk of being lost as vintage Macintosh software becomes increasingly difficult to run and archives disappear.</p>
+
+    <p>This site collects and documents these artifacts in a format that will remain accessible: static HTML with no external dependencies, data encoded as JSON, art preserved as PNG, sounds as WAV. No server required. No frameworks to break. No dependencies to rot.</p>
+
+    <h3>What's Preserved Here</h3>
+    <ul style="margin:12px 0 12px 24px;color:var(--text);">
+      <li>The complete FDO88 instruction set from AOL's internal engineering manual</li>
+      <li>Architecture analysis of the AOL 2.7 Mac client binary (57 executable modules)</li>
+      <li>P3 protocol documentation reconstructed from binary analysis</li>
+      <li>83 underground Macintosh AOL tools with extracted art, sounds, and text</li>
+      <li>Decompiled FDO88 form definitions from tool DB12 resources</li>
+      <li>Technical analysis of the AOL4FREE billing exploit</li>
+    </ul>
+
+    <h3>License</h3>
+    <p>This documentation and tooling is released under the <strong>MIT License</strong>. The original AOL software, FDO88 manual content, and underground tools are presented for historical and educational purposes under fair use principles.</p>
+
+    <h3>Disclaimer</h3>
+    <p style="color:var(--text-dim);">This project is not affiliated with, endorsed by, or connected to AOL, Verizon, Yahoo, or any successor entity. All trademarks are the property of their respective owners. The underground tools documented here are presented as historical artifacts. This project does not endorse or encourage unauthorized access to computer systems.</p>
+
+    <h3>Related Resources</h3>
+    <ul style="margin:12px 0 12px 24px;color:var(--text);">
+      <li><a href="https://mac.dialtone.live">Dialtone Mac &mdash; AOL 2.7 in your browser</a></li>
+      <li><a href="https://github.com/iconidentify/atomforge-fdo-java">atomforge-fdo-java &mdash; FDO88 bytecode compiler/decompiler</a></li>
+      <li><a href="https://mattmazur.com/2012/01/28/remembering-aols-fdo91-programming-language/">Matt Mazur: Remembering AOL's FDO91 Programming Language</a></li>
+      <li><a href="https://archive.org/details/aol-fdo-traces">AOL FDO Traces (Internet Archive)</a></li>
+    </ul>
+
+    <h3>Contact</h3>
+    <p style="margin:12px 0;"><a href="https://x.com/SiliconForested">@SiliconForested on X</a></p>
+
+    <div style="margin-top:48px;padding-top:24px;border-top:1px solid var(--border);text-align:center;">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:24px;height:24px;">
+          <path fill="#fc9d2c" d="M256 40L380 180H132L256 40z"/>
+          <ellipse fill="#fc9d2c" cx="256" cy="340" rx="180" ry="40"/>
+          <path fill="#001e37" d="M96 180c-20 0-36 16-36 36v120c0 20 16 36 36 36h320c20 0 36-16 36-36V216c0-20-16-36-36-36H96z"/>
+          <rect fill="#fffae3" x="76" y="196" width="360" height="104" rx="16"/>
+          <rect fill="#001e37" x="92" y="212" width="328" height="72" rx="12"/>
+          <circle fill="#fffae3" cx="140" cy="248" r="24"/>
+          <circle fill="#001e37" cx="140" cy="248" r="14"/>
+          <circle fill="#fffae3" cx="320" cy="248" r="10"/>
+          <circle fill="#fffae3" cx="360" cy="248" r="10"/>
+          <circle fill="#fffae3" cx="400" cy="248" r="10"/>
+        </svg>
+        <span style="font-family:var(--sans);font-size:14px;font-weight:600;color:var(--orange);">DIALTONE</span>
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text-dim);">
+        Dialtone Tech Notes
+      </div>
+    </div>
+  </section>
+
+</div><!-- /main -->
+
+<!-- Load manual data -->
 <script src="aol_manual_output.js"></script>
+<script src="tool_manifest.js"></script>
+<script src="fdo88_forms.js"></script>
+<script src="aol4free_docs.js"></script>
+
 <script>
-let DATA = window.__MANUAL_DATA || null;
+(function() {
+  'use strict';
 
-async function loadData() {
-  if (DATA) { init(); return; }
-  try {
-    const resp = await fetch('aol_manual_output.json');
-    DATA = await resp.json();
-    init();
-  } catch (e) {
-    document.getElementById('main').innerHTML =
-      '<div class="no-results">Failed to load manual data. Ensure aol_manual_output.js exists alongside this file.</div>';
+  // ========== NAVIGATION ==========
+  const navItems = document.querySelectorAll('.nav-item');
+  const mainEl = document.getElementById('main');
+  const sections = document.querySelectorAll('.section, #hero');
+
+  function setActiveNav(hash) {
+    const target = hash || '#overview';
+    navItems.forEach(n => {
+      n.classList.toggle('active', n.getAttribute('href') === target);
+    });
   }
-}
 
-function init() {
-  const m = DATA.manual || {};
-  const meta = m.document_metadata || {};
-
-  document.getElementById('doc-title').textContent = meta.title || 'Manual';
-  document.getElementById('doc-meta').textContent =
-    [meta.version, meta.date].filter(Boolean).join(' / ');
-  document.title = (meta.title || 'Manual') + ' - Viewer';
-
-  buildNav();
-  showOverview();
-
-  document.getElementById('search').addEventListener('input', onSearch);
-}
-
-function buildNav() {
-  const m = DATA.manual || {};
-  const nav = document.getElementById('nav');
-  const cmds = m.commands || [];
-  const glossary = m.glossary || [];
-  const tables = m.reference_tables || [];
-  const chapters = m.chapters || [];
-  const samples = m.code_samples || [];
-
-  let html = '';
-
-  html += navItem('overview', 'Overview', null);
-  html += navItem('toc', 'Table of Contents', (m.table_of_contents || []).length);
-
-  if (chapters.length) {
-    html += '<div class="nav-section">Chapters</div>';
-    const seen = new Set();
-    for (const ch of chapters) {
-      const key = (ch.chapter || '') + ':' + (ch.chapter_title || '');
-      if (ch.page_type === 'chapter_start' || ch.page_type === 'appendix_start') {
-        if (seen.has(key)) continue;
-        seen.add(key);
-        const label = (ch.chapter ? (ch.page_type === 'appendix_start' ? 'App ' : 'Ch ') + ch.chapter + ': ' : '') + (ch.chapter_title || 'Untitled');
-        html += navItem('chapter:' + key, label, null);
+  navItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      const hash = this.getAttribute('href');
+      const el = document.querySelector(hash);
+      if (el) {
+        history.pushState(null, '', hash);
+        el.scrollIntoView({ behavior: 'smooth' });
+        setActiveNav(hash);
       }
+    });
+  });
+
+  // Intersection observer for active nav
+  const navObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        if (id) setActiveNav('#' + id);
+      }
+    });
+  }, { root: mainEl, threshold: 0.15 });
+
+  document.querySelectorAll('section[id]').forEach(s => navObserver.observe(s));
+
+  // Handle initial hash
+  if (window.location.hash) {
+    const el = document.querySelector(window.location.hash);
+    if (el) {
+      setTimeout(() => el.scrollIntoView(), 100);
+      setActiveNav(window.location.hash);
     }
   }
 
-  html += '<div class="nav-section">Reference</div>';
-  html += navItem('commands', 'All Commands', cmds.length);
-  html += navItem('glossary', 'Glossary', glossary.length);
-  html += navItem('tables', 'Reference Tables', tables.length);
-  if (samples.length) html += navItem('samples', 'Code Samples', samples.length);
-  if ((m.figures || []).length) html += navItem('figures', 'Figures', m.figures.length);
+  window.addEventListener('popstate', () => {
+    setActiveNav(window.location.hash);
+    const el = document.querySelector(window.location.hash || '#overview');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  });
 
-  if (cmds.length) {
-    html += '<div class="nav-section">Commands A-Z</div>';
-    for (let i = 0; i < cmds.length; i++) {
-      const c = cmds[i];
-      const label = c.alias ? c.name + ' (' + c.alias + ')' : (c.name || '(unnamed)');
-      html += '<div class="nav-cmd" data-idx="' + i + '" onclick="showCommand(' + i + ')">' + esc(label) + '</div>';
+  // ========== FDO88 COMMAND REFERENCE ==========
+  function initManual() {
+    const data = window.__MANUAL_DATA;
+    if (!data || !data.manual || !data.manual.commands) {
+      document.getElementById('cmd-list').innerHTML = '<p class="dim">Manual data not available.</p>';
+      return;
     }
-  }
 
-  nav.innerHTML = html;
-}
+    const commands = data.manual.commands;
+    const cmdList = document.getElementById('cmd-list');
+    const cmdSearch = document.getElementById('cmd-search');
+    const cmdCount = document.getElementById('cmd-count');
+    const catFilters = document.getElementById('cmd-category-filters');
 
-function navItem(id, label, count) {
-  const countHtml = count !== null ? '<span class="count">' + count + '</span>' : '';
-  return '<div class="nav-item" data-nav="' + id + '" onclick="navigate(\'' + id + '\')">' + esc(label) + countHtml + '</div>';
-}
-
-function navigate(id) {
-  setActive(id);
-  if (id === 'overview') showOverview();
-  else if (id === 'toc') showTOC();
-  else if (id === 'commands') showAllCommands();
-  else if (id === 'glossary') showGlossary();
-  else if (id === 'tables') showTables();
-  else if (id === 'samples') showSamples();
-  else if (id === 'figures') showFigures();
-  else if (id.startsWith('chapter:')) showChapter(id.substring(8));
-}
-
-function setActive(id) {
-  document.querySelectorAll('.nav-item, .nav-cmd').forEach(el => el.classList.remove('active'));
-  const el = document.querySelector('[data-nav="' + id + '"]');
-  if (el) el.classList.add('active');
-}
-
-function showCommand(idx) {
-  document.querySelectorAll('.nav-cmd').forEach(el => el.classList.remove('active'));
-  const el = document.querySelector('.nav-cmd[data-idx="' + idx + '"]');
-  if (el) el.classList.add('active');
-
-  const c = DATA.manual.commands[idx];
-  const main = document.getElementById('main');
-  main.innerHTML = renderCommandDetail(c);
-  main.scrollTop = 0;
-}
-
-function showOverview() {
-  const m = DATA.manual || {};
-  const meta = m.document_metadata || {};
-  const cmds = m.commands || [];
-  const wf = cmds.filter(c => c.opcode && c.syntax).length;
-  const summary = DATA.summary || {};
-
-  let html = '<div class="page-title">' + esc(meta.title || 'Manual') + '</div>';
-  html += '<div class="page-subtitle">' + [meta.version, meta.date].filter(Boolean).join(' / ') + '</div>';
-
-  html += '<div class="stats-grid">';
-  html += stat(summary.total_pages || 0, 'Pages');
-  html += stat(cmds.length, 'Commands');
-  html += stat(wf, 'Well-formed');
-  html += stat((m.glossary || []).length, 'Glossary');
-  html += stat((m.reference_tables || []).length, 'Ref Tables');
-  html += stat((m.chapters || []).length, 'Sections');
-  html += stat((m.code_samples || []).length, 'Code Samples');
-  html += stat((m.figures || []).length, 'Figures');
-  html += '</div>';
-
-
-  // Page type breakdown
-  const pt = (summary.page_types_found || {});
-  if (Object.keys(pt).length) {
-    html += '<div class="card"><h3>Page Type Breakdown</h3><table class="param-table">';
-    html += '<tr><th>Type</th><th>Count</th></tr>';
-    for (const [k, v] of Object.entries(pt).sort((a, b) => b[1] - a[1])) {
-      html += '<tr><td>' + esc(k) + '</td><td>' + v + '</td></tr>';
+    // Strip fdo$ prefix from command names and text for display
+    function stripFdo(s) {
+      if (!s) return '';
+      return s.replace(/\bfdo\$/g, '').replace(/\bfdoS\$/g, '');
     }
-    html += '</table></div>';
-  }
 
-  document.getElementById('main').innerHTML = html;
-}
-
-function showTOC() {
-  const entries = (DATA.manual || {}).table_of_contents || [];
-  let html = '<div class="page-title">Table of Contents</div>';
-  html += '<div class="page-subtitle">' + entries.length + ' entries</div>';
-  html += '<div class="card">';
-  for (const e of entries) {
-    const level = e.level || 1;
-    html += '<div class="toc-entry level-' + level + '">';
-    html += '<span>' + (e.numbering ? esc(e.numbering) + ' ' : '') + esc(e.title || '') + '</span>';
-    html += '<span class="toc-page">' + esc(e.page_ref || '') + '</span>';
-    html += '</div>';
-  }
-  html += '</div>';
-  document.getElementById('main').innerHTML = html;
-}
-
-function showAllCommands(filter) {
-  const cmds = (DATA.manual || {}).commands || [];
-  const filtered = filter
-    ? cmds.filter(c => matchCmd(c, filter))
-    : cmds;
-
-  let html = '<div class="page-title">Commands</div>';
-  html += '<div class="page-subtitle">' + filtered.length + ' of ' + cmds.length + ' commands</div>';
-
-  for (let i = 0; i < filtered.length; i++) {
-    const c = filtered[i];
-    const realIdx = cmds.indexOf(c);
-    html += '<div class="card" style="cursor:pointer" onclick="showCommand(' + realIdx + ')">';
-    html += '<div class="cmd-header">';
-    html += '<span class="cmd-name">' + esc(c.name || '(unnamed)') + '</span>';
-    if (c.alias) html += '<span class="cmd-alias">(' + esc(c.alias) + ')</span>';
-    html += '</div>';
-    html += '<div class="cmd-opcodes">';
-    if (c.opcode != null) html += '<span class="tag">Opcode: ' + c.opcode + (c.opcode_hex ? ' (' + c.opcode_hex + ')' : '') + '</span>';
-    if (c.sub_opcode != null) html += '<span class="tag">Sub: ' + c.sub_opcode + (c.sub_opcode_hex ? ' (' + c.sub_opcode_hex + ')' : '') + '</span>';
-    if (c.platforms) c.platforms.forEach(p => { if (p && p !== 'None') html += '<span class="tag platform">' + esc(p) + '</span>'; });
-    html += '</div>';
-    if (c.description) {
-      const desc = c.description.length > 200 ? c.description.substring(0, 200) + '...' : c.description;
-      html += '<p style="color:var(--text-muted);font-size:13px">' + esc(desc) + '</p>';
+    // Derive categories from command names
+    function getCategory(cmd) {
+      const name = stripFdo(cmd.name || '').toLowerCase();
+      if (name.startsWith('field') || name.includes('field')) return 'Field';
+      if (name.startsWith('window') || name.includes('window') || name.startsWith('$26')) return 'Window';
+      if (name.startsWith('text') || name.includes('text') || name.includes('globaltext')) return 'Text';
+      if (name.startsWith('switch') || name.includes('switch')) return 'Switch';
+      if (name.startsWith('dispch') || name.includes('dispatch') || name.includes('dispch')) return 'Dispatch';
+      if (name.startsWith('menu') || name.includes('menu')) return 'Menu';
+      if (name.includes('sound') || name.includes('snd')) return 'Sound';
+      if (name.includes('mark')) return 'Mark';
+      if (name.includes('group') || name.includes('cluster')) return 'Group';
+      if (name.startsWith('248') || name.includes('extended')) return 'Extended';
+      if (name.startsWith('')) return 'FDO';
+      if (name.startsWith('$')) return 'Opcode';
+      return 'Other';
     }
-    html += '</div>';
-  }
 
-  if (!filtered.length) html += '<div class="no-results">No commands match your search.</div>';
+    commands.forEach(c => { c._category = getCategory(c); });
 
-  const main = document.getElementById('main');
-  main.innerHTML = html;
-  main.scrollTop = 0;
-}
+    const categories = [...new Set(commands.map(c => c._category))].sort();
 
-function renderCommandDetail(c) {
-  let html = '<div class="cmd-header">';
-  html += '<span class="cmd-name">' + esc(c.name || '(unnamed)') + '</span>';
-  if (c.alias) html += '<span class="cmd-alias">(' + esc(c.alias) + ')</span>';
-  html += '</div>';
+    // Render category filter buttons
+    catFilters.innerHTML = '<button class="filter-btn active" data-cat="all">All</button>' +
+      categories.map(c => '<button class="filter-btn" data-cat="' + c + '">' + c + '</button>').join('');
 
-  html += '<div class="cmd-opcodes">';
-  if (c.opcode != null) html += '<span class="tag">Opcode: ' + c.opcode + (c.opcode_hex ? ' (' + c.opcode_hex + ')' : '') + '</span>';
-  if (c.sub_opcode != null) html += '<span class="tag">Sub-Opcode: ' + c.sub_opcode + (c.sub_opcode_hex ? ' (' + c.sub_opcode_hex + ')' : '') + '</span>';
-  if (c.is_extended) html += '<span class="tag">Extended</span>';
-  if (c.is_byte_count) html += '<span class="tag">Byte-Count</span>';
-  if (c.platforms) c.platforms.forEach(p => { if (p && p !== 'None') html += '<span class="tag platform">' + esc(p) + '</span>'; });
-  if (c.source_page) html += '<span class="tag">Page ' + esc(c.source_page) + '</span>';
-  html += '</div>';
+    let activeCategory = 'all';
 
-  if (c.description) {
-    html += '<div class="cmd-section"><div class="cmd-section-title">Description</div>';
-    html += '<div class="cmd-description">' + esc(c.description) + '</div></div>';
-  }
+    catFilters.addEventListener('click', e => {
+      if (e.target.classList.contains('filter-btn')) {
+        activeCategory = e.target.dataset.cat;
+        catFilters.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.cat === activeCategory);
+        });
+        renderCommands();
+      }
+    });
 
-  if (c.syntax) {
-    html += '<div class="cmd-section"><div class="cmd-section-title">Syntax</div>';
-    html += '<div class="cmd-syntax">' + esc(c.syntax) + '</div></div>';
-  }
+    function escapeHtml(s) {
+      if (s == null) return '';
+      if (typeof s !== 'string') s = String(s);
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
 
-  if (c.parameters && c.parameters.length) {
-    html += '<div class="cmd-section"><div class="cmd-section-title">Parameters</div>';
-    html += '<table class="param-table"><tr><th>Name</th><th>Type</th><th>Description</th></tr>';
-    for (const p of c.parameters) {
-      html += '<tr>';
-      html += '<td class="param-name">' + esc(p.name || '') + '</td>';
-      html += '<td>' + esc(p.type || '') + (p.size ? ' (' + p.size + ')' : '') + '</td>';
-      html += '<td>' + esc(p.description || '');
-      if (p.values && p.values.length) {
-        html += '<div class="param-values">';
-        for (const v of p.values) {
-          html += '<div class="pv"><span class="pv-val">' + esc(String(v.value)) + '</span><span>' + esc(v.description || '') + '</span></div>';
+    function renderCommands() {
+      const query = cmdSearch.value.toLowerCase().trim();
+      const filtered = commands.filter(c => {
+        if (activeCategory !== 'all' && c._category !== activeCategory) return false;
+        if (query) {
+          const haystack = (stripFdo(c.name||'') + ' ' + stripFdo(c.alias||'') + ' ' + (c.opcode_hex||'') + ' ' + (c.description||'')).toLowerCase();
+          return haystack.includes(query);
         }
-        html += '</div>';
+        return true;
+      });
+
+      cmdCount.textContent = 'Showing ' + filtered.length + ' of ' + commands.length + ' commands';
+
+      if (filtered.length === 0) {
+        cmdList.innerHTML = '<p class="dim">No commands match your search.</p>';
+        return;
       }
-      html += '</td></tr>';
+
+      cmdList.innerHTML = filtered.map((c, i) => {
+        const opcodeStr = c.opcode_hex || (c.opcode != null ? '$' + c.opcode.toString(16).toUpperCase().padStart(2,'0') : '--');
+        const aliasStr = c.alias ? ' (' + escapeHtml(stripFdo(c.alias)) + ')' : '';
+        const params = c.parameters || [];
+
+        let paramsHtml = '';
+        if (params.length > 0) {
+          paramsHtml = '<div class="cmd-field"><div class="cmd-field-label">Parameters</div>' +
+            '<table class="param-table"><thead><tr><th>Name</th><th>Type</th><th>Size</th><th>Required</th><th>Description</th></tr></thead><tbody>' +
+            params.map(p =>
+              '<tr><td>' + escapeHtml(p.name) + '</td><td>' + escapeHtml(p.type) + '</td><td>' + escapeHtml(p.size||'') + '</td><td>' + (p.required ? 'Yes' : 'No') + '</td><td style="color:var(--text)">' + escapeHtml(p.description) + '</td></tr>'
+            ).join('') +
+            '</tbody></table></div>';
+        }
+
+        return '<div class="cmd-card" data-idx="' + i + '">' +
+          '<div class="cmd-header" onclick="this.parentElement.classList.toggle(\'expanded\')">' +
+            '<span class="cmd-opcode">' + escapeHtml(opcodeStr) + '</span>' +
+            '<span class="cmd-name">' + escapeHtml(stripFdo(c.name)) + '<span class="cmd-alias">' + aliasStr + '</span></span>' +
+            '<span class="tag">' + c._category + '</span>' +
+            '<span class="cmd-expand-icon">&#9654;</span>' +
+          '</div>' +
+          '<div class="cmd-body">' +
+            '<div class="cmd-field"><div class="cmd-field-label">Description</div><div class="cmd-field-value">' + escapeHtml(stripFdo(c.description)) + '</div></div>' +
+            (c.syntax ? '<div class="cmd-field"><div class="cmd-field-label">Syntax</div><pre><code>' + escapeHtml(stripFdo(c.syntax)) + '</code></pre></div>' : '') +
+            (c.example ? '<div class="cmd-field"><div class="cmd-field-label">Example</div><pre><code>' + escapeHtml(stripFdo(c.example)) + '</code></pre></div>' : '') +
+            (c.example_explanation ? '<div class="cmd-field"><div class="cmd-field-label">Explanation</div><div class="cmd-field-value">' + escapeHtml(stripFdo(c.example_explanation)) + '</div></div>' : '') +
+            paramsHtml +
+            (c.platforms && c.platforms.length ? '<div class="cmd-field"><div class="cmd-field-label">Platforms</div><div class="cmd-field-value">' + c.platforms.map(p => '<span class="tag orange">' + escapeHtml(p) + '</span>').join('') + '</div></div>' : '') +
+            (c.is_extended ? '<div class="cmd-field"><div class="cmd-field-label">Sub-opcode</div><div class="cmd-field-value">' + escapeHtml(c.sub_opcode_hex || String(c.sub_opcode)) + '</div></div>' : '') +
+            '<div class="cmd-field"><div class="cmd-field-label">Source Page</div><div class="cmd-field-value dim">' + escapeHtml(c.source_page) + '</div></div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
     }
-    html += '</table></div>';
+
+    cmdSearch.addEventListener('input', renderCommands);
+    renderCommands();
   }
 
-  if (c.example) {
-    html += '<div class="cmd-section"><div class="cmd-section-title">Example</div>';
-    html += '<div class="cmd-example">' + esc(c.example) + '</div>';
-    if (c.example_explanation) html += '<div class="cmd-example-expl">' + esc(c.example_explanation) + '</div>';
-    html += '</div>';
+  // Init manual on load (script tag is sync, so data should be available)
+  if (window.__MANUAL_DATA) {
+    initManual();
+  } else {
+    // Fallback: wait a bit
+    setTimeout(initManual, 500);
   }
 
-  if (c.notes) {
-    html += '<div class="cmd-section"><div class="cmd-section-title">Notes</div>';
-    html += '<p style="font-size:14px;line-height:1.6;color:var(--text-muted)">' + esc(c.notes) + '</p></div>';
-  }
+  // ========== TOOL GALLERY ==========
+  let toolManifest = null;
+  let currentAudio = null;
 
-  if (c.cross_references && c.cross_references.length) {
-    html += '<div class="cmd-section"><div class="cmd-section-title">Cross References</div>';
-    html += '<div class="cross-refs">';
-    for (const ref of c.cross_references) {
-      html += '<span class="cross-ref" onclick="jumpToCommand(\'' + esc(ref).replace(/'/g, "\\'") + '\')">' + esc(ref) + '</span>';
+  function loadToolManifest() {
+    // Try inline data first (loaded via script tag), then fall back to fetch
+    var data = window.__TOOL_MANIFEST;
+    if (data) {
+      toolManifest = data;
+      if (data.stats) {
+        var s = data.stats;
+        document.getElementById('stat-tools').textContent = s.total_tools || 83;
+        document.getElementById('stat-art').textContent = s.total_art || 2158;
+        document.getElementById('stat-sounds').textContent = s.total_sounds || 57;
+      }
+      initToolGallery();
+      return;
     }
-    html += '</div></div>';
+    // Fallback: try fetch (works when served via HTTP)
+    fetch('site_data/web_manifest.json')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        toolManifest = d;
+        if (d.stats) {
+          document.getElementById('stat-tools').textContent = d.stats.total_tools || 83;
+          document.getElementById('stat-art').textContent = d.stats.total_art || 2158;
+          document.getElementById('stat-sounds').textContent = d.stats.total_sounds || 57;
+        }
+        initToolGallery();
+      })
+      .catch(function(err) {
+        document.getElementById('tool-gallery').innerHTML = '<p class="dim">Failed to load tool manifest. If viewing from file://, ensure tool_manifest.js is loaded.</p>';
+      });
   }
 
-  return html;
-}
+  function initToolGallery() {
+    const tools = Object.values(toolManifest.tools);
+    const gallery = document.getElementById('tool-gallery');
+    const searchInput = document.getElementById('tool-search');
+    const sortSelect = document.getElementById('tool-sort');
+    const filterArt = document.getElementById('tool-filter-art');
+    const filterSound = document.getElementById('tool-filter-sound');
+    const toolCount = document.getElementById('tool-count');
 
-function jumpToCommand(ref) {
-  const cmds = (DATA.manual || {}).commands || [];
-  const refLower = ref.toLowerCase();
-  const idx = cmds.findIndex(c =>
-    (c.name || '').toLowerCase() === refLower ||
-    (c.alias || '').toLowerCase() === refLower ||
-    ((c.name || '') + ' ' + (c.alias || '')).toLowerCase().includes(refLower)
-  );
-  if (idx >= 0) showCommand(idx);
-}
+    function getToolIcon(tool) {
+      // Prefer icl8, then ICN#, then first icon
+      if (tool.icons && tool.icons.length > 0) {
+        const icl8 = tool.icons.find(i => i.type === 'icl8');
+        const icn = tool.icons.find(i => i.type === 'ICN#');
+        return (icl8 || icn || tool.icons[0]).data;
+      }
+      if (tool.picts && tool.picts.length > 0) {
+        return tool.picts[0].data;
+      }
+      return null;
+    }
 
-function showGlossary(filter) {
-  const terms = (DATA.manual || {}).glossary || [];
-  const filtered = filter
-    ? terms.filter(t => (t.term || '').toLowerCase().includes(filter) || (t.definition || '').toLowerCase().includes(filter))
-    : terms;
+    function getVersionStr(tool) {
+      if (tool.versions && tool.versions.length > 0) {
+        const v = tool.versions[0];
+        return (v.long || v.short || v.version || '');
+      }
+      return '';
+    }
 
-  let html = '<div class="page-title">Glossary</div>';
-  html += '<div class="page-subtitle">' + filtered.length + ' terms</div>';
+    function renderGallery() {
+      const query = searchInput.value.toLowerCase().trim();
+      const needArt = filterArt.checked;
+      const needSound = filterSound.checked;
+      const sortBy = sortSelect.value;
 
-  for (const t of filtered) {
-    html += '<div class="card">';
-    html += '<div class="glossary-term">' + esc(t.term || '') + '</div>';
-    html += '<div class="glossary-def">' + esc(t.definition || '') + '</div>';
-    html += '</div>';
-  }
+      let filtered = tools.filter(t => {
+        if (query && !t.name.toLowerCase().includes(query)) return false;
+        if (needArt && t.art_count === 0) return false;
+        if (needSound && t.sound_count === 0) return false;
+        return true;
+      });
 
-  if (!filtered.length) html += '<div class="no-results">No glossary terms match your search.</div>';
-
-  const main = document.getElementById('main');
-  main.innerHTML = html;
-  main.scrollTop = 0;
-}
-
-function showTables() {
-  const tables = (DATA.manual || {}).reference_tables || [];
-  let html = '<div class="page-title">Reference Tables</div>';
-  html += '<div class="page-subtitle">' + tables.length + ' tables</div>';
-
-  for (const t of tables) {
-    html += '<div class="card">';
-    html += '<h3>' + (t.table_id ? esc(t.table_id) + ' - ' : '') + esc(t.table_title || 'Untitled') + '</h3>';
-    if (t.page_number) html += '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Page ' + esc(t.page_number) + '</div>';
-
-    const cols = t.columns || [];
-    const rows = t.rows || [];
-    if (rows.length) {
-      html += '<div style="overflow-x:auto"><table class="ref-table"><tr>';
-      if (cols.length) {
-        for (const c of cols) html += '<th>' + esc(String(c)) + '</th>';
+      if (sortBy === 'art') {
+        filtered.sort((a, b) => b.art_count - a.art_count);
+      } else if (sortBy === 'sound') {
+        filtered.sort((a, b) => b.sound_count - a.sound_count);
       } else {
-        const keys = Object.keys(rows[0] || {});
-        for (const k of keys) html += '<th>' + esc(k) + '</th>';
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
       }
-      html += '</tr>';
-      for (const row of rows) {
-        html += '<tr>';
-        if (cols.length) {
-          for (const c of cols) {
-            const key = String(c);
-            const val = row[key] != null ? row[key] : row[key.toLowerCase()] != null ? row[key.toLowerCase()] : '';
-            html += '<td>' + esc(String(val)) + '</td>';
+
+      toolCount.textContent = 'Showing ' + filtered.length + ' of ' + tools.length + ' tools';
+
+      if (filtered.length === 0) {
+        gallery.innerHTML = '<p class="dim">No tools match your filters.</p>';
+        return;
+      }
+
+      gallery.innerHTML = filtered.map((t, i) => {
+        const icon = getToolIcon(t);
+        const iconHtml = icon ? '<img class="tool-primary-icon" data-src="data:image/png;base64,' + icon + '" alt="icon">' : '<div class="tool-primary-icon" style="display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-family:var(--mono);font-size:10px;">N/A</div>';
+        const ver = getVersionStr(t);
+
+        // Art strip: first 8 icons/picts
+        const artItems = [...(t.icons || []).slice(0, 5), ...(t.picts || []).slice(0, 3)];
+        const stripHtml = artItems.length > 0
+          ? artItems.map(a => '<img data-src="data:image/png;base64,' + a.data + '" alt="' + (a.type || 'art') + '">').join('')
+          : '<span style="font-family:var(--mono);font-size:11px;color:var(--text-dim);padding:8px;">No art extracted</span>';
+
+        return '<div class="tool-card" data-tool="' + t.name + '">' +
+          '<div class="tool-card-header">' +
+            iconHtml +
+            '<div class="tool-card-info">' +
+              '<h4>' + escHtml(t.name) + '</h4>' +
+              (ver ? '<div class="tool-card-version">' + escHtml(ver) + '</div>' : '') +
+            '</div>' +
+          '</div>' +
+          '<div class="tool-card-stats">' +
+            '<span>' + t.art_count + '</span> art ' +
+            '<span>' + t.sound_count + '</span> snd ' +
+            '<span>' + t.text_count + '</span> txt ' +
+            '<span>' + t.fdo88_count + '</span> fdo' +
+          '</div>' +
+          '<div class="tool-art-strip">' + stripHtml + '</div>' +
+        '</div>';
+      }).join('');
+
+      // Lazy load images
+      lazyLoadImages();
+
+      // Add click handlers
+      gallery.querySelectorAll('.tool-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const toolName = card.dataset.tool;
+          const tool = toolManifest.tools[toolName];
+          if (tool) showToolDetail(tool);
+        });
+      });
+    }
+
+    searchInput.addEventListener('input', renderGallery);
+    sortSelect.addEventListener('change', renderGallery);
+    filterArt.addEventListener('change', renderGallery);
+    filterSound.addEventListener('change', renderGallery);
+
+    renderGallery();
+  }
+
+  // Lazy loading via IntersectionObserver
+  function lazyLoadImages() {
+    const images = document.querySelectorAll('img[data-src]');
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+            observer.unobserve(img);
           }
-        } else {
-          for (const v of Object.values(row)) html += '<td>' + esc(String(v || '')) + '</td>';
-        }
-        html += '</tr>';
-      }
-      html += '</table></div>';
+        });
+      }, { root: mainEl, rootMargin: '200px' });
+      images.forEach(img => obs.observe(img));
+    } else {
+      images.forEach(img => { img.src = img.dataset.src; img.removeAttribute('data-src'); });
     }
-
-    if (t.notes) html += '<p style="font-size:12px;color:var(--text-muted);margin-top:8px">' + esc(t.notes) + '</p>';
-    html += '</div>';
   }
 
-  const main = document.getElementById('main');
-  main.innerHTML = html;
-  main.scrollTop = 0;
-}
+  function escHtml(s) {
+    if (s == null) return '';
+    if (typeof s !== 'string') s = String(s);
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
 
-function showChapter(key) {
-  const chapters = (DATA.manual || {}).chapters || [];
-  const [chNum, chTitle] = key.split(':');
-  const matching = chapters.filter(ch => ch.chapter === chNum && ch.chapter_title === chTitle);
+  // ========== TOOL DETAIL OVERLAY ==========
+  function showToolDetail(tool) {
+    const overlay = document.getElementById('tool-detail-overlay');
+    const detail = document.getElementById('tool-detail');
 
-  let html = '<div class="page-title">' + (chNum ? (matching[0]?.page_type === 'appendix_start' ? 'Appendix ' : 'Chapter ') + esc(chNum) : '') + '</div>';
-  if (chTitle) html += '<div class="page-subtitle">' + esc(chTitle) + '</div>';
+    const ver = tool.versions && tool.versions.length > 0 ? tool.versions[0] : null;
 
-  for (const ch of matching) {
-    if (ch.page_number) html += '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Page ' + esc(ch.page_number) + '</div>';
+    let versionsHtml = '';
+    if (tool.versions && tool.versions.length > 0) {
+      versionsHtml = '<div class="tool-detail-section"><h4>Versions</h4>' +
+        tool.versions.map(v =>
+          '<div style="margin-bottom:6px;">' +
+            '<span class="version-tag">' + escHtml(v.short || v.version) + '</span> ' +
+            '<span class="dim">' + escHtml(v.stage || '') + '</span> ' +
+            '<span style="color:var(--text)">' + escHtml(v.long || '') + '</span>' +
+          '</div>'
+        ).join('') + '</div>';
+    }
 
-    const sections = ch.sections || [];
-    for (const s of sections) {
-      if (typeof s !== 'object') continue;
-      if (s.heading) html += '<div class="chapter-heading">' + esc(s.heading) + '</div>';
-      if (s.content) html += '<div class="chapter-content">' + esc(s.content) + '</div>';
-      if (s.bullet_points && s.bullet_points.length) {
-        html += '<ul class="chapter-bullets">';
-        for (const bp of s.bullet_points) html += '<li>' + esc(bp) + '</li>';
-        html += '</ul>';
+    // Icons
+    let iconsHtml = '';
+    if (tool.icons && tool.icons.length > 0) {
+      iconsHtml = '<div class="tool-detail-section"><h4>Icons (' + tool.icons.length + ')</h4><div class="art-grid">' +
+        tool.icons.map(ic =>
+          '<img src="data:image/png;base64,' + ic.data + '" alt="' + escHtml(ic.type + ' #' + ic.id) + '" title="' + escHtml(ic.type + ' #' + ic.id + (ic.name ? ' - ' + ic.name : '')) + '" onclick="openLightbox(this.src)">'
+        ).join('') + '</div></div>';
+    }
+
+    // PICTs
+    let pictsHtml = '';
+    if (tool.picts && tool.picts.length > 0) {
+      pictsHtml = '<div class="tool-detail-section"><h4>PICT Art (' + tool.picts.length + ')</h4><div class="art-grid">' +
+        tool.picts.map(p =>
+          '<img class="large-art" src="data:image/png;base64,' + p.data + '" alt="' + escHtml('PICT #' + p.id) + '" title="' + escHtml('PICT #' + p.id + (p.name ? ' - ' + p.name : '')) + '" onclick="openLightbox(this.src)">'
+        ).join('') + '</div></div>';
+    }
+
+    // Sounds
+    let soundsHtml = '';
+    if (tool.sounds && tool.sounds.length > 0) {
+      soundsHtml = '<div class="tool-detail-section"><h4>Sounds (' + tool.sounds.length + ')</h4><div class="sound-list">' +
+        tool.sounds.map((s, i) =>
+          '<button class="sound-btn" data-sound="data:audio/wav;base64,' + s.data + '" onclick="playSound(this)">' +
+            '<span class="play-icon">&#9654;</span> ' + escHtml(s.name || ('snd #' + s.id)) +
+          '</button>'
+        ).join('') + '</div></div>';
+    }
+
+    // Text
+    let textHtml = '';
+    if (tool.text && tool.text.length > 0) {
+      textHtml = '<div class="tool-detail-section"><h4>Text Content (' + tool.text.length + ')</h4>' +
+        tool.text.map(t =>
+          '<div class="text-block-label">' + escHtml(t.type + ' #' + t.id + (t.name ? ' - ' + t.name : '')) + '</div>' +
+          '<div class="text-block">' + escHtml(t.content) + '</div>'
+        ).join('') + '</div>';
+    }
+
+    // Resource summary
+    let resSummary = '';
+    if (tool.resource_summary) {
+      const rs = tool.resource_summary;
+      const entries = Object.entries(rs).filter(([k,v]) => v > 0);
+      if (entries.length > 0) {
+        resSummary = '<div class="tool-detail-section"><h4>Resource Summary</h4><div style="display:flex;flex-wrap:wrap;gap:6px;">' +
+          entries.map(([k,v]) =>
+            '<span class="tag">' + escHtml(k) + ': ' + v + '</span>'
+          ).join('') + '</div></div>';
       }
-      if (s.subsections) {
-        for (const sub of s.subsections) {
-          if (sub.heading) html += '<div class="chapter-heading" style="font-size:15px">' + esc(sub.heading) + '</div>';
-          if (sub.content) html += '<div class="chapter-content">' + esc(sub.content) + '</div>';
-          if (sub.bullet_points && sub.bullet_points.length) {
-            html += '<ul class="chapter-bullets">';
-            for (const bp of sub.bullet_points) html += '<li>' + esc(bp) + '</li>';
-            html += '</ul>';
+    }
+
+    // FDO88 decompiled forms
+    let formsHtml = '';
+    var fdoForms = window.__FDO88_FORMS && window.__FDO88_FORMS[tool.name];
+    if (fdoForms && fdoForms.length > 0) {
+      formsHtml = '<div class="tool-detail-section"><h4>Decompiled FDO88 Forms (' + fdoForms.length + ')</h4>' +
+        fdoForms.map(function(fm, idx) {
+          var desc = describeFdoForm(fm.source);
+          return '<div class="fdo-form-card" id="fdo-card-' + idx + '">' +
+            '<div class="fdo-form-header" onclick="this.parentElement.classList.toggle(\'expanded\')">' +
+              '<span class="fdo-form-db">' + escHtml(fm.db) + ' #' + escHtml(fm.record) + '</span>' +
+              '<span class="fdo-form-desc">' + escHtml(desc) + '</span>' +
+              '<span class="fdo-form-lines">' + fm.lines + ' lines</span>' +
+            '</div>' +
+            '<div class="fdo-form-body"><div class="fdo-source">' + highlightFdo88(fm.source) + '</div></div>' +
+          '</div>';
+        }).join('') + '</div>';
+    }
+
+    detail.innerHTML =
+      '<div class="tool-detail-header">' +
+        '<h3>' + escHtml(tool.name) + '</h3>' +
+        (ver ? '<span class="version-tag">' + escHtml(ver.short || ver.version) + '</span>' : '') +
+        '<button class="tool-detail-close" onclick="closeToolDetail()">Close [Esc]</button>' +
+      '</div>' +
+      '<div class="tool-detail-body">' +
+        versionsHtml +
+        resSummary +
+        iconsHtml +
+        pictsHtml +
+        soundsHtml +
+        textHtml +
+        formsHtml +
+        (!iconsHtml && !pictsHtml && !soundsHtml && !textHtml && !formsHtml ? '<p class="dim">No extractable resources found in this tool.</p>' : '') +
+      '</div>';
+
+    overlay.classList.add('visible');
+    document.addEventListener('keydown', detailEscHandler);
+  }
+
+  function detailEscHandler(e) {
+    if (e.key === 'Escape') closeToolDetail();
+  }
+
+  window.closeToolDetail = function() {
+    document.getElementById('tool-detail-overlay').classList.remove('visible');
+    document.removeEventListener('keydown', detailEscHandler);
+    stopCurrentAudio();
+  };
+
+  // Click on overlay background to close
+  document.getElementById('tool-detail-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeToolDetail();
+  });
+
+  // ========== AUDIO PLAYBACK ==========
+  window.playSound = function(btn) {
+    stopCurrentAudio();
+    const src = btn.dataset.sound;
+    try {
+      const audio = new Audio(src);
+      currentAudio = audio;
+      btn.classList.add('playing');
+      audio.addEventListener('ended', () => {
+        btn.classList.remove('playing');
+        currentAudio = null;
+      });
+      audio.addEventListener('error', () => {
+        btn.classList.remove('playing');
+        currentAudio = null;
+      });
+      audio.play().catch(() => {
+        btn.classList.remove('playing');
+        currentAudio = null;
+      });
+    } catch(e) {
+      btn.classList.remove('playing');
+    }
+  };
+
+  function stopCurrentAudio() {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+      document.querySelectorAll('.sound-btn.playing').forEach(b => b.classList.remove('playing'));
+    }
+  }
+
+  // ========== LIGHTBOX ==========
+  window.openLightbox = function(src) {
+    event.stopPropagation();
+    const lb = document.getElementById('lightbox');
+    document.getElementById('lightbox-img').src = src;
+    lb.classList.add('visible');
+    document.addEventListener('keydown', lightboxEsc);
+  };
+
+  window.closeLightbox = function() {
+    document.getElementById('lightbox').classList.remove('visible');
+    document.removeEventListener('keydown', lightboxEsc);
+  };
+
+  function lightboxEsc(e) {
+    if (e.key === 'Escape') closeLightbox();
+  }
+
+  // ========== FDO88 SYNTAX HIGHLIGHTER ==========
+  function highlightFdo88(source) {
+    if (!source) return '';
+    return source.split('\n').map(function(line) {
+      // Strip  prefix if still present (legacy data)
+      var display = line.replace(/^fdo\$/, '');
+      var escaped = escHtml(display);
+
+      // Comment lines
+      if (/^\s*;/.test(display)) {
+        return '<span class="fdo-comment">' + escaped + '</span>';
+      }
+      // Raw hex lines ($XX $XX...)
+      if (/^\$[0-9A-Fa-f]{2}(\s+\$[0-9A-Fa-f]{2})*\s*$/.test(display.trim())) {
+        return '<span class="fdo-hex">' + escaped + '</span>';
+      }
+
+      // Highlight strings
+      escaped = escaped.replace(/"([^"]*?)"/g, '<span class="fdo-string">"$1"</span>');
+      // Highlight hex values ($XX)
+      escaped = escaped.replace(/\$[0-9A-Fa-f]{2,4}\b/g, '<span class="fdo-hex">$&</span>');
+      // Highlight numbers (standalone digits)
+      escaped = escaped.replace(/\b(\d+)(pt|KB)?\b/g, function(m, n, suffix) {
+        return '<span class="fdo-number">' + n + (suffix||'') + '</span>';
+      });
+
+      // Highlight command names at start of line
+      var cmdMatch = display.match(/^(\w+)/);
+      if (cmdMatch) {
+        var cmd = cmdMatch[1];
+        // Known commands
+        var cmds = ['start','enddef','break','Window16','window','Field16','field',
+          'Title','Text','dispch','TextDesc','SetFont','Switch','Mark','MarkText',
+          'Picture','SMultiIcon','SetWindowTag','SetSize','SetIcon','SndName',
+          'Document','canned','canmap','EncodeType','SImdDispatch','PlusGroup'];
+        var dispatches = ['close','send_form','send_selected','invoke_record',
+          'invoke_and_send','ask_indirect','no_action','goto_keyword','run_tool',
+          'open_room','goto_url','none'];
+        var types = ['Text','Button','List','Popup','Check','Radio','Picture',
+          'normal','modal_round','no_resize','type_2','type_9','center','stagger',
+          'default','sendform','editable','scrollable','dispatch','smallbtn','none',
+          'plain','bold','italic','underline','black','white','red','green','blue',
+          'magenta','cyan','yellow','geneva','times','helvetica','courier','system',
+          'application'];
+
+        if (cmds.indexOf(cmd) >= 0) {
+          escaped = escaped.replace(cmd, '<span class="fdo-cmd">' + cmd + '</span>');
+        } else if (dispatches.indexOf(cmd) >= 0) {
+          escaped = escaped.replace(cmd, '<span class="fdo-dispatch">' + cmd + '</span>');
+        }
+      }
+
+      // Highlight type keywords anywhere in line
+      escaped = escaped.replace(/\b(cluster:\w+|token=|resid=|field=|mark=|info=|rec=|db=|at\s)/g,
+        '<span class="fdo-param">$1</span>');
+
+      return escaped;
+    }).join('\n');
+  }
+
+  // ========== FDO88 FORM DESCRIPTION ==========
+  function describeFdoForm(source) {
+    if (!source) return '';
+    var lines = source.split('\n');
+    var parts = [];
+
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].replace(/^fdo\$/, '').trim();
+
+      // Window title
+      var titleMatch = line.match(/^Title\s+"(.+?)"/);
+      if (titleMatch) { parts.push(titleMatch[1]); continue; }
+
+      // Window type
+      var winMatch = line.match(/^(Window16|window)\s/);
+      if (winMatch) { parts.push('Window'); continue; }
+
+      // Count fields
+      var fieldMatch = line.match(/^Field16\s+(\w+)/);
+      if (fieldMatch && parts.indexOf(fieldMatch[1]) < 0 && ['Button','List','Popup'].indexOf(fieldMatch[1]) >= 0) {
+        parts.push(fieldMatch[1]);
+      }
+
+      // Dispatches
+      var dispMatch = line.match(/^dispch\s+(\w+)/);
+      if (dispMatch && ['goto_keyword','run_tool','open_room','send_form'].indexOf(dispMatch[1]) >= 0) {
+        parts.push(dispMatch[1].replace('_',' '));
+      }
+
+      // Text content (first meaningful string)
+      var textMatch = line.match(/^Text\s+\d+\s+"(.{3,40})"/);
+      if (textMatch && parts.length < 4) {
+        parts.push('"' + textMatch[1].substring(0,30) + (textMatch[1].length > 30 ? '...' : '') + '"');
+      }
+    }
+
+    return parts.slice(0,4).join(' / ') || '(empty form)';
+  }
+
+  // ========== DEEP LINKING ==========
+  // Support URLs like #tool/ToolName to open a specific tool
+  function handleDeepLink() {
+    var hash = location.hash;
+    if (!hash) return;
+
+    // Check for tool deep link: #tool/ToolName
+    var toolMatch = hash.match(/^#tool\/(.+)$/);
+    if (toolMatch && toolManifest) {
+      var toolName = decodeURIComponent(toolMatch[1]);
+      var tools = Object.values(toolManifest.tools);
+      var tool = tools.find(function(t) { return t.name === toolName; });
+      if (tool) {
+        // Scroll to tools section first
+        var toolsSection = document.getElementById('tools');
+        if (toolsSection) toolsSection.scrollIntoView();
+        // Open the tool detail
+        setTimeout(function() { showToolDetail(tool); }, 100);
+        // Update URL to keep it shareable
+        history.replaceState(null, '', '#tool/' + encodeURIComponent(toolName));
+        return;
+      }
+    }
+  }
+
+  // Update hash when opening a tool detail
+  var _origShowToolDetail = showToolDetail;
+  showToolDetail = function(tool) {
+    _origShowToolDetail(tool);
+    history.pushState(null, '', '#tool/' + encodeURIComponent(tool.name));
+  };
+
+  var _origCloseToolDetail = window.closeToolDetail;
+  window.closeToolDetail = function() {
+    _origCloseToolDetail();
+    // Restore to tools section hash
+    history.pushState(null, '', '#tools');
+  };
+
+  window.addEventListener('popstate', handleDeepLink);
+
+  // ========== CODE SEGMENT LINKS ==========
+  // Make "CODE N" references throughout the page clickable
+  // Walks text nodes outside of <pre>, <code>, <script>, <style> and wraps "CODE N" with a link
+  (function linkCodeRefs() {
+    var codePattern = /\bCODE\s+(\d+)\b/g;
+    var skip = {PRE:1, CODE:1, SCRIPT:1, STYLE:1, A:1, TEXTAREA:1, INPUT:1};
+    var walker = document.createTreeWalker(
+      document.getElementById('main'),
+      NodeFilter.SHOW_TEXT,
+      null
+    );
+    var nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function(node) {
+      if (skip[node.parentElement.tagName]) return;
+      var text = node.nodeValue;
+      if (!codePattern.test(text)) return;
+      codePattern.lastIndex = 0;
+      var frag = document.createDocumentFragment();
+      var lastIdx = 0;
+      var match;
+      while ((match = codePattern.exec(text)) !== null) {
+        if (match.index > lastIdx) {
+          frag.appendChild(document.createTextNode(text.slice(lastIdx, match.index)));
+        }
+        var num = match[1];
+        var a = document.createElement('a');
+        a.href = '#code-' + num;
+        a.textContent = match[0];
+        a.className = 'code-ref';
+        a.title = 'Jump to CODE ' + num + ' in segment map';
+        a.addEventListener('click', function(e) {
+          var target = document.getElementById(this.getAttribute('href').slice(1));
+          if (target) {
+            target.style.transition = 'background 0.3s';
+            target.style.background = 'rgba(252,157,44,0.15)';
+            setTimeout(function() { target.style.background = ''; }, 2000);
           }
-        }
+        });
+        frag.appendChild(a);
+        lastIdx = codePattern.lastIndex;
       }
+      if (lastIdx < text.length) {
+        frag.appendChild(document.createTextNode(text.slice(lastIdx)));
+      }
+      node.parentElement.replaceChild(frag, node);
+    });
+  })();
+
+  // ========== SYNTAX HIGHLIGHT STATIC CODE BLOCKS ==========
+  document.querySelectorAll('pre code.fdo-source').forEach(function(el) {
+    el.innerHTML = highlightFdo88(el.textContent);
+  });
+
+  // ========== AOL4FREE DOCS BROWSER ==========
+  (function initAol4freeDocs() {
+    var data = window.__AOL4FREE_DOCS;
+    var container = document.getElementById('aol4free-docs');
+    if (!data || !container) return;
+
+    var html = '';
+    data.chapters.forEach(function(ch, i) {
+      html += '<div class="fdo-form-card">' +
+        '<div class="fdo-form-header" onclick="this.parentElement.classList.toggle(\'expanded\')">' +
+          '<span class="fdo-form-db" style="min-width:30px;">' + (i+1) + '</span>' +
+          '<span style="color:var(--text-bright);flex:1;">' + escHtml(ch.title) + '</span>' +
+          '<span class="fdo-form-lines">' + ch.text.length + ' chars</span>' +
+        '</div>' +
+        '<div class="fdo-form-body" style="padding:16px 20px;">' +
+          '<div class="text-block" style="white-space:pre-wrap;font-size:13px;line-height:1.7;color:var(--text);">' + escHtml(ch.text) + '</div>' +
+        '</div>' +
+      '</div>';
+    });
+
+    if (data.install_about) {
+      html += '<div class="fdo-form-card">' +
+        '<div class="fdo-form-header" onclick="this.parentElement.classList.toggle(\'expanded\')">' +
+          '<span class="fdo-form-db" style="min-width:30px;">+</span>' +
+          '<span style="color:var(--text-bright);flex:1;">Installer About Text</span>' +
+        '</div>' +
+        '<div class="fdo-form-body" style="padding:16px 20px;">' +
+          '<div class="text-block" style="white-space:pre-wrap;font-size:13px;line-height:1.7;color:var(--text);">' + escHtml(data.install_about) + '</div>' +
+        '</div>' +
+      '</div>';
     }
-  }
 
-  if (!matching.length) html += '<div class="no-results">No content found for this chapter.</div>';
-
-  setActive('chapter:' + key);
-  const main = document.getElementById('main');
-  main.innerHTML = html;
-  main.scrollTop = 0;
-}
-
-function showSamples() {
-  const samples = (DATA.manual || {}).code_samples || [];
-  let html = '<div class="page-title">Code Samples</div>';
-  html += '<div class="page-subtitle">' + samples.length + ' samples</div>';
-
-  for (const s of samples) {
-    html += '<div class="card">';
-    html += '<h3>' + (s.sample_id ? esc(s.sample_id) + ' - ' : '') + esc(s.sample_title || 'Untitled') + '</h3>';
-    if (s.language) html += '<span class="tag" style="margin-bottom:8px;display:inline-block">' + esc(s.language) + '</span> ';
-    if (s.page_number) html += '<span class="tag">Page ' + esc(s.page_number) + '</span>';
-    if (s.code) html += '<div class="code-block" style="margin-top:10px">' + esc(s.code) + '</div>';
-    if (s.explanation) html += '<p style="margin-top:8px;font-size:13px;color:var(--text-muted)">' + esc(s.explanation) + '</p>';
-    html += '</div>';
-  }
-
-  const main = document.getElementById('main');
-  main.innerHTML = html;
-  main.scrollTop = 0;
-}
-
-function showFigures() {
-  const figs = (DATA.manual || {}).figures || [];
-  let html = '<div class="page-title">Figures</div>';
-  html += '<div class="page-subtitle">' + figs.length + ' figures</div>';
-
-  for (const f of figs) {
-    html += '<div class="card">';
-    html += '<h3>' + (f.figure_id ? 'Figure ' + esc(f.figure_id) + ': ' : '') + esc(f.figure_title || 'Untitled') + '</h3>';
-    if (f.page_number) html += '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Page ' + esc(f.page_number) + '</div>';
-    if (f.description) html += '<p>' + esc(f.description) + '</p>';
-    html += '</div>';
-  }
-
-  const main = document.getElementById('main');
-  main.innerHTML = html;
-  main.scrollTop = 0;
-}
-
-function matchCmd(c, q) {
-  const s = [c.name, c.alias, c.description, c.syntax, c.opcode, c.sub_opcode, c.opcode_hex]
-    .filter(Boolean).join(' ').toLowerCase();
-  return s.includes(q);
-}
-
-let searchTimeout;
-function onSearch(e) {
-  clearTimeout(searchTimeout);
-  const q = e.target.value.trim().toLowerCase();
-  searchTimeout = setTimeout(() => {
-    if (!q) { showOverview(); return; }
-    showSearchResults(q);
-  }, 200);
-}
-
-function showSearchResults(q) {
-  const m = DATA.manual || {};
-  const cmds = (m.commands || []).filter(c => matchCmd(c, q));
-  const terms = (m.glossary || []).filter(t =>
-    (t.term || '').toLowerCase().includes(q) || (t.definition || '').toLowerCase().includes(q));
-
-  let html = '<div class="page-title">Search: "' + esc(q) + '"</div>';
-  html += '<div class="page-subtitle">' + cmds.length + ' commands, ' + terms.length + ' glossary terms</div>';
-
-  if (cmds.length) {
-    html += '<h3 style="margin:16px 0 8px">Commands</h3>';
-    for (const c of cmds) {
-      const realIdx = (m.commands || []).indexOf(c);
-      html += '<div class="card" style="cursor:pointer;padding:12px 16px" onclick="showCommand(' + realIdx + ')">';
-      html += '<span class="cmd-name" style="font-size:15px">' + esc(c.name || '') + '</span>';
-      if (c.alias) html += ' <span class="cmd-alias" style="font-size:13px">(' + esc(c.alias) + ')</span>';
-      if (c.opcode != null) html += ' <span class="tag" style="margin-left:8px">Opcode ' + c.opcode + '</span>';
-      html += '</div>';
+    if (data.ultrabomb_readme) {
+      html += '<div class="fdo-form-card">' +
+        '<div class="fdo-form-header" onclick="this.parentElement.classList.toggle(\'expanded\')">' +
+          '<span class="fdo-form-db" style="min-width:30px;">+</span>' +
+          '<span style="color:var(--text-bright);flex:1;">UltraBomb ReadMe</span>' +
+        '</div>' +
+        '<div class="fdo-form-body" style="padding:16px 20px;">' +
+          '<div class="text-block" style="white-space:pre-wrap;font-size:13px;line-height:1.7;color:var(--text);">' + escHtml(data.ultrabomb_readme) + '</div>' +
+        '</div>' +
+      '</div>';
     }
-  }
 
-  if (terms.length) {
-    html += '<h3 style="margin:16px 0 8px">Glossary</h3>';
-    for (const t of terms) {
-      html += '<div class="card" style="padding:12px 16px">';
-      html += '<span class="glossary-term" style="font-size:14px">' + esc(t.term || '') + '</span>';
-      html += '<span style="font-size:13px;color:var(--text-muted)"> - ' + esc((t.definition || '').substring(0, 150)) + '</span>';
-      html += '</div>';
-    }
-  }
+    container.innerHTML = html;
+  })();
 
-  if (!cmds.length && !terms.length) {
-    html += '<div class="no-results">No results found.</div>';
-  }
+  // ========== INIT ==========
+  loadToolManifest();
+  // Check for deep links after a short delay (wait for data to load)
+  setTimeout(handleDeepLink, 500);
 
-  const main = document.getElementById('main');
-  main.innerHTML = html;
-  main.scrollTop = 0;
-}
-
-function stat(value, label) {
-  return '<div class="stat-card"><div class="stat-value">' + value + '</div><div class="stat-label">' + label + '</div></div>';
-}
-
-function esc(s) {
-  if (s == null) return '';
-  const d = document.createElement('div');
-  d.textContent = String(s);
-  return d.innerHTML;
-}
-
-loadData();
+})();
 </script>
 </body>
 </html>
