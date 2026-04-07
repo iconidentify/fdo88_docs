@@ -1,0 +1,1 @@
+window.__DISASM_CODE_54={"arch":"m68k","segment":{"id":54,"name":"%_Static_Constructor_Destructor_Pointers","size":8},"functions":[],"instructions":[{"a":"0x0004","b":"3282","m":"move.w","o":"d2, (a1)","c":"","t":"data","f":null,"r":null,"w":0},{"a":"0x0006","b":"328A","m":"move.w","o":"a2, (a1)","c":"","t":"data","f":null,"r":null,"w":0}]};

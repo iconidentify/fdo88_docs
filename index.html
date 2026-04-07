@@ -895,6 +895,109 @@ pre code.fdo-source {
   padding: 2px 6px;
   border-radius: 3px;
 }
+
+/* ========== DISASSEMBLY WORKBENCH ========== */
+.disasm-row {
+  display: flex;
+  padding: 0 12px;
+  height: 20px;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+  cursor: default;
+}
+
+.disasm-row:nth-child(even) { background: rgba(255,255,255,0.012); }
+.disasm-row:hover { background: rgba(252,157,44,0.04); }
+.disasm-row.disasm-highlight { background: rgba(252,157,44,0.15); transition: background 0.3s; }
+.disasm-row.disasm-warn-1 { border-left: 2px solid rgba(250,204,21,0.4); }
+.disasm-row.disasm-warn-2 { border-left: 2px solid rgba(248,113,113,0.6); background: rgba(248,113,113,0.03); }
+
+.disasm-row .d-off { width: 72px; color: var(--text-dim); font-size: 12px; flex-shrink: 0; }
+.disasm-row .d-bytes { width: 140px; color: #4b5563; font-size: 11px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.disasm-row .d-mnem { width: 90px; font-weight: bold; flex-shrink: 0; }
+.disasm-row .d-ops { flex: 1; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.disasm-row .d-cmt { width: 300px; color: var(--text-dim); font-size: 12px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Mnemonic colors by instruction class */
+.disasm-row .d-mnem.t-call   { color: #fc9d2c; }
+.disasm-row .d-mnem.t-branch { color: #60a5fa; }
+.disasm-row .d-mnem.t-jump   { color: #f472b6; }
+.disasm-row .d-mnem.t-return { color: #f87171; }
+.disasm-row .d-mnem.t-trap   { color: #34d399; }
+.disasm-row .d-mnem.t-data   { color: #9aa4c7; }
+.disasm-row .d-mnem.t-stack  { color: #6b7280; }
+.disasm-row .d-mnem.t-arith  { color: #c4b5fd; }
+.disasm-row .d-mnem.t-nop    { color: #4b5563; }
+
+/* Clickable xref targets in comments */
+.disasm-row .d-cmt .xref-link {
+  color: var(--green);
+  cursor: pointer;
+  text-decoration: none;
+}
+.disasm-row .d-cmt .xref-link:hover { text-decoration: underline; }
+
+/* Resolved target in operands */
+.disasm-row .d-ops .sym-target { color: var(--orange); }
+
+/* Function header rows */
+.disasm-func-hdr {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  height: 36px;
+  background: rgba(252,157,44,0.06);
+  border-top: 1px solid rgba(252,157,44,0.15);
+  border-bottom: 1px solid rgba(252,157,44,0.08);
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--orange);
+  gap: 12px;
+  cursor: pointer;
+}
+.disasm-func-hdr:hover { background: rgba(252,157,44,0.1); }
+.disasm-func-hdr .func-name { font-weight: bold; font-size: 13px; }
+.disasm-func-hdr .func-meta { color: var(--text-dim); font-size: 11px; }
+
+/* Function list sidebar items */
+.disasm-func-item {
+  display: block;
+  padding: 5px 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.disasm-func-item:hover { color: var(--text); background: rgba(0,255,65,0.03); }
+.disasm-func-item.active { color: var(--orange); border-left-color: var(--orange); background: rgba(252,157,44,0.08); transition: background 0.4s, color 0.3s, border-left-color 0.3s; }
+.disasm-func-item.flash { background: rgba(252,157,44,0.3); color: #fff; border-left-color: var(--orange); transition: none; }
+
+/* Compact mode */
+.disasm-compact .disasm-row { height: 16px; line-height: 16px; font-size: 11px; }
+.disasm-compact .disasm-row .d-off { font-size: 10px; }
+.disasm-compact .disasm-row .d-bytes { font-size: 10px; }
+.disasm-compact .disasm-row .d-cmt { font-size: 10px; }
+.disasm-compact .disasm-func-hdr { height: 28px; padding: 4px 12px; font-size: 11px; }
+.disasm-compact .disasm-func-hdr .func-name { font-size: 11px; }
+
+/* Hide bytes column */
+.disasm-hide-bytes .d-bytes,
+.disasm-hide-bytes .disasm-bytes-col { display: none; }
+
+/* Scrollbar styling for disasm panels */
+#disasm-func-list::-webkit-scrollbar { width: 4px; }
+#disasm-func-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+#disasm-scroll::-webkit-scrollbar { width: 6px; }
+#disasm-scroll::-webkit-scrollbar-track { background: var(--code-bg); }
+#disasm-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </style>
 </head>
 <body>
@@ -931,7 +1034,8 @@ pre code.fdo-source {
     <a class="nav-item" href="#tools"><span class="nav-num">05</span>Tool Gallery</a>
     <a class="nav-item" href="#source"><span class="nav-num">06</span>Decompiled FDO88</a>
     <a class="nav-item" href="#toolkit"><span class="nav-num">07</span>RE Toolkit</a>
-    <a class="nav-item" href="#about"><span class="nav-num">08</span>About</a>
+    <a class="nav-item" href="#disasm"><span class="nav-num">08</span>Disassembly</a>
+    <a class="nav-item" href="#about"><span class="nav-num">09</span>About</a>
   </div>
 </nav>
 
@@ -1121,7 +1225,7 @@ pre code.fdo-source {
     <div class="table-wrap" style="max-height: 700px;" id="code-table">
       <table>
         <thead>
-          <tr><th>#</th><th>Size (bytes)</th><th>Module</th><th>What it does</th></tr>
+          <tr><th>#</th><th>Size (bytes)</th><th>Module</th><th>What it does</th><th style="width:70px;"></th></tr>
         </thead>
         <tbody>
           <tr id="code-0"><td>0</td><td>12,928</td><td>Jump table</td><td>Segment loader &mdash; contains the inter-segment jump table. The Macintosh Segment Loader resolves CODE resource references through this table.</td></tr>
@@ -1353,7 +1457,7 @@ enddef</code></pre>
         <tbody>
           <tr><td>$05</td><td><code>close</code></td><td>Close this window</td></tr>
           <tr><td>$12</td><td><code>send_form</code></td><td>Send all sendform field contents to the server</td></tr>
-          <tr><td>$24</td><td><code>invoke_record</code></td><td>Request a form from the host database by record number</td></tr>
+          <tr><td>$24</td><td><code>invoke_record</code></td><td>Dispatch an action by event code (info byte 1). Bit 7 clear = local action table, bit 7 set = send request to server. Does NOT directly encode DB type + record ID.</td></tr>
           <tr><td>$80</td><td><code>no_action</code></td><td>Placeholder &mdash; click does nothing</td></tr>
           <tr><td>$81</td><td><code>goto_keyword</code></td><td>Navigate to an AOL keyword</td></tr>
           <tr><td>$89</td><td><code>run_tool</code></td><td>Launch an Online Tool</td></tr>
@@ -1496,7 +1600,60 @@ Turn IM's Off            iS [token] $IM_OFF  $ˇ</code></pre>
     </div>
   </section>
 
-  <!-- ============ SECTION 8: ABOUT / CREDITS ============ -->
+  <!-- ============ SECTION 8: DISASSEMBLY WORKBENCH ============ -->
+  <section id="disasm" class="section" style="max-width:none;padding:40px 24px;">
+    <div style="max-width:1100px;margin:0 auto 24px;">
+      <h2>Disassembly</h2>
+      <p class="section-desc">Interactive 68k disassembly of all 57 CODE segments from the AOL 2.7 binary</p>
+    </div>
+
+    <div id="disasm-container" style="display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;height:calc(100vh - 180px);min-height:500px;background:var(--code-bg);">
+      <!-- Left panel: segment + function list -->
+      <div id="disasm-sidebar" style="width:220px;min-width:220px;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--sidebar-bg);">
+        <div style="padding:12px;border-bottom:1px solid var(--border);">
+          <select id="disasm-seg-select" style="width:100%;background:var(--code-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-family:var(--mono);font-size:12px;cursor:pointer;">
+            <option value="">Select segment...</option>
+          </select>
+          <div style="display:flex;gap:6px;margin-top:8px;">
+            <button id="disasm-compact-btn" title="Toggle compact mode" style="flex:1;background:var(--code-bg);color:var(--text-dim);border:1px solid var(--border);border-radius:4px;padding:4px;font-family:var(--mono);font-size:11px;cursor:pointer;">Compact</button>
+            <button id="disasm-bytes-btn" title="Toggle byte display" style="flex:1;background:var(--code-bg);color:var(--text-dim);border:1px solid var(--border);border-radius:4px;padding:4px;font-family:var(--mono);font-size:11px;cursor:pointer;">Bytes</button>
+          </div>
+        </div>
+        <div id="disasm-seg-info" style="padding:8px 12px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text-dim);display:none;">
+          <div id="disasm-seg-stats"></div>
+        </div>
+        <div id="disasm-func-list" style="flex:1;overflow-y:auto;padding:4px 0;">
+          <div style="padding:12px;color:var(--text-dim);font-size:12px;">Select a segment to browse functions</div>
+        </div>
+      </div>
+
+      <!-- Right panel: disassembly view -->
+      <div id="disasm-view" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+        <!-- Column headers -->
+        <div id="disasm-header" style="display:flex;padding:6px 12px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--orange);text-transform:uppercase;letter-spacing:0.5px;background:var(--sidebar-bg);flex-shrink:0;">
+          <span style="width:72px;">Offset</span>
+          <span class="disasm-bytes-col" style="width:140px;">Bytes</span>
+          <span style="width:90px;">Mnemonic</span>
+          <span style="flex:1;">Operands</span>
+          <span style="width:300px;">Comment</span>
+        </div>
+        <!-- Virtual scroll container -->
+        <div id="disasm-scroll" style="flex:1;overflow-y:auto;position:relative;">
+          <div id="disasm-spacer-top" style="height:0;"></div>
+          <div id="disasm-rows"></div>
+          <div id="disasm-spacer-bottom" style="height:0;"></div>
+          <div id="disasm-empty" style="padding:48px;text-align:center;color:var(--text-dim);font-size:14px;">
+            Select a CODE segment to begin disassembly
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tooltip for traps and hover info -->
+    <div id="disasm-tooltip" style="display:none;position:fixed;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-family:var(--mono);font-size:12px;color:var(--text);max-width:400px;z-index:1000;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.4);"></div>
+  </section>
+
+  <!-- ============ SECTION 9: ABOUT / CREDITS ============ -->
   <section id="about" class="section">
     <h2>About This Project</h2>
     <p class="section-desc">Preservation, documentation, and historical context</p>
@@ -1562,6 +1719,7 @@ Turn IM's Off            iS [token] $IM_OFF  $ˇ</code></pre>
 <script src="tool_manifest.js"></script>
 <script src="fdo88_forms.js"></script>
 <script src="aol4free_docs.js"></script>
+<script src="disasm_data/disasm_index.js"></script>
 
 <script>
 (function() {
@@ -2201,6 +2359,12 @@ Turn IM's Off            iS [token] $IM_OFF  $ˇ</code></pre>
     var hash = location.hash;
     if (!hash) return;
 
+    // Check for disasm deep link: #disasm/CODE_N or #disasm/CODE_N/0xOFFSET
+    if (hash.indexOf('#disasm/') === 0) {
+      // Handled by the disasm module's own deep link handler
+      return;
+    }
+
     // Check for tool deep link: #tool/ToolName
     var toolMatch = hash.match(/^#tool\/(.+)$/);
     if (toolMatch && toolManifest) {
@@ -2285,6 +2449,33 @@ Turn IM's Off            iS [token] $IM_OFF  $ˇ</code></pre>
     });
   })();
 
+  // ========== CODE TABLE DISASSEMBLE LINKS ==========
+  (function addDisasmLinks() {
+    var table = document.getElementById('code-table');
+    if (!table) return;
+    var rows = table.querySelectorAll('tbody tr[id^="code-"]');
+    rows.forEach(function(tr) {
+      var idStr = tr.id.replace('code-', '');
+      var segId = parseInt(idStr, 10);
+      // CODE 30-50 is a combined row, skip composite entries
+      if (isNaN(segId)) return;
+      var td = document.createElement('td');
+      td.style.cssText = 'text-align:center;';
+      var a = document.createElement('a');
+      a.href = '#disasm/CODE_' + segId;
+      a.textContent = 'View';
+      a.style.cssText = 'color:var(--green);font-family:var(--mono);font-size:11px;text-decoration:none;cursor:pointer;';
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (window.openDisasmSegment) window.openDisasmSegment(segId);
+      });
+      a.addEventListener('mouseover', function() { this.style.textDecoration = 'underline'; });
+      a.addEventListener('mouseout', function() { this.style.textDecoration = 'none'; });
+      td.appendChild(a);
+      tr.appendChild(td);
+    });
+  })();
+
   // ========== SYNTAX HIGHLIGHT STATIC CODE BLOCKS ==========
   document.querySelectorAll('pre code.fdo-source').forEach(function(el) {
     el.innerHTML = highlightFdo88(el.textContent);
@@ -2335,6 +2526,539 @@ Turn IM's Off            iS [token] $IM_OFF  $ˇ</code></pre>
     }
 
     container.innerHTML = html;
+  })();
+
+  // ========== DISASSEMBLY WORKBENCH ==========
+  (function initDisasm() {
+    var index = null;        // disasm_index.js data
+    var currentSeg = null;   // currently loaded segment data
+    var currentSegId = -1;
+    var allItems = [];       // flat array of renderable items (instructions + function headers)
+    var ROW_H = 20;
+    var HDR_H = 36;
+    var COMPACT_ROW_H = 16;
+    var COMPACT_HDR_H = 28;
+    var BUFFER = 60;         // extra rows above/below viewport
+    var isCompact = false;
+    var showBytes = true;
+    var renderedRange = { start: -1, end: -1 };
+    var scrollEl = document.getElementById('disasm-scroll');
+    var rowsEl = document.getElementById('disasm-rows');
+    var topSpacer = document.getElementById('disasm-spacer-top');
+    var botSpacer = document.getElementById('disasm-spacer-bottom');
+    var emptyEl = document.getElementById('disasm-empty');
+    var segSelect = document.getElementById('disasm-seg-select');
+    var funcList = document.getElementById('disasm-func-list');
+    var segInfo = document.getElementById('disasm-seg-info');
+    var segStats = document.getElementById('disasm-seg-stats');
+    var tooltip = document.getElementById('disasm-tooltip');
+    var container = document.getElementById('disasm-container');
+
+    function rowHeight(item) {
+      return item._isHdr ? (isCompact ? COMPACT_HDR_H : HDR_H) : (isCompact ? COMPACT_ROW_H : ROW_H);
+    }
+
+    // Cumulative heights for virtual scroll
+    var heights = [];  // heights[i] = cumulative height up to (not including) item i
+    function rebuildHeights() {
+      heights = new Array(allItems.length + 1);
+      heights[0] = 0;
+      for (var i = 0; i < allItems.length; i++) {
+        heights[i + 1] = heights[i] + rowHeight(allItems[i]);
+      }
+    }
+
+    function totalHeight() {
+      return heights.length > 0 ? heights[heights.length - 1] : 0;
+    }
+
+    // Binary search: find first item whose cumulative top >= scrollTop
+    function findItemAtScroll(scrollTop) {
+      var lo = 0, hi = allItems.length - 1;
+      while (lo < hi) {
+        var mid = (lo + hi) >> 1;
+        if (heights[mid + 1] <= scrollTop) lo = mid + 1;
+        else hi = mid;
+      }
+      return lo;
+    }
+
+    // Load disasm_index.js
+    function loadIndex(cb) {
+      if (index) return cb();
+      // Check if already loaded via script tag
+      if (window.__DISASM_INDEX) {
+        index = window.__DISASM_INDEX;
+        populateSegmentSelect();
+        return cb();
+      }
+      var s = document.createElement('script');
+      s.src = 'disasm_data/disasm_index.js';
+      s.onload = function() {
+        index = window.__DISASM_INDEX;
+        if (index) populateSegmentSelect();
+        cb();
+      };
+      s.onerror = function() {
+        emptyEl.textContent = 'Failed to load disasm_data/disasm_index.js';
+        cb();
+      };
+      document.head.appendChild(s);
+    }
+
+    function populateSegmentSelect() {
+      if (!index) return;
+      var html = '<option value="">Select segment...</option>';
+      index.segments.forEach(function(seg) {
+        var label = 'CODE ' + seg.id + (seg.name ? ' (' + seg.name + ')' : '');
+        if (seg.instructionCount > 0) {
+          label += ' - ' + seg.instructionCount + ' insns';
+        }
+        html += '<option value="' + seg.id + '">' + escHtml(label) + '</option>';
+      });
+      segSelect.innerHTML = html;
+    }
+
+    // Load a segment's JS file
+    function loadSegment(segId, cb) {
+      var key = '__DISASM_CODE_' + String(segId).padStart(2, '0');
+      if (window[key]) return cb(window[key]);
+      var s = document.createElement('script');
+      s.src = 'disasm_data/code_' + String(segId).padStart(2, '0') + '.js';
+      s.onload = function() { cb(window[key]); };
+      s.onerror = function() {
+        emptyEl.textContent = 'Failed to load segment data';
+        emptyEl.style.display = '';
+        cb(null);
+      };
+      document.head.appendChild(s);
+    }
+
+    // Build the flat renderable list (function headers interleaved with instructions)
+    function buildItemList(segData) {
+      allItems = [];
+      if (!segData || !segData.instructions || segData.instructions.length === 0) return;
+
+      // Build function offset set for header insertion
+      var funcByOffset = {};
+      (segData.functions || []).forEach(function(f) { funcByOffset[f.offset] = f; });
+
+      segData.instructions.forEach(function(insn) {
+        // Insert function header before function entry
+        if (insn.f && funcByOffset[insn.a]) {
+          var f = funcByOffset[insn.a];
+          allItems.push({
+            _isHdr: true,
+            name: f.name,
+            offset: f.offset,
+            frameSize: f.frameSize,
+            params: f.params,
+            locals: f.locals,
+            preservedRegs: f.preservedRegs,
+            xrefsIn: f.xrefsIn,
+            xrefsOut: f.xrefsOut,
+          });
+          delete funcByOffset[insn.a]; // only insert once
+        }
+        insn._isHdr = false;
+        allItems.push(insn);
+      });
+    }
+
+    // Render visible rows
+    function render() {
+      if (allItems.length === 0) return;
+
+      var scrollTop = scrollEl.scrollTop;
+      var viewH = scrollEl.clientHeight;
+
+      var firstVisible = findItemAtScroll(scrollTop);
+      var start = Math.max(0, firstVisible - BUFFER);
+
+      // Find last visible
+      var lastVisible = firstVisible;
+      while (lastVisible < allItems.length - 1 && heights[lastVisible] < scrollTop + viewH) {
+        lastVisible++;
+      }
+      var end = Math.min(allItems.length, lastVisible + BUFFER);
+
+      // Skip if range unchanged
+      if (start === renderedRange.start && end === renderedRange.end) return;
+      renderedRange = { start: start, end: end };
+
+      topSpacer.style.height = heights[start] + 'px';
+      botSpacer.style.height = (totalHeight() - heights[end]) + 'px';
+
+      var html = '';
+      for (var i = start; i < end; i++) {
+        var item = allItems[i];
+        if (item._isHdr) {
+          html += renderFuncHeader(item, i);
+        } else {
+          html += renderInstruction(item, i);
+        }
+      }
+      rowsEl.innerHTML = html;
+    }
+
+    function renderFuncHeader(f, idx) {
+      var meta = [];
+      if (f.frameSize > 0) meta.push('frame: ' + f.frameSize + 'B');
+      if (f.params && f.params.length) meta.push('args: ' + f.params.length);
+      if (f.locals && f.locals.length) meta.push('locals: ' + f.locals.length);
+      if (f.xrefsIn && f.xrefsIn.length) meta.push('xrefs in: ' + f.xrefsIn.length);
+      if (f.xrefsOut && f.xrefsOut.length) meta.push('xrefs out: ' + f.xrefsOut.length);
+      var metaStr = meta.length ? meta.join(' | ') : '';
+
+      return '<div class="disasm-func-hdr" data-idx="' + idx + '" data-offset="' + escAttr(f.offset) + '">' +
+        '<span class="func-name">' + escHtml(f.name) + '</span>' +
+        '<span style="color:var(--text-dim);font-size:11px;">' + escHtml(f.offset) + '</span>' +
+        '<span class="func-meta">' + escHtml(metaStr) + '</span>' +
+      '</div>';
+    }
+
+    function renderInstruction(insn, idx) {
+      var warnClass = insn.w === 2 ? ' disasm-warn-2' : insn.w === 1 ? ' disasm-warn-1' : '';
+      var html = '<div class="disasm-row' + warnClass + '" data-idx="' + idx + '" data-addr="' + escAttr(insn.a) + '">';
+
+      // Offset
+      html += '<span class="d-off">' + insn.a + '</span>';
+
+      // Bytes
+      html += '<span class="d-bytes">' + escHtml(insn.b) + '</span>';
+
+      // Mnemonic with type class color
+      html += '<span class="d-mnem t-' + insn.t + '">' + escHtml(insn.m) + '</span>';
+
+      // Operands -- highlight resolved symbol targets
+      var ops = insn.o;
+      if (insn.r && insn.r.indexOf('CODE') === 0) {
+        // Show symbolic name in operands for cross-segment calls
+        html += '<span class="d-ops">' + escHtml(ops) + '</span>';
+      } else {
+        html += '<span class="d-ops">' + escHtml(ops) + '</span>';
+      }
+
+      // Comment -- make xrefs clickable
+      var comment = insn.c;
+      if (comment) {
+        comment = formatComment(comment, insn);
+      }
+      html += '<span class="d-cmt">' + (comment || '') + '</span>';
+
+      html += '</div>';
+      return html;
+    }
+
+    function formatComment(text, insn) {
+      // Make "-> CODE N (Name):0xOFFSET [FuncName]" clickable
+      var codeRefPattern = /-> (CODE (\d+) \([^)]*\):0x[0-9A-Fa-f]+(?:\s*\[[^\]]+\])?)/g;
+      text = escHtml(text).replace(codeRefPattern, function(match, target, segId) {
+        return '-> <span class="xref-link" data-seg="' + segId + '" data-target="' + escAttr(target) + '">' + escHtml(target) + '</span>';
+      });
+
+      // Make trap names stand out
+      text = text.replace(/(Trap: )(_\w+)/, function(m, prefix, name) {
+        return prefix + '<span class="trap-name" style="color:var(--green);">' + name + '</span>';
+      });
+
+      return text;
+    }
+
+    function escAttr(s) { return String(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
+    // Populate function sidebar
+    function populateFuncList(segData) {
+      if (!segData || !segData.functions || segData.functions.length === 0) {
+        funcList.innerHTML = '<div style="padding:12px;color:var(--text-dim);font-size:12px;">No functions detected</div>';
+        return;
+      }
+
+      var html = '';
+      segData.functions.forEach(function(f) {
+        var label = f.name;
+        if (label.length > 24) label = label.substring(0, 22) + '..';
+        html += '<div class="disasm-func-item" data-offset="' + escAttr(f.offset) + '" title="' + escAttr(f.name + ' at ' + f.offset) + '">' +
+          '<span style="color:var(--green-dim);margin-right:4px;">' + f.offset + '</span> ' + escHtml(label) + '</div>';
+      });
+      funcList.innerHTML = html;
+    }
+
+    // Scroll to a specific offset within current segment
+    function scrollToOffset(offset) {
+      var targetOffset = typeof offset === 'string' ? offset : '0x' + offset.toString(16).padStart(4, '0');
+      for (var i = 0; i < allItems.length; i++) {
+        var item = allItems[i];
+        var itemOffset = item._isHdr ? item.offset : item.a;
+        if (itemOffset === targetOffset) {
+          scrollEl.scrollTop = heights[i];
+          // Force render then highlight
+          render();
+          setTimeout(function() {
+            var el = rowsEl.querySelector('[data-addr="' + targetOffset + '"], [data-offset="' + targetOffset + '"]');
+            if (el) {
+              el.classList.add('disasm-highlight');
+              setTimeout(function() { el.classList.remove('disasm-highlight'); }, 2000);
+            }
+          }, 50);
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Navigate to a cross-segment target
+    function navigateToTarget(segId, targetStr) {
+      // Extract offset from "CODE N (Name):0xOFFSET [FuncName]"
+      var m = targetStr.match(/:0x([0-9A-Fa-f]+)/);
+      if (!m) return;
+      var offset = '0x' + m[1].toUpperCase();
+
+      var numSegId = parseInt(segId, 10);
+      if (numSegId === currentSegId) {
+        scrollToOffset(offset);
+        return;
+      }
+
+      // Load different segment
+      selectSegment(numSegId, function() {
+        setTimeout(function() { scrollToOffset(offset); }, 100);
+      });
+    }
+
+    // Select and load a segment
+    function selectSegment(segId, cb) {
+      emptyEl.style.display = 'none';
+      currentSegId = segId;
+      segSelect.value = String(segId);
+
+      // Show loading
+      rowsEl.innerHTML = '';
+      topSpacer.style.height = '0';
+      botSpacer.style.height = '0';
+
+      loadSegment(segId, function(data) {
+        if (!data) return;
+        currentSeg = data;
+
+        buildItemList(data);
+        rebuildHeights();
+        renderedRange = { start: -1, end: -1 };
+
+        // Update segment info
+        segInfo.style.display = '';
+        var insnCount = data.instructions ? data.instructions.length : 0;
+        var funcCount = data.functions ? data.functions.length : 0;
+        segStats.innerHTML = escHtml(insnCount + ' instructions, ' + funcCount + ' functions');
+
+        populateFuncList(data);
+
+        // Update spacers and render
+        topSpacer.style.height = '0';
+        botSpacer.style.height = totalHeight() + 'px';
+        scrollEl.scrollTop = 0;
+        render();
+
+        // Update URL hash
+        var hashSeg = 'disasm/CODE_' + segId;
+        if (location.hash !== '#' + hashSeg) {
+          history.pushState(null, '', '#' + hashSeg);
+        }
+
+        if (cb) cb();
+      });
+    }
+
+    // Event: segment select change
+    segSelect.addEventListener('change', function() {
+      var val = this.value;
+      if (val === '') return;
+      selectSegment(parseInt(val, 10));
+    });
+
+    // Event: scroll -> virtual rendering with trackpad dampening
+    var scrollRAF = null;
+    scrollEl.addEventListener('scroll', function() {
+      if (scrollRAF) return;
+      scrollRAF = requestAnimationFrame(function() {
+        scrollRAF = null;
+        render();
+      });
+    });
+
+    // Tame trackpad inertial scrolling inside the disasm viewer.
+    // Instead of fighting momentum with preventDefault (which causes feedback loops),
+    // we clamp the maximum scroll delta per wheel event so inertial flings can't
+    // cover thousands of pixels in one tick.
+    var MAX_DELTA = 80;  // max pixels per wheel event
+    scrollEl.addEventListener('wheel', function(e) {
+      var dy = e.deltaY;
+      // Only intervene when momentum produces large deltas
+      if (Math.abs(dy) > MAX_DELTA) {
+        e.preventDefault();
+        scrollEl.scrollTop += (dy > 0 ? MAX_DELTA : -MAX_DELTA);
+      }
+    }, { passive: false });
+
+    // Event: click on xref links and function headers
+    document.getElementById('disasm-container').addEventListener('click', function(e) {
+      var xref = e.target.closest('.xref-link');
+      if (xref) {
+        var seg = xref.getAttribute('data-seg');
+        var target = xref.getAttribute('data-target');
+        if (seg && target) navigateToTarget(seg, target);
+        return;
+      }
+
+      var funcItem = e.target.closest('.disasm-func-item');
+      if (funcItem) {
+        var offset = funcItem.getAttribute('data-offset');
+        if (offset) scrollToOffset(offset);
+        // Flash then settle into active
+        funcList.querySelectorAll('.disasm-func-item').forEach(function(el) {
+          el.classList.remove('active');
+          el.classList.remove('flash');
+        });
+        funcItem.classList.add('flash');
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            funcItem.classList.remove('flash');
+            funcItem.classList.add('active');
+          });
+        });
+        return;
+      }
+
+      var funcHdr = e.target.closest('.disasm-func-hdr');
+      if (funcHdr) {
+        var offset = funcHdr.getAttribute('data-offset');
+        if (offset) {
+          // Find in function list and highlight
+          funcList.querySelectorAll('.disasm-func-item').forEach(function(el) {
+            el.classList.toggle('active', el.getAttribute('data-offset') === offset);
+          });
+        }
+        return;
+      }
+    });
+
+    // Event: hover for trap tooltips
+    document.getElementById('disasm-container').addEventListener('mouseover', function(e) {
+      var trapEl = e.target.closest('.trap-name');
+      if (trapEl && index && index.trapDescriptions) {
+        var name = trapEl.textContent;
+        var desc = index.trapDescriptions[name];
+        if (desc) {
+          tooltip.textContent = name + ': ' + desc;
+          tooltip.style.display = '';
+          var r = trapEl.getBoundingClientRect();
+          tooltip.style.left = r.left + 'px';
+          tooltip.style.top = (r.bottom + 4) + 'px';
+        }
+      }
+
+      // A6-relative operand hover
+      var opsEl = e.target.closest('.d-ops');
+      if (opsEl && currentSeg) {
+        var text = opsEl.textContent;
+        var a6Match = text.match(/\$([0-9a-fA-F]+)\(a6\)/);
+        if (a6Match) {
+          var off = parseInt(a6Match[1], 16);
+          var label = '';
+          if (off >= 8 && off <= 0x7FFF) {
+            label = 'arg' + Math.floor((off - 8) / 4) + ' (frame offset +' + off + ')';
+          } else if (off > 0x7FFF) {
+            var neg = 0x10000 - off;
+            label = 'local' + Math.floor((neg - 4) / 4) + ' (frame offset -' + neg + ')';
+          }
+          if (label) {
+            tooltip.textContent = label;
+            tooltip.style.display = '';
+            var r = opsEl.getBoundingClientRect();
+            tooltip.style.left = r.left + 'px';
+            tooltip.style.top = (r.bottom + 4) + 'px';
+          }
+        }
+      }
+    });
+
+    document.getElementById('disasm-container').addEventListener('mouseout', function(e) {
+      if (e.target.closest('.trap-name') || e.target.closest('.d-ops')) {
+        tooltip.style.display = 'none';
+      }
+    });
+
+    // Compact mode toggle
+    document.getElementById('disasm-compact-btn').addEventListener('click', function() {
+      isCompact = !isCompact;
+      container.classList.toggle('disasm-compact', isCompact);
+      this.style.color = isCompact ? 'var(--orange)' : 'var(--text-dim)';
+      if (allItems.length > 0) {
+        rebuildHeights();
+        renderedRange = { start: -1, end: -1 };
+        topSpacer.style.height = '0';
+        botSpacer.style.height = totalHeight() + 'px';
+        render();
+      }
+    });
+
+    // Bytes toggle
+    document.getElementById('disasm-bytes-btn').addEventListener('click', function() {
+      showBytes = !showBytes;
+      container.classList.toggle('disasm-hide-bytes', !showBytes);
+      this.style.color = showBytes ? 'var(--text-dim)' : 'var(--orange)';
+    });
+
+    // Handle disasm deep links: #disasm/CODE_N or #disasm/CODE_N/0xOFFSET
+    function handleDisasmDeepLink() {
+      var hash = location.hash;
+      var m = hash.match(/^#disasm\/CODE_(\d+)(?:\/(.+))?$/);
+      if (!m) return false;
+
+      var segId = parseInt(m[1], 10);
+      var offset = m[2] || null;
+
+      // Scroll section into view
+      var section = document.getElementById('disasm');
+      if (section) section.scrollIntoView();
+
+      loadIndex(function() {
+        selectSegment(segId, function() {
+          if (offset) {
+            setTimeout(function() { scrollToOffset(offset); }, 150);
+          }
+        });
+      });
+      return true;
+    }
+
+    // Initialize: load index and check for deep links.
+    // The index script tag may still be loading on first page load (large
+    // preceding data files can delay it), so retry briefly if not ready.
+    function initOnce() {
+      loadIndex(function() {
+        if (!index) {
+          // Script tag hasn't executed yet -- retry in 200ms
+          setTimeout(initOnce, 200);
+          return;
+        }
+        if (!handleDisasmDeepLink()) {
+          // No deep link, just wait for user selection
+        }
+      });
+    }
+    initOnce();
+
+    // Expose for external navigation (CODE table links, etc.)
+    window.openDisasmSegment = function(segId, offset) {
+      var section = document.getElementById('disasm');
+      if (section) section.scrollIntoView({ behavior: 'smooth' });
+      loadIndex(function() {
+        selectSegment(segId, function() {
+          if (offset) setTimeout(function() { scrollToOffset(offset); }, 150);
+        });
+      });
+    };
   })();
 
   // ========== INIT ==========

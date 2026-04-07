@@ -12,62 +12,65 @@ Do not use emojis in any output: no commits, no UI, no code, no READMEs.
 
 ## Architecture
 
-The site is a single `index.html` (no frameworks, no build step) that loads three inline JS data files:
+The site is a single `index.html` (no frameworks, no build step) that loads inline JS data files:
 
 - `aol_manual_output.js` -- `window.__MANUAL_DATA`, 119 FDO88 commands from the OCR'd AOL engineering manual
 - `tool_manifest.js` -- `window.__TOOL_MANIFEST`, base64-encoded art (PNGs), sounds (WAVs), and text from 83 extracted Mac AOL tools (~10MB)
 - `fdo88_forms.js` -- `window.__FDO88_FORMS`, 2,485 decompiled FDO88 form sources grouped by tool (~5.5MB)
+- `aol4free_docs.js` -- `window.__AOL4FREE_DOCS`, AOL4Free documentation chapters
+- `disasm_data/disasm_index.js` -- `window.__DISASM_INDEX`, segment manifest for the disassembly viewer
+- `disasm_data/code_NN.js` -- `window.__DISASM_CODE_NN`, per-segment disassembly data (loaded on demand)
 
-The site runs from `file://` with no server required. Deep linking works via `#tool/ToolName` hash routes.
+The site runs from `file://` with no server required. Deep linking works via `#tool/ToolName` and `#disasm/CODE_N/0xOFFSET` hash routes.
+
+## Disassembly Viewer
+
+The `#disasm` section is an interactive 68k disassembly workbench with:
+- Architecture-agnostic common instruction schema (68k first, x86-32 next)
+- Virtual scrolling for segments with 14,000+ instructions
+- 9 instruction type colors (call/branch/jump/return/trap/data/stack/arith/nop)
+- Clickable cross-segment xref navigation
+- Function headers with stack frame inference
+- Trap name hover tooltips
+- Compact mode and bytes toggle
+
+The `disasm_data/` directory contains pre-generated JS files (one per CODE segment). To regenerate, use the tools in the chonkback repo (`binary_analysis/generate_disasm_data.py`).
 
 ## Related Projects (same machine)
 
-- **atomforge-fdo-java** (`/Users/chrisk/Documents/source/atomforge-fdo-java`) -- Java 21 FDO88/FDO91 compiler and decompiler. This repo's decompiled forms come from its `Fdo88Decompiler` class. Changes to formatters there require regenerating `fdo88_forms.js`.
+- **chonkback** (`/Users/chrisk/Documents/source/chonkback`) -- Reverse engineering workbench. Contains binary_analysis/ (disassembler, auto_re harness, code segments), chonkback_research_os (MCP server), extraction scripts, and all binary source materials. Regenerating `disasm_data/` requires running tools from this repo.
+- **atomforge-fdo-java** (`/Users/chrisk/Documents/source/atomforge-fdo-java`) -- Java 21 FDO88/FDO91 compiler and decompiler. This repo's decompiled forms come from its `Fdo88Decompiler` class.
 - **Dialtone** (`/Users/chrisk/Documents/source/Dialtone`) -- AOL server reimplementation (Java, Netty). Uses atomforge-fdo for FDO88 compilation.
-
-## Reverse Engineering Pipeline
-
-The full pipeline is scripted in `scripts/reverse_engineer.sh`. Individual steps:
-
-### 1. Extract StuffIt archives
-```
-# .sit files in "binary sources/tools/" -> extracted to extracted_tools/
-unar -o extracted_tools/ToolName -f "binary sources/tools/ToolName.sit"
-```
-
-### 2. Extract resources (art, sounds, text, FDO88 binaries)
-```
-python3 scripts/extract_resources.py extracted_tools site_data
-```
-Requires macOS (resource fork access via `..namedfork/rsrc`), Python 3 with Pillow. Outputs PNGs, WAVs, text, and raw `.fdo88` binary files into `site_data/`.
-
-### 3. Decompile FDO88 forms
-```
-cd scripts
-javac -cp /path/to/atomforge-fdo-2.0.0-SNAPSHOT.jar Fdo88BatchDecompile.java
-java -cp /path/to/atomforge-fdo-2.0.0-SNAPSHOT.jar:. Fdo88BatchDecompile ../site_data/fdo88 ../site_data/fdo88_decompiled
-```
-Requires Java 21+ and the built atomforge JAR. Produces `fdo88_manifest.json` with all decompiled source.
-
-### 4. Rebuild JS data files
-After extraction or decompilation changes, rebuild the inline JS files. The `fdo$` prefix must be stripped from decompiled source -- FDO88 commands are displayed without the prefix (it's implied). The rebuild script in `reverse_engineer.sh` handles this.
-
-### 5. Rebuild atomforge JAR (when modifying formatters/decoders)
-```
-cd /Users/chrisk/Documents/source/atomforge-fdo-java
-mvn package -DskipTests
-# Then re-run steps 3-4
-```
-Run `mvn test` to verify -- expects 140/140 golden round-trips and ~98% community accuracy.
 
 ## Key Technical Facts (verified from binary analysis)
 
 - AOL 2.7 Mac client: 57 CODE segments, 448 resources, 44 types, 851KB resource fork
 - AOL4Free patches AOL **2.6** (not 2.7) using **ResCompare** by Michael Hecht (v4.0.3), not a custom framework
 - DB resource types for FDO88 forms use non-standard IDs across tools (db69, db81, db96, dbAB, dbDD, etc.), not just DB00-DB19
-- FDO88 low-bit opcodes ($00-$7F) are mirrors of high-bit opcodes ($80-$FF) with fixed-size params instead of byte-count prefix
+- FDO88 low-bit opcodes ($00-$7F) and high-bit opcodes ($80-$FF) share the FormsCreation dispatch but have INDEPENDENT handlers. Many perform similar functions, but at least 6 opcodes (0x21, 0x23, 0x26, 0x28, 0x2A, 0x2C) do completely different things.
 - Mac `snd` resources with encoding byte $FE (cmpSH/MACE compressed) cannot be decoded to WAV; $FF (extSH) can
-- The Gemini API key for image generation is stored on i9beef at `/etc/opencode/cloud-api-keys.env`
+
+## Protocol Documentation
+
+Reverse-engineered protocol specs in `documentation/`:
+
+- `aol27_connection_sequence.md` -- connection flow and current investigation status
+- `init_packet_disassembly.md` -- annotated 68k disassembly of the INIT packet builder with field map
+- `fdo88_form_delivery.md` -- form delivery protocol (AT token + fdo$break chunking)
+- `fdo88_opcode_conflicts.md` -- 6 low-bit opcodes that differ from their high-bit counterparts
+- `at_token_framing.md` -- At/AT/at/aT token wire format and stream ID encoding
+- `dialtone_aol27_support.md` -- Dialtone server integration reference
+
+Key protocol facts verified from binary:
+- Form delivery uses P3 DATA frames with token "AT" (0x4154) with 2-byte stream ID
+- Multi-frame forms split at fdo$break boundaries, one AT frame per chunk
+- Auth transition triggered by undocumented FDO88 opcode 0x23 (SetConnectionState), NOT by `aT` token
+- The `aT` token (0x6154) is AOL 3.0+ only -- 2.7 has no handler for it
+- INIT token bytes come from the vNum resource, not Gestalt
+- OT (0x4F54) is Network News, NOT form delivery (confirmed by 3.0 source + screenshots)
+- XS (0x5853) is sign-OFF, NOT sign-on (confirmed by 3.0 source)
+- fdo$Switch CloseSignOn (87) = "broadcasts 'We are now online' to tools" (from FDO88 Manual)
+- P3 handshake may require SS (0x21) / SSR (0x22) exchange before DATA flow
 
 ## Content Accuracy Rules
 
